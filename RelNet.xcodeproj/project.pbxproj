@@ -21,6 +21,10 @@
 		F5405C0F2A96FC38002FA0C9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C0E2A96FC38002FA0C9 /* FirebaseFirestoreSwift */; };
 		F5405C112A96FCEA002FA0C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */; };
 		F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */; };
+		F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C152A9701F6002FA0C9 /* PersonClient.swift */; };
+		F5405C192A970233002FA0C9 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C182A970233002FA0C9 /* Person.swift */; };
+		F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */; };
+		F5418A872A973EA600511A67 /* PersonList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A862A973EA600511A67 /* PersonList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,9 @@
 		F5405BF62A96F349002FA0C9 /* RelNetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F5405C152A9701F6002FA0C9 /* PersonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonClient.swift; sourceTree = "<group>"; };
+		F5405C182A970233002FA0C9 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		F5418A862A973EA600511A67 /* PersonList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +69,7 @@
 			files = (
 				F5405C0F2A96FC38002FA0C9 /* FirebaseFirestoreSwift in Frameworks */,
 				F5405C0B2A96FC38002FA0C9 /* FirebaseCrashlytics in Frameworks */,
+				F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */,
 				F5405C0D2A96FC38002FA0C9 /* FirebaseFirestore in Frameworks */,
 				F5405C072A96FC38002FA0C9 /* FirebaseAnalytics in Frameworks */,
 				F5405C092A96FC38002FA0C9 /* FirebaseAuth in Frameworks */,
@@ -108,13 +116,12 @@
 		F5405BD82A96F347002FA0C9 /* RelNet */ = {
 			isa = PBXGroup;
 			children = (
-				F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */,
+				F5418A882A973EAC00511A67 /* App */,
 				F5405C042A96F579002FA0C9 /* Dependencies */,
-				F5405BD92A96F347002FA0C9 /* RelNetApp.swift */,
+				F5405C172A970223002FA0C9 /* Model */,
+				F5418A862A973EA600511A67 /* PersonList.swift */,
 				F5405BDB2A96F347002FA0C9 /* ContentView.swift */,
-				F5405BDD2A96F348002FA0C9 /* Assets.xcassets */,
 				F5405BDF2A96F348002FA0C9 /* Preview Content */,
-				F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */,
 			);
 			path = RelNet;
 			sourceTree = "<group>";
@@ -147,8 +154,28 @@
 		F5405C042A96F579002FA0C9 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				F5405C152A9701F6002FA0C9 /* PersonClient.swift */,
 			);
 			path = Dependencies;
+			sourceTree = "<group>";
+		};
+		F5405C172A970223002FA0C9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F5405C182A970233002FA0C9 /* Person.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F5418A882A973EAC00511A67 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */,
+				F5405BD92A96F347002FA0C9 /* RelNetApp.swift */,
+				F5405BDD2A96F348002FA0C9 /* Assets.xcassets */,
+				F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,6 +200,7 @@
 				F5405C0A2A96FC38002FA0C9 /* FirebaseCrashlytics */,
 				F5405C0C2A96FC38002FA0C9 /* FirebaseFirestore */,
 				F5405C0E2A96FC38002FA0C9 /* FirebaseFirestoreSwift */,
+				F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */,
 			);
 			productName = RelNet;
 			productReference = F5405BD62A96F347002FA0C9 /* RelNet.app */;
@@ -248,6 +276,7 @@
 			mainGroup = F5405BCD2A96F347002FA0C9;
 			packageReferences = (
 				F5405C052A96FC38002FA0C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = F5405BD72A96F347002FA0C9 /* Products */;
 			projectDirPath = "";
@@ -292,9 +321,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
 				F5405BDC2A96F347002FA0C9 /* ContentView.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
+				F5418A872A973EA600511A67 /* PersonList.swift in Sources */,
+				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,6 +667,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -662,6 +702,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F5405C052A96FC38002FA0C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
