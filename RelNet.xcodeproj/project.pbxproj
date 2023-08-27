@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BD92A96F347002FA0C9 /* RelNetApp.swift */; };
-		F5405BDC2A96F347002FA0C9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BDB2A96F347002FA0C9 /* ContentView.swift */; };
 		F5405BDE2A96F348002FA0C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5405BDD2A96F348002FA0C9 /* Assets.xcassets */; };
 		F5405BE12A96F348002FA0C9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5405BE02A96F348002FA0C9 /* Preview Assets.xcassets */; };
 		F5405BEB2A96F349002FA0C9 /* RelNetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BEA2A96F349002FA0C9 /* RelNetTests.swift */; };
@@ -24,7 +23,12 @@
 		F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C152A9701F6002FA0C9 /* PersonClient.swift */; };
 		F5405C192A970233002FA0C9 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C182A970233002FA0C9 /* Person.swift */; };
 		F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */; };
-		F5418A872A973EA600511A67 /* PersonList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A862A973EA600511A67 /* PersonList.swift */; };
+		F5418A872A973EA600511A67 /* PersonsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A862A973EA600511A67 /* PersonsList.swift */; };
+		F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A892A9AED2E00511A67 /* PersonForm.swift */; };
+		F5418A8D2A9AEE3900511A67 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F5418A8C2A9AEE3900511A67 /* SwiftUINavigation */; };
+		F5418A902A9B759B00511A67 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A8F2A9B759B00511A67 /* Binding.swift */; };
+		F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A912A9B93D500511A67 /* AppFeature.swift */; };
+		F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A932A9B98C300511A67 /* PersonDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +51,6 @@
 /* Begin PBXFileReference section */
 		F5405BD62A96F347002FA0C9 /* RelNet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RelNet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5405BD92A96F347002FA0C9 /* RelNetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetApp.swift; sourceTree = "<group>"; };
-		F5405BDB2A96F347002FA0C9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F5405BDD2A96F348002FA0C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5405BE02A96F348002FA0C9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F5405BE62A96F349002FA0C9 /* RelNetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RelNetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,7 +62,11 @@
 		F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5405C152A9701F6002FA0C9 /* PersonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonClient.swift; sourceTree = "<group>"; };
 		F5405C182A970233002FA0C9 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		F5418A862A973EA600511A67 /* PersonList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonList.swift; sourceTree = "<group>"; };
+		F5418A862A973EA600511A67 /* PersonsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonsList.swift; sourceTree = "<group>"; };
+		F5418A892A9AED2E00511A67 /* PersonForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonForm.swift; sourceTree = "<group>"; };
+		F5418A8F2A9B759B00511A67 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
+		F5418A912A9B93D500511A67 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		F5418A932A9B98C300511A67 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,7 @@
 				F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */,
 				F5405C0D2A96FC38002FA0C9 /* FirebaseFirestore in Frameworks */,
 				F5405C072A96FC38002FA0C9 /* FirebaseAnalytics in Frameworks */,
+				F5418A8D2A9AEE3900511A67 /* SwiftUINavigation in Frameworks */,
 				F5405C092A96FC38002FA0C9 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,12 +124,15 @@
 		F5405BD82A96F347002FA0C9 /* RelNet */ = {
 			isa = PBXGroup;
 			children = (
+				F5418A8E2A9B758E00511A67 /* Extensions */,
+				F5405BDF2A96F348002FA0C9 /* Preview Content */,
 				F5418A882A973EAC00511A67 /* App */,
 				F5405C042A96F579002FA0C9 /* Dependencies */,
 				F5405C172A970223002FA0C9 /* Model */,
-				F5418A862A973EA600511A67 /* PersonList.swift */,
-				F5405BDB2A96F347002FA0C9 /* ContentView.swift */,
-				F5405BDF2A96F348002FA0C9 /* Preview Content */,
+				F5418A912A9B93D500511A67 /* AppFeature.swift */,
+				F5418A862A973EA600511A67 /* PersonsList.swift */,
+				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
+				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
 			);
 			path = RelNet;
 			sourceTree = "<group>";
@@ -178,6 +189,14 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		F5418A8E2A9B758E00511A67 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F5418A8F2A9B759B00511A67 /* Binding.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -201,6 +220,7 @@
 				F5405C0C2A96FC38002FA0C9 /* FirebaseFirestore */,
 				F5405C0E2A96FC38002FA0C9 /* FirebaseFirestoreSwift */,
 				F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */,
+				F5418A8C2A9AEE3900511A67 /* SwiftUINavigation */,
 			);
 			productName = RelNet;
 			productReference = F5405BD62A96F347002FA0C9 /* RelNet.app */;
@@ -277,6 +297,7 @@
 			packageReferences = (
 				F5405C052A96FC38002FA0C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 			);
 			productRefGroup = F5405BD72A96F347002FA0C9 /* Products */;
 			projectDirPath = "";
@@ -321,11 +342,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */,
+				F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */,
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
+				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
-				F5405BDC2A96F347002FA0C9 /* ContentView.swift in Sources */,
+				F5418A902A9B759B00511A67 /* Binding.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
-				F5418A872A973EA600511A67 /* PersonList.swift in Sources */,
+				F5418A872A973EA600511A67 /* PersonsList.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -675,6 +699,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swiftui-navigation";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -707,6 +739,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		F5418A8C2A9AEE3900511A67 /* SwiftUINavigation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
+			productName = SwiftUINavigation;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

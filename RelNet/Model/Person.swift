@@ -24,5 +24,21 @@ struct Person: Codable, Identifiable, Equatable {
     var notes: String?
 
     @ServerTimestamp var createdAt: Timestamp?
-    var updatedAt: Timestamp
+    var updatedAt: Timestamp?
+}
+
+extension Person {
+    static let mock = Self (
+        id: UUID().uuidString,
+        firstName: "DemoFirst",
+        lastName: "DemoLast",
+        nickname: "Nick",
+        birthdate: Date(),
+        phoneNumbers: ["00012341234"],
+        emailAddresses: ["demo@demomail.com"],
+        address: "Japan",
+        photoURL: "https://picsum.photos/200",
+        lastContacted: Date(),
+        notes: "this is note."
+    )
 }
