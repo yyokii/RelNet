@@ -5,28 +5,28 @@
 //  Created by Higashihara Yoki on 2023/08/27.
 //
 
-import ComposableArchitecture
 import SwiftUI
+
+import ComposableArchitecture
 import SwiftUINavigation
 
 struct PersonForm: Reducer {
 
     struct State: Equatable, Sendable {
-        @BindingState var focus: Field? = .title
+        @BindingState var focus: Field? = .firstName
         @BindingState var person: Person
 
-        init(focus: Field? = .title, person: Person) {
+        init(focus: Field? = .firstName, person: Person) {
             self.focus = focus
             self.person = person
         }
 
         enum Field: Hashable {
-            case title
+            case firstName
         }
     }
 
     enum Action: BindableAction, Equatable, Sendable {
-        case addButtonTapped
         case binding(BindingAction<State>)
     }
 
@@ -36,11 +36,6 @@ struct PersonForm: Reducer {
         BindingReducer()
         Reduce<State, Action> { state, action in
             switch action {
-            case .addButtonTapped:
-                let person = Person()
-                print("add person")
-                return .none
-
             case .binding:
                 return .none
             }
@@ -56,10 +51,10 @@ struct PersonFormView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             Form {
                 Section {
-                    TextField("Title", text: viewStore.$person.firstName.toUnwrapped(defaultValue: ""))
-                        .focused(self.$focus, equals: .title)
+                    TextField("demo", text: viewStore.$person.firstName.toUnwrapped(defaultValue: ""))
+                        .focused(self.$focus, equals: .firstName)
                 } header: {
-                    Text("Standup Info")
+                    Text("Person")
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)

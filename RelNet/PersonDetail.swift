@@ -10,6 +10,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PersonDetail: Reducer {
+
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
         var person: Person

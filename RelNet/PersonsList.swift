@@ -11,7 +11,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PersonsList: Reducer {
-    
+
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
         var persons: IdentifiedArrayOf<Person> = []
@@ -22,7 +22,7 @@ struct PersonsList: Reducer {
             self.destination = destination
         }
     }
-    
+
     enum Action: Equatable {
         case addPersonButtonTapped
         case confirmAddPersonButtonTapped
@@ -50,12 +50,13 @@ struct PersonsList: Reducer {
 
     @Dependency(\.personClient) private var personClient
 
-    public var body: Reduce<State, Action> {
-        Reduce { state, action in
+    var body: some ReducerOf<Self> {
+        Reduce<State, Action> { state, action in
             switch action {
             case .addPersonButtonTapped:
-                print("add person button tapped")
+                state.destination = .add(PersonForm.State(person: Person(id: UUID().uuidString)))
                 return .none
+
             case .confirmAddPersonButtonTapped:
                 guard case let .some(.add(editState)) = state.destination
                 else { return .none }
@@ -63,11 +64,14 @@ struct PersonsList: Reducer {
                 state.persons.append(person)
                 state.destination = nil
                 return .none
+
             case .destination:
                 return .none
+
             case .dismissAddPersonButtonTapped:
                 state.destination = nil
                 return .none
+
             case .listen:
                 return .run { send in
                     for try await result in try await self.personClient.listen("aufguss") {
@@ -76,13 +80,18 @@ struct PersonsList: Reducer {
                 } catch: { error, send in
                     await send(.listenPersonsResponse(.failure(error)))
                 }
+
             case let .listenPersonsResponse(.success(persons)):
                 state.persons = persons
                 return .none
+
             case let .listenPersonsResponse(.failure(error)):
                 print(error.localizedDescription)
                 return .none
             }
+        }
+        .ifLet(\.$destination, action: /Action.destination) {
+            Destination()
         }
     }
 }
@@ -145,6 +154,7 @@ struct CardView: View {
                 .font(.headline)
         }
         .padding()
+        .foregroundColor(Color.cyan)
     }
 }
 
