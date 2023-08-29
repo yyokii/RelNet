@@ -25,6 +25,17 @@ struct Person: Codable, Identifiable, Equatable {
 
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
+
+    var name: String {
+        if let firstName,
+           let lastName,
+           !firstName.isEmpty,
+           !lastName.isEmpty {
+            return firstName + " " + lastName
+        } else {
+            return nickname ?? ""
+        }
+    }
 }
 
 extension Person {

@@ -108,7 +108,6 @@ struct PersonsListView: View {
                     ) {
                         CardView(person: person)
                     }
-                    .listRowBackground(Color.cyan)
                 }
             }
             .toolbar {
@@ -150,7 +149,7 @@ struct CardView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(self.person.firstName ?? "")
+            Text(self.person.name)
                 .font(.headline)
         }
         .padding()

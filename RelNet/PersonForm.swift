@@ -23,11 +23,13 @@ struct PersonForm: Reducer {
 
         enum Field: Hashable {
             case firstName
+            case lastName
         }
     }
 
     enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
+        case contactedTodayButtonTapped
     }
 
     @Dependency(\.uuid) var uuid
@@ -38,6 +40,9 @@ struct PersonForm: Reducer {
             switch action {
             case .binding:
                 return .none
+            case .contactedTodayButtonTapped:
+                state.person.lastContacted = Date()
+                return .none
             }
         }
     }
@@ -45,16 +50,42 @@ struct PersonForm: Reducer {
 
 struct PersonFormView: View {
     let store: StoreOf<PersonForm>
+
     @FocusState var focus: PersonForm.State.Field?
+
+    let defaultBirthDate: Date = Date()
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             Form {
                 Section {
-                    TextField("demo", text: viewStore.$person.firstName.toUnwrapped(defaultValue: ""))
-                        .focused(self.$focus, equals: .firstName)
+                    VStack {
+                        TextField("first name", text: viewStore.$person.firstName.toUnwrapped(defaultValue: ""))
+                            .focused(self.$focus, equals: .firstName)
+                        TextField("last name", text: viewStore.$person.lastName.toUnwrapped(defaultValue: ""))
+                            .focused(self.$focus, equals: .lastName)
+                        
+                        TextField("nickname", text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
+
+                        // TODO: 年いる？あまり入れれない気がする、年と月日を分けるとか？
+                        DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+                    }
                 } header: {
-                    Text("Person")
+                    Text("Basic Info")
+                }
+                
+                Section {
+                    VStack {
+                        Button {
+                            viewStore.send(.contactedTodayButtonTapped)
+                        } label: {
+                            Text("いつ会った？")
+                        }
+
+                        TextEditor(text: viewStore.$person.notes.toUnwrapped(defaultValue: ""))
+                    }
+                } header: {
+                    Text("Additional Info")
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)
