@@ -117,7 +117,7 @@ struct PersonsListView: View {
                     Image(systemName: "plus")
                 }
             }
-            .navigationTitle("Daily Standups")
+            .navigationTitle("Persons")
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /PersonsList.Destination.State.add,
@@ -125,7 +125,7 @@ struct PersonsListView: View {
             ) { store in
                 NavigationStack {
                     PersonFormView(store: store)
-                        .navigationTitle("New standup")
+                        .navigationTitle("New person")
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {

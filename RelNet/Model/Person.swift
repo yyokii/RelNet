@@ -22,18 +22,23 @@ struct Person: Codable, Identifiable, Equatable {
     var photoURL: String?
     var lastContacted: Date?
     var notes: String?
-
+    
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
-
+    
     var name: String {
-        if let firstName,
-           let lastName,
-           !firstName.isEmpty,
-           !lastName.isEmpty {
+        let firstName = firstName ?? ""
+        let lastName = lastName ?? ""
+        
+        if let nickname,
+           !nickname.isEmpty {
+            return nickname
+        } else if
+            !firstName.isEmpty,
+            !lastName.isEmpty {
             return firstName + " " + lastName
         } else {
-            return nickname ?? ""
+            return firstName.isEmpty ? lastName : firstName
         }
     }
 }
