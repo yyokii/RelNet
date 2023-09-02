@@ -75,9 +75,9 @@ struct GroupsList: Reducer {
             case .listen:
                 return .run { send in
                     // TODO: clientを修正してgroupを取得できるようにする
-//                    for try await result in try await self.personClient.listen("aufguss") {
-//                        await send(.listenGroupsResponse(.success(result)))
-//                    }
+                    //                    for try await result in try await self.personClient.listen("aufguss") {
+                    //                        await send(.listenGroupsResponse(.success(result)))
+                    //                    }
                 } catch: { error, send in
                     await send(.listenGroupsResponse(.failure(error)))
                 }
@@ -104,7 +104,11 @@ struct GroupsListView: View {
         WithViewStore(self.store, observe: \.groups) { viewStore in
             List {
                 ForEach(viewStore.state) { group in
-                    GroupCardView(group: group)
+                    NavigationLink(
+                        state: AppFeature.Path.State.groupDetail(GroupDetail.State(group: group))
+                    ) {
+                        GroupCardView(group: group)
+                    }
                 }
             }
             .toolbar {

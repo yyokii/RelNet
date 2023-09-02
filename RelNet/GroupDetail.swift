@@ -1,19 +1,19 @@
 //
-//  PersonDetail.swift
+//  GroupDetail.swift
 //  RelNet
 //
-//  Created by Higashihara Yoki on 2023/08/27.
+//  Created by Higashihara Yoki on 2023/08/30.
 //
 
 import SwiftUI
 
 import ComposableArchitecture
 
-struct PersonDetail: Reducer {
+struct GroupDetail: Reducer {
 
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
-        var person: Person
+        var group: Group
     }
 
     enum Action: Equatable, Sendable {
@@ -25,8 +25,8 @@ struct PersonDetail: Reducer {
         case editButtonTapped
 
         enum Delegate: Equatable {
-            case deletePerson
-            case personUpdated(Person)
+            case deleteGroup
+            case groupUpdated(Group)
         }
     }
 
@@ -35,11 +35,11 @@ struct PersonDetail: Reducer {
     struct Destination: Reducer {
         enum State: Equatable {
             case alert(AlertState<Action.Alert>)
-            case edit(PersonForm.State)
+            case edit(GroupForm.State)
         }
         enum Action: Equatable, Sendable {
             case alert(Alert)
-            case edit(PersonForm.Action)
+            case edit(GroupForm.Action)
 
             enum Alert {
                 case confirmDeletion
@@ -47,7 +47,7 @@ struct PersonDetail: Reducer {
         }
         var body: some ReducerOf<Self> {
             Scope(state: /State.edit, action: /Action.edit) {
-                PersonForm()
+                GroupForm()
             }
         }
     }
@@ -63,14 +63,14 @@ struct PersonDetail: Reducer {
                 return .none
 
             case .deleteButtonTapped:
-                state.destination = .alert(.deletePerson)
+                state.destination = .alert(.deleteGroup)
                 return .none
 
             case let .destination(.presented(.alert(alertAction))):
                 switch alertAction {
                 case .confirmDeletion:
                     return .run { send in
-                        await send(.delegate(.deletePerson), animation: .default)
+                        await send(.delegate(.deleteGroup), animation: .default)
                         await self.dismiss()
                     }
                 }
@@ -81,34 +81,34 @@ struct PersonDetail: Reducer {
             case .doneEditingButtonTapped:
                 guard case let .some(.edit(editState)) = state.destination
                 else { return .none }
-                state.person = editState.person
+                state.group = editState.group
                 state.destination = nil
                 return .none
 
             case .editButtonTapped:
-                state.destination = .edit(PersonForm.State(person: state.person))
+                state.destination = .edit(GroupForm.State(group: state.group))
                 return .none
             }
         }
         .ifLet(\.$destination, action: /Action.destination) {
             Destination()
         }
-        .onChange(of: \.person) { oldValue, newValue in
+        .onChange(of: \.group) { oldValue, newValue in
             Reduce { state, action in
-                    .send(.delegate(.personUpdated(newValue)))
+                    .send(.delegate(.groupUpdated(newValue)))
             }
         }
     }
 }
 
-struct PersonDetailView: View {
-    let store: StoreOf<PersonDetail>
+struct GroupDetailView: View {
+    let store: StoreOf<GroupDetail>
 
     struct ViewState: Equatable {
-        let person: Person
+        let group: Group
 
-        init(state: PersonDetail.State) {
-            self.person = state.person
+        init(state: GroupDetail.State) {
+            self.group = state.group
         }
     }
 
@@ -123,7 +123,7 @@ struct PersonDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle(viewStore.person.firstName ?? "")
+            .navigationTitle(viewStore.group.name)
             .toolbar {
                 Button("Edit") {
                     viewStore.send(.editButtonTapped)
@@ -131,17 +131,17 @@ struct PersonDetailView: View {
             }
             .alert(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonDetail.Destination.State.alert,
-                action: PersonDetail.Destination.Action.alert
+                state: /GroupDetail.Destination.State.alert,
+                action: GroupDetail.Destination.Action.alert
             )
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonDetail.Destination.State.edit,
-                action: PersonDetail.Destination.Action.edit
+                state: /GroupDetail.Destination.State.edit,
+                action: GroupDetail.Destination.Action.edit
             ) { store in
                 NavigationStack {
-                    PersonFormView(store: store)
-                        .navigationTitle(viewStore.person.firstName ?? "")
+                    GroupFormView(store: store)
+                        .navigationTitle(viewStore.group.name)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
@@ -160,8 +160,8 @@ struct PersonDetailView: View {
     }
 }
 
-extension AlertState where Action == PersonDetail.Destination.Action.Alert {
-    static let deletePerson = Self {
+extension AlertState where Action == GroupDetail.Destination.Action.Alert {
+    static let deleteGroup = Self {
         TextState("Delete?")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
@@ -175,12 +175,12 @@ extension AlertState where Action == PersonDetail.Destination.Action.Alert {
     }
 }
 
-struct PersonDetail_Previews: PreviewProvider {
+struct GroupDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            PersonDetailView(
-                store: Store(initialState: PersonDetail.State(person: .mock)) {
-                    PersonDetail()
+            GroupDetailView(
+                store: Store(initialState: GroupDetail.State(group: .mock)) {
+                    GroupDetail()
                 }
             )
         }

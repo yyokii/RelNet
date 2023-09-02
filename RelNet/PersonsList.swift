@@ -104,7 +104,7 @@ struct PersonsListView: View {
             List {
                 ForEach(viewStore.state) { person in
                     NavigationLink(
-                        state: AppFeature.Path.State.detail(PersonDetail.State(person: person))
+                        state: AppFeature.Path.State.personDetail(PersonDetail.State(person: person))
                     ) {
                         CardView(person: person)
                     }

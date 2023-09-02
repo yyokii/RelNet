@@ -37,10 +37,24 @@ struct AppFeature: Reducer {
         }
         Reduce<State, Action> { state, action in
             switch action {
-            case let .path(.element(id, .detail(.delegate(delegateAction)))):
-                guard case let .some(.detail(detailState)) = state.path[id: id]
+            case let .path(.element(id, .groupDetail(.delegate(delegateAction)))):
+                guard case let .some(.groupDetail(detailState)) = state.path[id: id]
                 else { return .none }
-
+                
+                switch delegateAction {
+                case .deleteGroup:
+                    state.groupsList.groups.remove(id: detailState.group.id)
+                    return .none
+                    
+                case let .groupUpdated(group):
+                    state.groupsList.groups[id: group.id] = group
+                    return .none
+                }
+                
+            case let .path(.element(id, .personDetail(.delegate(delegateAction)))):
+                guard case let .some(.personDetail(detailState)) = state.path[id: id]
+                else { return .none }
+                
                 switch delegateAction {
                 case .deletePerson:
                     state.personsList.persons.remove(id: detailState.person.id)
@@ -68,15 +82,20 @@ struct AppFeature: Reducer {
 
     struct Path: Reducer {
         enum State: Equatable {
-            case detail(PersonDetail.State)
+            case groupDetail(GroupDetail.State)
+            case personDetail(PersonDetail.State)
         }
-
+        
         enum Action: Equatable {
-            case detail(PersonDetail.Action)
+            case groupDetail(GroupDetail.Action)
+            case personDetail(PersonDetail.Action)
         }
-
+        
         var body: some Reducer<State, Action> {
-            Scope(state: /State.detail, action: /Action.detail) {
+            Scope(state: /State.groupDetail, action: /Action.groupDetail) {
+                GroupDetail()
+            }
+            Scope(state: /State.personDetail, action: /Action.personDetail) {
                 PersonDetail()
             }
         }
@@ -101,14 +120,7 @@ private extension AppView {
                 store: self.store.scope(state: \.personsList, action: { .personsList($0) })
             )
         } destination: {
-            switch $0 {
-            case .detail:
-                CaseLet(
-                    /AppFeature.Path.State.detail,
-                     action: AppFeature.Path.Action.detail,
-                     then: PersonDetailView.init(store:)
-                )
-            }
+            destinationView(state: $0)
         }
         .tabItem {
             Label("persons", systemImage: "person.crop.circle.fill")
@@ -121,17 +133,28 @@ private extension AppView {
                 store: self.store.scope(state: \.groupsList, action: { .groupsList($0) })
             )
         } destination: {
-            switch $0 {
-            case .detail:
-                CaseLet(
-                    /AppFeature.Path.State.detail,
-                     action: AppFeature.Path.Action.detail,
-                     then: PersonDetailView.init(store:)
-                )
-            }
+            destinationView(state: $0)
         }
         .tabItem {
             Label("groups", systemImage: "rectangle.3.group.fill")
+        }
+    }
+
+    @ViewBuilder
+    func destinationView(state: AppFeature.Path.State) -> some View {
+        switch state {
+        case .groupDetail:
+            CaseLet(
+                /AppFeature.Path.State.groupDetail,
+                 action: AppFeature.Path.Action.groupDetail,
+                 then: GroupDetailView.init(store:)
+            )
+        case .personDetail:
+            CaseLet(
+                /AppFeature.Path.State.personDetail,
+                 action: AppFeature.Path.Action.personDetail,
+                 then: PersonDetailView.init(store:)
+            )
         }
     }
 }

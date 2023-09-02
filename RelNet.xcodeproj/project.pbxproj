@@ -32,6 +32,7 @@
 		F5DC3B892A9D6CFA005528F9 /* GroupsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
+		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsList.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
+		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +142,7 @@
 				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
 				F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */,
 				F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */,
+				F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */,
 			);
 			path = RelNet;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				F5418A872A973EA600511A67 /* PersonsList.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
+				F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +524,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"RelNet/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RelNet/App/Preview Content\"";
 				DEVELOPMENT_TEAM = EAZT2D654U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -552,7 +556,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"RelNet/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"RelNet/App/Preview Content\"";
 				DEVELOPMENT_TEAM = EAZT2D654U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
