@@ -38,6 +38,7 @@
 		F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */; };
 		F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */; };
 		F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA12AA6110A005528F9 /* SafariView.swift */; };
+		F5DC3BA42AA69401005528F9 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA32AA69401005528F9 /* AppVersion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +86,7 @@
 		F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithRoundedBackground.swift; sourceTree = "<group>"; };
 		F5DC3BA12AA6110A005528F9 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		F5DC3BA32AA69401005528F9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +196,7 @@
 			children = (
 				F5405C182A970233002FA0C9 /* Person.swift */,
 				F5DC3B8A2A9D6E30005528F9 /* Group.swift */,
+				F5DC3BA32AA69401005528F9 /* AppVersion.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 				F5418A902A9B759B00511A67 /* Binding.swift in Sources */,
 				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
 				F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */,
+				F5DC3BA42AA69401005528F9 /* AppVersion.swift in Sources */,
 				F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
 				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
