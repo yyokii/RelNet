@@ -33,6 +33,11 @@
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
 		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
+		F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B982AA57F39005528F9 /* LoginView.swift */; };
+		F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */; };
+		F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */; };
+		F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */; };
+		F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA12AA6110A005528F9 /* SafariView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +80,11 @@
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
 		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
+		F5DC3B982AA57F39005528F9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationClient.swift; sourceTree = "<group>"; };
+		F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithRoundedBackground.swift; sourceTree = "<group>"; };
+		F5DC3BA12AA6110A005528F9 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,13 +146,11 @@
 				F5418A882A973EAC00511A67 /* App */,
 				F5405C042A96F579002FA0C9 /* Dependencies */,
 				F5405C172A970223002FA0C9 /* Model */,
+				F5DC3B952AA57EBA005528F9 /* Person */,
+				F5DC3B962AA57ED2005528F9 /* Group */,
+				F5DC3B972AA57EE3005528F9 /* Login */,
+				F5DC3B9C2AA5EE65005528F9 /* MyPage */,
 				F5418A912A9B93D500511A67 /* AppFeature.swift */,
-				F5418A862A973EA600511A67 /* PersonsList.swift */,
-				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
-				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
-				F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */,
-				F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */,
-				F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */,
 			);
 			path = RelNet;
 			sourceTree = "<group>";
@@ -176,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				F5405C152A9701F6002FA0C9 /* PersonClient.swift */,
+				F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -207,6 +216,44 @@
 				F5418A8F2A9B759B00511A67 /* Binding.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F5DC3B952AA57EBA005528F9 /* Person */ = {
+			isa = PBXGroup;
+			children = (
+				F5418A862A973EA600511A67 /* PersonsList.swift */,
+				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
+				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
+			);
+			path = Person;
+			sourceTree = "<group>";
+		};
+		F5DC3B962AA57ED2005528F9 /* Group */ = {
+			isa = PBXGroup;
+			children = (
+				F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */,
+				F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */,
+				F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */,
+			);
+			path = Group;
+			sourceTree = "<group>";
+		};
+		F5DC3B972AA57EE3005528F9 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				F5DC3B982AA57F39005528F9 /* LoginView.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		F5DC3B9C2AA5EE65005528F9 /* MyPage */ = {
+			isa = PBXGroup;
+			children = (
+				F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */,
+				F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */,
+				F5DC3BA12AA6110A005528F9 /* SafariView.swift */,
+			);
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -359,10 +406,15 @@
 				F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */,
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,
+				F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
 				F5DC3B892A9D6CFA005528F9 /* GroupsList.swift in Sources */,
 				F5418A902A9B759B00511A67 /* Binding.swift in Sources */,
+				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
+				F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */,
+				F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
+				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
 				F5418A872A973EA600511A67 /* PersonsList.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
