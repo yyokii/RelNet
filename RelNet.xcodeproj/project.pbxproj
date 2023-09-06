@@ -39,6 +39,8 @@
 		F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */; };
 		F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA12AA6110A005528F9 /* SafariView.swift */; };
 		F5DC3BA42AA69401005528F9 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA32AA69401005528F9 /* AppVersion.swift */; };
+		F5DC3BA72AA71894005528F9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA62AA71894005528F9 /* GoogleSignIn */; };
+		F5DC3BA92AA71894005528F9 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA82AA71894005528F9 /* GoogleSignInSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,7 @@
 		F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithRoundedBackground.swift; sourceTree = "<group>"; };
 		F5DC3BA12AA6110A005528F9 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		F5DC3BA32AA69401005528F9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
+		F5DC3BAA2AA7191A005528F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +97,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5DC3BA92AA71894005528F9 /* GoogleSignInSwift in Frameworks */,
 				F5405C0F2A96FC38002FA0C9 /* FirebaseFirestoreSwift in Frameworks */,
+				F5DC3BA72AA71894005528F9 /* GoogleSignIn in Frameworks */,
 				F5405C0B2A96FC38002FA0C9 /* FirebaseCrashlytics in Frameworks */,
 				F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */,
 				F5405C0D2A96FC38002FA0C9 /* FirebaseFirestore in Frameworks */,
@@ -207,6 +212,7 @@
 				F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */,
 				F5405BD92A96F347002FA0C9 /* RelNetApp.swift */,
 				F5405BDD2A96F348002FA0C9 /* Assets.xcassets */,
+				F5DC3BAA2AA7191A005528F9 /* Info.plist */,
 				F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */,
 				F5405BDF2A96F348002FA0C9 /* Preview Content */,
 			);
@@ -283,6 +289,8 @@
 				F5405C0E2A96FC38002FA0C9 /* FirebaseFirestoreSwift */,
 				F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */,
 				F5418A8C2A9AEE3900511A67 /* SwiftUINavigation */,
+				F5DC3BA62AA71894005528F9 /* GoogleSignIn */,
+				F5DC3BA82AA71894005528F9 /* GoogleSignInSwift */,
 			);
 			productName = RelNet;
 			productReference = F5405BD62A96F347002FA0C9 /* RelNet.app */;
@@ -360,6 +368,7 @@
 				F5405C052A96FC38002FA0C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
+				F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = F5405BD72A96F347002FA0C9 /* Products */;
 			projectDirPath = "";
@@ -584,6 +593,7 @@
 				DEVELOPMENT_TEAM = EAZT2D654U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RelNet/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -616,6 +626,7 @@
 				DEVELOPMENT_TEAM = EAZT2D654U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RelNet/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -779,6 +790,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -816,6 +835,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
 			productName = SwiftUINavigation;
+		};
+		F5DC3BA62AA71894005528F9 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		F5DC3BA82AA71894005528F9 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
