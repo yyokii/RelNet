@@ -12,17 +12,23 @@ import ComposableArchitecture
 struct AppFeature: Reducer {
     struct State: Equatable {
         var path = StackState<Path.State>()
+
+        var isSignIn: Bool = false
         var personsList = PersonsList.State()
         var groupsList = GroupsList.State()
     }
 
     enum Action: Equatable {
+        case signInWithGoogleButtonTapped
+        case updateSignInState(Bool)
+        case onAppear
         case path(StackAction<Path.State, Path.Action>)
         case personsList(PersonsList.Action)
         case groupsList(GroupsList.Action)
     }
 
-    @Dependency(\.uuid) var uuid
+    @Dependency(\.uuid) private var uuid
+    @Dependency(\.authenticationClient) private var authenticationClient
 
     private enum CancelID {
         case saveDebounce
@@ -37,6 +43,20 @@ struct AppFeature: Reducer {
         }
         Reduce<State, Action> { state, action in
             switch action {
+            case .signInWithGoogleButtonTapped:
+                return .run { send in
+                    let _ = try await authenticationClient.signInWithGoogle()
+                    await send(.updateSignInState(true))
+                } catch: { error, send in
+                    await send(.updateSignInState(false))
+                }
+            case let .updateSignInState(isSignIn):
+                state.isSignIn = isSignIn
+                return .none
+            case .onAppear:
+                let user = authenticationClient.currentUser()
+                state.isSignIn = user != nil
+                return .none
             case let .path(.element(id, .groupDetail(.delegate(delegateAction)))):
                 guard case let .some(.groupDetail(detailState)) = state.path[id: id]
                 else { return .none }
@@ -106,9 +126,21 @@ struct AppView: View {
     let store: StoreOf<AppFeature>
 
     var body: some View {
-        TabView {
-            personsListTab
-            groupsListTab
+        WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
+            if viewStore.isSignIn {
+                TabView {
+                    personsListTab
+                    groupsListTab
+                }
+            } else {
+                Text("need to signin")
+                Button {
+                    viewStore.send(.signInWithGoogleButtonTapped)
+                } label: {
+                    Text("sign in with google")
+                }
+
+            }
         }
     }
 }

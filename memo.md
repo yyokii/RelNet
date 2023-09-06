@@ -1,3 +1,41 @@
+* `.run`
+
+  * ````
+    effectの中で、何度でもアクションを発することができる非同期の作業単位をラップする。
+    
+    例えば、依存関係として保持するクライアントに非同期ストリームがあったとします：
+    
+    ```swift
+    struct EventsClient {
+      var events: () -> AsyncStream<Event>
+    }
+    ```
+    
+    `for await` を使って `run` effectに設定し、ストリームの各アクションをシステムに送り返すことができる：
+    
+    ```swift
+    case .startButtonTapped:
+      return .run { send in
+        for await event in self.events() {
+          send(.event(event))
+        }
+      }
+    ```
+    
+    run` のクロージャに渡される `send` 引数の使い方については ``Send`` を参照してください。
+    
+    `run(priority:operation:catch:fileID:line:)`に渡されたクロージャは、エラーを投げることができます。
+    しかし、non-cancellationなエラーがスローされた場合、シミュレータやデバイス上で実行すると実行時警告が表示され、テストではテスト失敗の原因になります。non-cancellation以外のエラーをキャッチするには、末尾に `catch` をつけます。
+    ````
+
+  * CancellationError
+
+    * https://developer.apple.com/documentation/swift/cancellationerror?changes=_3
+
+* Dependencied
+
+  * https://zenn.dev/kalupas226/articles/25ec066246473e
+
 * BindingViewStore
 
 * @PresentationState

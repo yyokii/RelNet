@@ -15,13 +15,21 @@ import GoogleSignIn
 struct AuthenticationClient: Sendable {
     var login: @Sendable (LoginRequest) async throws -> AuthenticationResponse
     var signInWithGoogle: @Sendable () async throws -> User
+    var currentUser: @Sendable () -> User?
 
     init(
         login: @escaping @Sendable (LoginRequest) async throws -> AuthenticationResponse,
-        signInWithGoogle: @escaping @Sendable () async throws -> User
+        signInWithGoogle: @escaping @Sendable () async throws -> User,
+        currentUser: @escaping @Sendable () -> User?
     ) {
+        // Create Google Sign In configuration object.
+        let clientID = FirebaseApp.app()!.options.clientID!
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
         self.login = login
         self.signInWithGoogle = signInWithGoogle
+        self.currentUser = currentUser
     }
 }
 
@@ -68,6 +76,9 @@ extension AuthenticationClient: DependencyKey {
                     throw AuthenticationClientError.notFoundUser
                 }
             }
+        },
+        currentUser: {
+            Auth.auth().currentUser
         }
     )
 }
