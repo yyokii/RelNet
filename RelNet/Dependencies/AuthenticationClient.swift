@@ -70,7 +70,7 @@ extension AuthenticationClient: DependencyKey {
                 }
 
                 do {
-                    let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
+                    let result = try await signInOnMainThread(withPresenting: rootViewController)
                     return try await authenticateUser(for: result.user)
                 } catch {
                     throw AuthenticationClientError.notFoundUser
@@ -104,6 +104,11 @@ private extension AuthenticationClient {
                 }
             }
         }
+    }
+
+    @MainActor
+    private static func signInOnMainThread(withPresenting rootViewController: UIViewController) async throws -> GIDSignInResult {
+        try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
     }
 }
 

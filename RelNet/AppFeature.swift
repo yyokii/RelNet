@@ -44,6 +44,7 @@ struct AppFeature: Reducer {
         Reduce<State, Action> { state, action in
             switch action {
             case .signInWithGoogleButtonTapped:
+                // TODO: 別のReducerにしたいかも
                 return .run { send in
                     let _ = try await authenticationClient.signInWithGoogle()
                     await send(.updateSignInState(true))
@@ -139,7 +140,6 @@ struct AppView: View {
                 } label: {
                     Text("sign in with google")
                 }
-
             }
         }
     }
