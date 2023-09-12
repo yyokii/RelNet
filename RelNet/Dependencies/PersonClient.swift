@@ -12,7 +12,8 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct PersonClient {
-    var listen: (_ userID: String) async throws ->AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var listen: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var addPerson: (_ person: Person, _ userID: String) throws -> Void
 }
 
 extension DependencyValues {
@@ -27,9 +28,9 @@ extension PersonClient: DependencyKey {
         listen: { userID in
             AsyncThrowingStream { continuation in
                 let listener = Firestore.firestore()
-                    .collection("user")
+                    .collection(FirestorePath.users.rawValue)
                     .document(userID)
-                    .collection("persons")
+                    .collection(FirestorePath.persons.rawValue)
                     .addSnapshotListener { querySnapshot, error in
                         if let error {
                             continuation.finish(throwing: error)
@@ -46,6 +47,30 @@ extension PersonClient: DependencyKey {
                     listener.remove()
                 }
             }
+        },
+        addPerson: { person, userID in
+            do {
+                try db
+                    .collection(FirestorePath.users.rawValue)
+                    .document(userID)
+                    .collection(FirestorePath.persons.rawValue)
+                    .addDocument(from: person)
+            } catch {
+                throw PersonClientError.general
+            }
         }
     )
+
+    private static let db: Firestore = Firestore.firestore()
+}
+
+enum PersonClientError: Equatable, LocalizedError, Sendable {
+    case general
+
+    var errorDescription: String? {
+        switch self {
+        case .general:
+            return "failed"
+        }
+    }
 }

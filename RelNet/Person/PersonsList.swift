@@ -49,6 +49,7 @@ struct PersonsList: Reducer {
     }
 
     @Dependency(\.personClient) private var personClient
+    @Dependency(\.authenticationClient) private var authenticationClient
 
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
@@ -74,7 +75,11 @@ struct PersonsList: Reducer {
 
             case .listen:
                 return .run { send in
-                    for try await result in try await self.personClient.listen("aufguss") {
+                    guard let user = self.authenticationClient.currentUser() else {
+                        return
+                    }
+
+                    for try await result in try await self.personClient.listen(user.uid) {
                         await send(.listenPersonsResponse(.success(result)))
                     }
                 } catch: { error, send in
@@ -118,6 +123,9 @@ struct PersonsListView: View {
                 }
             }
             .navigationTitle("Persons")
+            .task {
+                await viewStore.send(.listen).finish()
+            }
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /PersonsList.Destination.State.add,
@@ -125,19 +133,6 @@ struct PersonsListView: View {
             ) { store in
                 NavigationStack {
                     PersonFormView(store: store)
-                        .navigationTitle("New person")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    viewStore.send(.dismissAddPersonButtonTapped)
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    viewStore.send(.confirmAddPersonButtonTapped)
-                                }
-                            }
-                        }
                 }
             }
         }

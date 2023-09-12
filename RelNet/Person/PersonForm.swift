@@ -29,10 +29,16 @@ struct PersonForm: Reducer {
 
     enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
+
+        case addPersonButtonTapped
+        case addPersonResult(TaskResult<Person>)
         case contactedTodayButtonTapped
+        case dismissButtonTapped
     }
 
-    @Dependency(\.uuid) var uuid
+    @Dependency(\.dismiss) var dismiss
+    @Dependency(\.personClient) private var personClient
+    @Dependency(\.authenticationClient) private var authenticationClient
 
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -40,8 +46,30 @@ struct PersonForm: Reducer {
             switch action {
             case .binding:
                 return .none
+            case .addPersonButtonTapped:
+                let addPerson = state.person
+                return .run { send in
+                    guard let user = self.authenticationClient.currentUser() else {
+                        return
+                    }
+
+                    try personClient.addPerson(addPerson, user.uid)
+                    await send(.addPersonResult(.success(addPerson)))
+                } catch: { error, send in
+                    await send(.addPersonResult(.failure(error)))
+                }
             case .contactedTodayButtonTapped:
                 state.person.lastContacted = Date()
+                return .none
+            case .dismissButtonTapped:
+                return .run { _ in
+                    await self.dismiss()
+                }
+            case .addPersonResult(.success(_)):
+                print("📝 success add person")
+                return .none
+            case .addPersonResult(.failure(_)):
+                print("📝 failed add person")
                 return .none
             }
         }
@@ -89,6 +117,19 @@ struct PersonFormView: View {
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)
+            .navigationTitle("New person")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Dismiss") {
+                        viewStore.send(.dismissButtonTapped)
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Add") {
+                        viewStore.send(.addPersonButtonTapped)
+                    }
+                }
+            }
         }
     }
 }

@@ -1,3 +1,13 @@
+* DismissEffect
+
+  * https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/dismisseffect
+
+* 依存する~client作成する際に、プロパティを**@Sendable**にしているのはなんで？
+
+  * データ競合を起こす処理が発生する可能性がありそれをケアするため
+  * https://qiita.com/takehilo/items/39a3d4b14f7e1555e8c9
+  * https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/swiftconcurrency/
+
 * `.run`
 
   * ````

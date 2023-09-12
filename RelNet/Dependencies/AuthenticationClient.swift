@@ -106,6 +106,7 @@ private extension AuthenticationClient {
         }
     }
 
+    // TODO: signInはメインスレッドで呼び出す必要があるが、GIDSignInResultはsendableではないため、別のアクターコンテキストからMainActorへ変更することはできない。それ故に警告が発生するので呼び出し方変える必要あり（メインスレッド実行されるところで呼ぶ）。メインスレッドで実行する必要があり、そしてasync awaitでGIDSignInResultを返却しているのにそれがSendableではない、ということが問題と思われる
     @MainActor
     private static func signInOnMainThread(withPresenting rootViewController: UIViewController) async throws -> GIDSignInResult {
         try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
