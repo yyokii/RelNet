@@ -1,3 +1,8 @@
+* view間での通知/共有方法
+
+  * delegate
+  * 共有Stateを作成
+
 * sheet表示の時の引数、雰囲気で渡している
 
 * DismissEffect

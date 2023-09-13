@@ -90,12 +90,12 @@ struct PersonFormView: View {
             Form {
                 Section {
                     VStack {
-                        TextField("first name", text: viewStore.$person.firstName.toUnwrapped(defaultValue: ""))
+                        TextField("first name", text: viewStore.$person.firstName)
                             .focused(self.$focus, equals: .firstName)
-                        TextField("last name", text: viewStore.$person.lastName.toUnwrapped(defaultValue: ""))
+                        TextField("last name", text: viewStore.$person.lastName)
                             .focused(self.$focus, equals: .lastName)
                         
-                        TextField("nickname", text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
+                        TextField("nickname", text: viewStore.$person.nickname)
 
                         // TODO: 年いる？あまり入れれない気がする、年と月日を分けるとか？
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])

@@ -12,26 +12,23 @@ import FirebaseFirestoreSwift
 
 struct Person: Codable, Identifiable, Equatable {
     @DocumentID var id: String?
-    var firstName: String?
-    var lastName: String?
-    var nickname: String?
+    var firstName: String = ""
+    var lastName: String = ""
+    var nickname: String = ""
     var birthdate: Date?
+    var groupIDs: [String] = []
+    var notes: String = ""
     var phoneNumbers: [String]?
     var emailAddresses: [String]?
     var address: String?
     var imageURL: String?
     var lastContacted: Date?
-    var notes: String = ""
 
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
     var name: String {
-        let firstName = firstName ?? ""
-        let lastName = lastName ?? ""
-
-        if let nickname,
-           !nickname.isEmpty {
+        if !nickname.isEmpty {
             return nickname
         } else if
             !firstName.isEmpty,
@@ -50,11 +47,12 @@ extension Person {
         lastName: "DemoLast",
         nickname: "Nick",
         birthdate: Date(),
+        groupIDs: ["id-1"],
+        notes: "this is note.",
         phoneNumbers: ["00012341234"],
         emailAddresses: ["demo@demomail.com"],
         address: "Japan",
         imageURL: "https://picsum.photos/200",
-        lastContacted: Date(),
-        notes: "this is note."
+        lastContacted: Date()
     )
 }
