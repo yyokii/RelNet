@@ -19,17 +19,17 @@ struct Person: Codable, Identifiable, Equatable {
     var phoneNumbers: [String]?
     var emailAddresses: [String]?
     var address: String?
-    var photoURL: String?
+    var imageURL: String?
     var lastContacted: Date?
-    var notes: String?
-    
+    var notes: String = ""
+
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
-    
+
     var name: String {
         let firstName = firstName ?? ""
         let lastName = lastName ?? ""
-        
+
         if let nickname,
            !nickname.isEmpty {
             return nickname
@@ -53,7 +53,7 @@ extension Person {
         phoneNumbers: ["00012341234"],
         emailAddresses: ["demo@demomail.com"],
         address: "Japan",
-        photoURL: "https://picsum.photos/200",
+        imageURL: "https://picsum.photos/200",
         lastContacted: Date(),
         notes: "this is note."
     )

@@ -48,14 +48,14 @@ struct PersonsList: Reducer {
         }
     }
 
-    @Dependency(\.personClient) private var personClient
     @Dependency(\.authenticationClient) private var authenticationClient
+    @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
             case .addPersonButtonTapped:
-                state.destination = .add(PersonForm.State(person: Person(id: UUID().uuidString)))
+                state.destination = .add(PersonForm.State(person: Person()))
                 return .none
 
             case .confirmAddPersonButtonTapped:
@@ -79,7 +79,7 @@ struct PersonsList: Reducer {
                         return
                     }
 
-                    for try await result in try await self.personClient.listen(user.uid) {
+                    for try await result in try await self.personClient.listenPersons(user.uid) {
                         await send(.listenPersonsResponse(.success(result)))
                     }
                 } catch: { error, send in

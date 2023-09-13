@@ -1,3 +1,5 @@
+* sheet表示の時の引数、雰囲気で渡している
+
 * DismissEffect
 
   * https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/dismisseffect

@@ -12,7 +12,9 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct PersonClient {
-    var listen: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var listenGroups: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
+    var listenPersons: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var addGroup: (_ group: Group, _ userID: String) throws -> Void
     var addPerson: (_ person: Person, _ userID: String) throws -> Void
 }
 
@@ -25,7 +27,30 @@ extension DependencyValues {
 
 extension PersonClient: DependencyKey {
     public static let liveValue = Self(
-        listen: { userID in
+        listenGroups: { userID in
+            AsyncThrowingStream { continuation in
+                let listener = Firestore.firestore()
+                    .collection(FirestorePath.users.rawValue)
+                    .document(userID)
+                    .collection(FirestorePath.groups.rawValue)
+                    .addSnapshotListener { querySnapshot, error in
+                        if let error {
+                            continuation.finish(throwing: error)
+                        }
+                        if let querySnapshot {
+                            let groups = querySnapshot.documents
+                                .compactMap { document -> Group? in
+                                    try? document.data(as: Group.self)
+                                }
+                            continuation.yield(IdentifiedArray(uniqueElements: groups))
+                        }
+                    }
+                continuation.onTermination = { @Sendable _ in
+                    listener.remove()
+                }
+            }
+        },
+        listenPersons: { userID in
             AsyncThrowingStream { continuation in
                 let listener = Firestore.firestore()
                     .collection(FirestorePath.users.rawValue)
@@ -46,6 +71,17 @@ extension PersonClient: DependencyKey {
                 continuation.onTermination = { @Sendable _ in
                     listener.remove()
                 }
+            }
+        },
+        addGroup: { group, userID in
+            do {
+                try db
+                    .collection(FirestorePath.users.rawValue)
+                    .document(userID)
+                    .collection(FirestorePath.groups.rawValue)
+                    .addDocument(from: group)
+            } catch {
+                throw PersonClientError.general
             }
         },
         addPerson: { person, userID in

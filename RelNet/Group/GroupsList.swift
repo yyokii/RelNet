@@ -48,6 +48,7 @@ struct GroupsList: Reducer {
         }
     }
 
+    @Dependency(\.authenticationClient) private var authenticationClient
     @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
@@ -74,10 +75,13 @@ struct GroupsList: Reducer {
 
             case .listen:
                 return .run { send in
-                    // TODO: clientを修正してgroupを取得できるようにする
-                    //                    for try await result in try await self.personClient.listen("aufguss") {
-                    //                        await send(.listenGroupsResponse(.success(result)))
-                    //                    }
+                    guard let user = self.authenticationClient.currentUser() else {
+                        return
+                    }
+
+                    for try await result in try await self.personClient.listenGroups(user.uid) {
+                        await send(.listenGroupsResponse(.success(result)))
+                    }
                 } catch: { error, send in
                     await send(.listenGroupsResponse(.failure(error)))
                 }
@@ -119,6 +123,9 @@ struct GroupsListView: View {
                 }
             }
             .navigationTitle("Goups")
+            .task {
+                await viewStore.send(.listen).finish()
+            }
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /GroupsList.Destination.State.add,
@@ -126,19 +133,6 @@ struct GroupsListView: View {
             ) { store in
                 NavigationStack {
                     GroupFormView(store: store)
-                        .navigationTitle("New group")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    viewStore.send(.dismissAddGroupButtonTapped)
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    viewStore.send(.confirmAddGroupButtonTapped)
-                                }
-                            }
-                        }
                 }
             }
         }

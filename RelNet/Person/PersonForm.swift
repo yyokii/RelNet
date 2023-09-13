@@ -67,7 +67,9 @@ struct PersonForm: Reducer {
                 }
             case .addPersonResult(.success(_)):
                 print("📝 success add person")
-                return .none
+                return .run { _ in
+                    await self.dismiss()
+                }
             case .addPersonResult(.failure(_)):
                 print("📝 failed add person")
                 return .none
@@ -110,14 +112,14 @@ struct PersonFormView: View {
                             Text("いつ会った？")
                         }
 
-                        TextEditor(text: viewStore.$person.notes.toUnwrapped(defaultValue: ""))
+                        TextEditor(text: viewStore.$person.notes)
                     }
                 } header: {
                     Text("Additional Info")
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)
-            .navigationTitle("New person")
+            .navigationTitle("New Person")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Dismiss") {
