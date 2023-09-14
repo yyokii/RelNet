@@ -12,6 +12,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct PersonClient {
+    // TODO: ID渡すのではなく、処理の中で参照した方がシンプルかもしれない
     var listenGroups: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
     var listenPersons: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
     var addGroup: (_ group: Group, _ userID: String) throws -> Void
@@ -98,6 +99,34 @@ extension PersonClient: DependencyKey {
     )
 
     private static let db: Firestore = Firestore.firestore()
+}
+
+extension PersonClient: TestDependencyKey {
+    static let previewValue = Self(
+        listenGroups: { _ in
+            // TODO: previewに反映されない
+            AsyncThrowingStream { continuation in
+                let persons: [Group] = [
+                    .mock,
+                    .mock
+                ]
+                continuation.yield(IdentifiedArray(uniqueElements: persons))
+                continuation.finish()
+            }
+        },
+        listenPersons: { _ in
+            AsyncThrowingStream { continuation in
+                let persons: [Person] = [
+                    .mock,
+                    .mock
+                ]
+                continuation.yield(IdentifiedArray(uniqueElements: persons))
+                continuation.finish()
+            }
+        },
+        addGroup: { _, _ in},
+        addPerson: { _, _ in}
+    )
 }
 
 enum PersonClientError: Equatable, LocalizedError, Sendable {

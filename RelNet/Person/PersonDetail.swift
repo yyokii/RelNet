@@ -14,6 +14,7 @@ struct PersonDetail: Reducer {
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
         var person: Person
+        let groups: IdentifiedArrayOf<Group>
     }
 
     enum Action: Equatable, Sendable {
@@ -86,7 +87,7 @@ struct PersonDetail: Reducer {
                 return .none
 
             case .editButtonTapped:
-                state.destination = .edit(PersonForm.State(person: state.person))
+                state.destination = .edit(PersonForm.State(person: state.person, group: state.groups))
                 return .none
             }
         }
@@ -179,7 +180,7 @@ struct PersonDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             PersonDetailView(
-                store: Store(initialState: PersonDetail.State(person: .mock)) {
+                store: Store(initialState: PersonDetail.State(person: .mock, groups: .init(uniqueElements: [.mock]))) {
                     PersonDetail()
                 }
             )

@@ -23,13 +23,11 @@
 		F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C152A9701F6002FA0C9 /* PersonClient.swift */; };
 		F5405C192A970233002FA0C9 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C182A970233002FA0C9 /* Person.swift */; };
 		F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */; };
-		F5418A872A973EA600511A67 /* PersonsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A862A973EA600511A67 /* PersonsList.swift */; };
 		F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A892A9AED2E00511A67 /* PersonForm.swift */; };
 		F5418A8D2A9AEE3900511A67 /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = F5418A8C2A9AEE3900511A67 /* SwiftUINavigation */; };
 		F5418A902A9B759B00511A67 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A8F2A9B759B00511A67 /* Binding.swift */; };
 		F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A912A9B93D500511A67 /* AppFeature.swift */; };
 		F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A932A9B98C300511A67 /* PersonDetail.swift */; };
-		F5DC3B892A9D6CFA005528F9 /* GroupsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
 		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
@@ -42,6 +40,7 @@
 		F5DC3BA72AA71894005528F9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA62AA71894005528F9 /* GoogleSignIn */; };
 		F5DC3BA92AA71894005528F9 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA82AA71894005528F9 /* GoogleSignInSwift */; };
 		F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */; };
+		F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAE2AB1BE09005528F9 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,12 +74,10 @@
 		F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5405C152A9701F6002FA0C9 /* PersonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonClient.swift; sourceTree = "<group>"; };
 		F5405C182A970233002FA0C9 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
-		F5418A862A973EA600511A67 /* PersonsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonsList.swift; sourceTree = "<group>"; };
 		F5418A892A9AED2E00511A67 /* PersonForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonForm.swift; sourceTree = "<group>"; };
 		F5418A8F2A9B759B00511A67 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		F5418A912A9B93D500511A67 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		F5418A932A9B98C300511A67 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
-		F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsList.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
 		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
@@ -92,6 +89,7 @@
 		F5DC3BA32AA69401005528F9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		F5DC3BAA2AA7191A005528F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePath.swift; sourceTree = "<group>"; };
+		F5DC3BAE2AB1BE09005528F9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +153,7 @@
 				F5418A882A973EAC00511A67 /* App */,
 				F5405C042A96F579002FA0C9 /* Dependencies */,
 				F5405C172A970223002FA0C9 /* Model */,
+				F5DC3BAD2AB1BDC9005528F9 /* Main */,
 				F5DC3B952AA57EBA005528F9 /* Person */,
 				F5DC3B962AA57ED2005528F9 /* Group */,
 				F5DC3B972AA57EE3005528F9 /* Login */,
@@ -233,7 +232,6 @@
 		F5DC3B952AA57EBA005528F9 /* Person */ = {
 			isa = PBXGroup;
 			children = (
-				F5418A862A973EA600511A67 /* PersonsList.swift */,
 				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
 				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
 			);
@@ -243,7 +241,6 @@
 		F5DC3B962AA57ED2005528F9 /* Group */ = {
 			isa = PBXGroup;
 			children = (
-				F5DC3B882A9D6CFA005528F9 /* GroupsList.swift */,
 				F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */,
 				F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */,
 			);
@@ -266,6 +263,14 @@
 				F5DC3BA12AA6110A005528F9 /* SafariView.swift */,
 			);
 			path = MyPage;
+			sourceTree = "<group>";
+		};
+		F5DC3BAD2AB1BDC9005528F9 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				F5DC3BAE2AB1BE09005528F9 /* MainView.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -417,13 +422,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */,
+				F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */,
 				F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */,
 				F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */,
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,
 				F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
-				F5DC3B892A9D6CFA005528F9 /* GroupsList.swift in Sources */,
 				F5418A902A9B759B00511A67 /* Binding.swift in Sources */,
 				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
 				F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */,
@@ -431,7 +436,6 @@
 				F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
 				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
-				F5418A872A973EA600511A67 /* PersonsList.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
 				F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */,

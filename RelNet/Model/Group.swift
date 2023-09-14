@@ -10,7 +10,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct Group: Codable, Identifiable, Equatable {
+struct Group: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
     var name: String = ""
     var description: String?

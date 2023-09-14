@@ -15,10 +15,11 @@ struct PersonForm: Reducer {
     struct State: Equatable, Sendable {
         @BindingState var focus: Field? = .firstName
         @BindingState var person: Person
+        let group: IdentifiedArrayOf<Group>
 
-        init(focus: Field? = .firstName, person: Person) {
-            self.focus = focus
+        init(person: Person, group: IdentifiedArrayOf<Group>) {
             self.person = person
+            self.group = group
         }
 
         enum Field: Hashable {
@@ -103,6 +104,23 @@ struct PersonFormView: View {
                 } header: {
                     Text("Basic Info")
                 }
+
+//                Section {
+//                    ForEach(groups) { group in
+//                        HStack {
+//                            Label(group.name, systemImage: "paintpalette")
+//                                .padding(4)
+//
+//                            Button {
+//                                viewStore.send(.contactedTodayButtonTapped)
+//                            } label: {
+//                                Text("設定")
+//                            }
+//                        }
+//                    }
+//                } header: {
+//                    Text("Groups")
+//                }
                 
                 Section {
                     VStack {
@@ -136,11 +154,33 @@ struct PersonFormView: View {
     }
 }
 
+//struct GroupPicker: View {
+//    @Binding var selection: Group
+//    let groups: IdentifiedArrayOf<Group>
+//
+//    var body: some View {
+//        Picker("Group", selection: self.$selection) {
+//            ForEach(groups) { group in
+//                ZStack {
+//                    Label(group.name, systemImage: "paintpalette")
+//                        .padding(4)
+//                }
+//                .tag(group)
+//            }
+//        }
+//    }
+//}
+
 struct PersonForm_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             PersonFormView(
-                store: Store(initialState: PersonForm.State(person: .mock)) {
+                store: Store(
+                    initialState: PersonForm.State(
+                        person: .mock,
+                        group: .init(uniqueElements: [.mock])
+                    )
+                ) {
                     PersonForm()
                 }
             )

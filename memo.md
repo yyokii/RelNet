@@ -1,3 +1,32 @@
+* StoreTaskって何？.finish()？
+
+  * ```swift
+    .task {
+        await viewStore.send(.listenGroups).finish()
+        await viewStore.send(.listenPersons).finish()
+    }
+    ```
+
+    のようにすると後半のは呼ばれないのなぜ
+
+  * そもそもの.taskの処理の理解が必要そう
+
+* AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
+
+* Standupsにおいて、AppFeatureでdestinationの設定しているのはなんで？子viewでlink設定するのではだめ？
+
+  * navigation周りよくわからない
+  * Navigation
+    * tree-based navigation
+    * stack-based navigation
+      * NavigationStack
+
+* https://zenn.dev/yimajo/articles/da23e10ee9cf74
+
+  * > ちなみにProfile画面でresetする際に元データをリセットしてるのはsend(アクション)時にプロパティのsetが動くから。Reducerの関数が動作するとStateが書き換わるのを利用してそう。
+
+  * action → reducer → state更新 → stateのsetterが動作 てこと？
+
 * view間での通知/共有方法
 
   * delegate
