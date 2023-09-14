@@ -32,6 +32,7 @@ struct PersonForm: Reducer {
         case binding(BindingAction<State>)
 
         case contactedTodayButtonTapped
+        case groupButtonTapped(Group)
     }
 
     var body: some ReducerOf<Self> {
@@ -43,6 +44,13 @@ struct PersonForm: Reducer {
 
             case .contactedTodayButtonTapped:
                 state.person.lastContacted = Date()
+                return .none
+
+            case let .groupButtonTapped(group):
+                guard let id = group.id else {
+                    return .none
+                }
+                state.person.updateGroupID(id)
                 return .none
             }
         }
@@ -82,21 +90,26 @@ struct PersonFormView: View {
                 }
 
                 Section {
-                    Text("hoge")
-//                    VStack {
-//                        ForEach(viewStore.groups) { group in
-//                            HStack {
-//                                Label(group.name, systemImage: "paintpalette")
-//                                    .padding(4)
-//
-//                                Button {
-//                                    print("")
-//                                } label: {
-//                                    Text("設定")
-//                                }
-//                            }
-//                        }
-//                    }
+                    VStack(alignment: .leading) {
+                        ForEach(viewStore.groups) { group in
+                            HStack {
+                                Label(group.name, systemImage: "paintpalette")
+
+                                Spacer()
+
+                                Button {
+                                    viewStore.send(.groupButtonTapped(group))
+                                } label: {
+                                    if viewStore.person.groupIDs.contains(group.id ?? "") {
+                                        Text("解除")
+                                    } else {
+                                        Text("設定")
+                                    }
+                                }
+                                .buttonStyle(BorderlessButtonStyle())
+                            }
+                        }
+                    }
                 } header: {
                     Text("Groups")
                 }
@@ -119,23 +132,6 @@ struct PersonFormView: View {
         }
     }
 }
-
-//struct GroupPicker: View {
-//    @Binding var selection: Group
-//    let groups: IdentifiedArrayOf<Group>
-//
-//    var body: some View {
-//        Picker("Group", selection: self.$selection) {
-//            ForEach(groups) { group in
-//                ZStack {
-//                    Label(group.name, systemImage: "paintpalette")
-//                        .padding(4)
-//                }
-//                .tag(group)
-//            }
-//        }
-//    }
-//}
 
 struct PersonForm_Previews: PreviewProvider {
     static var previews: some View {

@@ -16,10 +16,10 @@ struct Person: Codable, Identifiable, Equatable {
     var lastName: String = ""
     var nickname: String = ""
     var birthdate: Date?
-    var groupIDs: [String] = []
     var notes: String = ""
     var address: String?
     var lastContacted: Date?
+    private(set) var groupIDs: [String] = []
 
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
@@ -44,10 +44,10 @@ extension Person {
         lastName: "DemoLast",
         nickname: "Nick",
         birthdate: Date(),
-        groupIDs: ["id-1"],
         notes: "this is note.",
         address: "Japan",
-        lastContacted: Date()
+        lastContacted: Date(),
+        groupIDs: ["id-1"]
     )
 
     func toDictionary() -> [String: Any] {
@@ -80,5 +80,13 @@ extension Person {
         }
 
         return dictionary
+    }
+
+    mutating func updateGroupID(_ id: String) {
+        if !groupIDs.contains(id) {
+            groupIDs.append(id)
+        } else {
+            groupIDs.removeAll { $0 == id }
+        }
     }
 }

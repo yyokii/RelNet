@@ -1,4 +1,6 @@
 
+* ViewStateを作成しているコードがたまにあるがどんな時に有効だろうか？
+
 * AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
 
 * Standupsにおいて、AppFeatureでdestinationの設定しているのはなんで？子viewでlink設定するのではだめ？

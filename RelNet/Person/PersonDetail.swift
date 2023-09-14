@@ -120,15 +120,37 @@ struct PersonDetailView: View {
 
     struct ViewState: Equatable {
         let person: Person
+        let groupNames: [String]
 
         init(state: PersonDetail.State) {
             self.person = state.person
+            self.groupNames = state.person.groupIDs.compactMap { groupID in
+                state.groups.first(where: { $0.id == groupID })?.name
+            }
         }
     }
 
     var body: some View {
         WithViewStore(self.store, observe: ViewState.init) { viewStore in
             List {
+                Section {
+                    Text(viewStore.person.lastName)
+                    Text(viewStore.person.firstName)
+                    Text(viewStore.person.nickname)
+                } header: {
+                    Text("Basic Info")
+                }
+
+                if !viewStore.person.groupIDs.isEmpty {
+                    Section {
+                        ForEach(viewStore.groupNames.indices, id: \.self) { index in
+                            Text(viewStore.groupNames[index])
+                        }
+                    } header: {
+                        Text("Group")
+                    }
+                }
+
                 Section {
                     Button("Delete") {
                         viewStore.send(.deleteButtonTapped)
