@@ -47,30 +47,31 @@ struct PersonForm: Reducer {
             switch action {
             case .binding:
                 return .none
+
             case .addPersonButtonTapped:
                 let addPerson = state.person
                 return .run { send in
-                    guard let user = self.authenticationClient.currentUser() else {
-                        return
-                    }
-
-                    try personClient.addPerson(addPerson, user.uid)
+                    try personClient.addPerson(addPerson)
                     await send(.addPersonResult(.success(addPerson)))
                 } catch: { error, send in
                     await send(.addPersonResult(.failure(error)))
                 }
+
             case .contactedTodayButtonTapped:
                 state.person.lastContacted = Date()
                 return .none
+
             case .dismissButtonTapped:
                 return .run { _ in
                     await self.dismiss()
                 }
+
             case .addPersonResult(.success(_)):
                 print("📝 success add person")
                 return .run { _ in
                     await self.dismiss()
                 }
+
             case .addPersonResult(.failure(_)):
                 print("📝 failed add person")
                 return .none

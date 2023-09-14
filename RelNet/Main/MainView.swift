@@ -104,11 +104,7 @@ struct Main: Reducer {
 
             case .listenGroups:
                 return .run { send in
-                    guard let user = self.authenticationClient.currentUser() else {
-                        return
-                    }
-
-                    for try await result in try await self.personClient.listenGroups(user.uid) {
+                    for try await result in try await self.personClient.listenGroups() {
                         await send(.listenGroupsResponse(.success(result)))
                     }
                 } catch: { error, send in
@@ -117,11 +113,7 @@ struct Main: Reducer {
 
             case .listenPersons:
                 return .run { send in
-                    guard let user = self.authenticationClient.currentUser() else {
-                        return
-                    }
-
-                    for try await result in try await self.personClient.listenPersons(user.uid) {
+                    for try await result in try await self.personClient.listenPersons() {
                         await send(.listenPersonsResponse(.success(result)))
                     }
                 } catch: { error, send in

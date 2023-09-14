@@ -44,27 +44,27 @@ struct GroupForm: Reducer {
             switch action {
             case .binding:
                 return .none
+
             case .addGroupButtonTapped:
                 let addGroup = state.group
                 return .run { send in
-                    guard let user = self.authenticationClient.currentUser() else {
-                        return
-                    }
-
-                    try personClient.addGroup(addGroup, user.uid)
+                    try personClient.addGroup(addGroup)
                     await send(.addGroupResult(.success(addGroup)))
                 } catch: { error, send in
                     await send(.addGroupResult(.failure(error)))
                 }
+
             case .dismissButtonTapped:
                 return .run { _ in
                     await self.dismiss()
                 }
+
             case .addGroupResult(.success(_)):
                 print("📝 success add Group")
                 return .run { _ in
                     await self.dismiss()
                 }
+
             case .addGroupResult(.failure(_)):
                 print("📝 failed add person")
                 return .none

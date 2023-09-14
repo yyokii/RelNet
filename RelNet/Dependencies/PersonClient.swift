@@ -12,11 +12,13 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 struct PersonClient {
-    // TODO: ID渡すのではなく、処理の中で参照した方がシンプルかもしれない
-    var listenGroups: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
-    var listenPersons: (_ userID: String) async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
-    var addGroup: (_ group: Group, _ userID: String) throws -> Void
-    var addPerson: (_ person: Person, _ userID: String) throws -> Void
+
+    @Dependency(\.authenticationClient) private static var authenticationClient
+
+    var listenGroups: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
+    var listenPersons: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var addGroup: (_ group: Group) throws -> Void
+    var addPerson: (_ person: Person) throws -> Void
 }
 
 extension DependencyValues {
@@ -28,17 +30,20 @@ extension DependencyValues {
 
 extension PersonClient: DependencyKey {
     public static let liveValue = Self(
-        listenGroups: { userID in
+        listenGroups: {
             AsyncThrowingStream { continuation in
+                guard let user = authenticationClient.currentUser() else {
+                    continuation.finish(throwing: PersonClientError.notFoundUser)
+                    return
+                }
                 let listener = Firestore.firestore()
                     .collection(FirestorePath.users.rawValue)
-                    .document(userID)
+                    .document(user.uid)
                     .collection(FirestorePath.groups.rawValue)
                     .addSnapshotListener { querySnapshot, error in
                         if let error {
-                            continuation.finish(throwing: error)
-                        }
-                        if let querySnapshot {
+                            continuation.finish(throwing: PersonClientError.general(error))
+                        } else if let querySnapshot {
                             let groups = querySnapshot.documents
                                 .compactMap { document -> Group? in
                                     try? document.data(as: Group.self)
@@ -51,17 +56,20 @@ extension PersonClient: DependencyKey {
                 }
             }
         },
-        listenPersons: { userID in
+        listenPersons: {
             AsyncThrowingStream { continuation in
+                guard let user = authenticationClient.currentUser() else {
+                    continuation.finish(throwing: PersonClientError.notFoundUser)
+                    return
+                }
                 let listener = Firestore.firestore()
                     .collection(FirestorePath.users.rawValue)
-                    .document(userID)
+                    .document(user.uid)
                     .collection(FirestorePath.persons.rawValue)
                     .addSnapshotListener { querySnapshot, error in
                         if let error {
-                            continuation.finish(throwing: error)
-                        }
-                        if let querySnapshot {
+                            continuation.finish(throwing: PersonClientError.general(error))
+                        } else if let querySnapshot {
                             let persons = querySnapshot.documents
                                 .compactMap { document -> Person? in
                                     try? document.data(as: Person.self)
@@ -74,26 +82,34 @@ extension PersonClient: DependencyKey {
                 }
             }
         },
-        addGroup: { group, userID in
+        addGroup: { group in
+            guard let user = authenticationClient.currentUser() else {
+                throw PersonClientError.notFoundUser
+            }
+
             do {
                 try db
                     .collection(FirestorePath.users.rawValue)
-                    .document(userID)
+                    .document(user.uid)
                     .collection(FirestorePath.groups.rawValue)
                     .addDocument(from: group)
             } catch {
-                throw PersonClientError.general
+                throw PersonClientError.general(error)
             }
         },
-        addPerson: { person, userID in
+        addPerson: { person in
+            guard let user = authenticationClient.currentUser() else {
+                throw PersonClientError.notFoundUser
+            }
+
             do {
                 try db
                     .collection(FirestorePath.users.rawValue)
-                    .document(userID)
+                    .document(user.uid)
                     .collection(FirestorePath.persons.rawValue)
                     .addDocument(from: person)
             } catch {
-                throw PersonClientError.general
+                throw PersonClientError.general(error)
             }
         }
     )
@@ -103,7 +119,7 @@ extension PersonClient: DependencyKey {
 
 extension PersonClient: TestDependencyKey {
     static let previewValue = Self(
-        listenGroups: { _ in
+        listenGroups: {
             // TODO: previewに反映されない
             AsyncThrowingStream { continuation in
                 let persons: [Group] = [
@@ -114,7 +130,7 @@ extension PersonClient: TestDependencyKey {
                 continuation.finish()
             }
         },
-        listenPersons: { _ in
+        listenPersons: {
             AsyncThrowingStream { continuation in
                 let persons: [Person] = [
                     .mock,
@@ -124,18 +140,21 @@ extension PersonClient: TestDependencyKey {
                 continuation.finish()
             }
         },
-        addGroup: { _, _ in},
-        addPerson: { _, _ in}
+        addGroup: { _ in},
+        addPerson: { _ in}
     )
 }
 
-enum PersonClientError: Equatable, LocalizedError, Sendable {
-    case general
+enum PersonClientError: LocalizedError, Sendable {
+    case general(Error?)
+    case notFoundUser
 
     var errorDescription: String? {
         switch self {
-        case .general:
-            return "failed"
+        case let .general(error):
+            return "failed. \(String(describing: error?.localizedDescription))"
+        case .notFoundUser:
+            return "not found user"
         }
     }
 }
