@@ -98,7 +98,7 @@ struct Main: Reducer {
                 }
 
                 let group = formState.group
-                
+
                 return .run { send in
                     try personClient.addGroup(group)
                     await send(.addGroupResult(.success(group)))
