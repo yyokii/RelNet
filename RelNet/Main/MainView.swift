@@ -11,6 +11,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct Main: Reducer {
+
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
 
@@ -25,13 +26,20 @@ struct Main: Reducer {
     }
 
     enum Action: Equatable {
+        // User Action
         case addGroupButtonTapped
         case addPersonButtonTapped
-        case destination(PresentationAction<Destination.Action>)
+        case confirmAddGroupButtonTapped
+        case confirmAddPersonButtonTapped
         case dismissAddGroupButtonTapped
         case dismissAddPersonButtonTapped
         case groupCardTapped(Group)
         case personCardTapped(Person)
+
+        // Other Action
+        case addGroupResult(TaskResult<Group>)
+        case addPersonResult(TaskResult<Person>)
+        case destination(PresentationAction<Destination.Action>)
         case listenGroups
         case listenPersons
         case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
@@ -75,6 +83,7 @@ struct Main: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
+
             case .addGroupButtonTapped:
                 state.destination = .addGroup(GroupForm.State(group: Group()))
                 return .none
@@ -83,8 +92,33 @@ struct Main: Reducer {
                 state.destination = .addPerson(PersonForm.State(person: Person(), group: state.groups))
                 return .none
 
-            case .destination:
-                return .none
+            case .confirmAddGroupButtonTapped:
+                guard case let .some(.addGroup(formState)) = state.destination else {
+                    return .none
+                }
+
+                let group = formState.group
+                
+                return .run { send in
+                    try personClient.addGroup(group)
+                    await send(.addGroupResult(.success(group)))
+                } catch: { error, send in
+                    await send(.addGroupResult(.failure(error)))
+                }
+
+            case .confirmAddPersonButtonTapped:
+                guard case let .some(.addPerson(formState)) = state.destination else {
+                    return .none
+                }
+
+                let person = formState.person
+
+                return .run { send in
+                    try personClient.addPerson(person)
+                    await send(.addPersonResult(.success(person)))
+                } catch: { error, send in
+                    await send(.addPersonResult(.failure(error)))
+                }
 
             case .dismissAddGroupButtonTapped:
                 state.destination = nil
@@ -100,6 +134,27 @@ struct Main: Reducer {
 
             case let .personCardTapped(person):
                 state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
+                return .none
+
+            case .addGroupResult(.success(_)):
+                print("📝 success add Group")
+                state.destination = nil
+                return .none
+
+            case .addGroupResult(.failure(_)):
+                print("📝 failed add person")
+                return .none
+
+            case .addPersonResult(.success(_)):
+                print("📝 success add person")
+                state.destination = nil
+                return .none
+
+            case .addPersonResult(.failure(_)):
+                print("📝 failed add person")
+                return .none
+
+            case .destination:
                 return .none
 
             case .listenGroups:
@@ -180,6 +235,19 @@ struct MainView: View {
             ) { store in
                 NavigationStack {
                     GroupFormView(store: store)
+                        .navigationTitle("New Group")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Dismiss") {
+                                    viewStore.send(.dismissAddGroupButtonTapped)
+                                }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Add") {
+                                    viewStore.send(.confirmAddGroupButtonTapped)
+                                }
+                            }
+                        }
                 }
             }
             .sheet(
@@ -189,6 +257,19 @@ struct MainView: View {
             ) { store in
                 NavigationStack {
                     PersonFormView(store: store)
+                        .navigationTitle("New Person")
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Dismiss") {
+                                    viewStore.send(.dismissAddPersonButtonTapped)
+                                }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Add") {
+                                    viewStore.send(.confirmAddPersonButtonTapped)
+                                }
+                            }
+                        }
                 }
             }
         }

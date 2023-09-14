@@ -17,20 +17,19 @@ struct GroupDetail: Reducer {
     }
 
     enum Action: Equatable, Sendable {
+        // User Action
         case cancelEditButtonTapped
-        case delegate(Delegate)
         case deleteButtonTapped
-        case destination(PresentationAction<Destination.Action>)
         case doneEditingButtonTapped
         case editButtonTapped
 
-        enum Delegate: Equatable {
-            case deleteGroup
-            case groupUpdated(Group)
-        }
+        // Other Action
+        case destination(PresentationAction<Destination.Action>)
+        case editGroupResult(TaskResult<Group>)
     }
 
     @Dependency(\.dismiss) var dismiss
+    @Dependency(\.personClient) private var personClient
 
     struct Destination: Reducer {
         enum State: Equatable {
@@ -59,9 +58,6 @@ struct GroupDetail: Reducer {
                 state.destination = nil
                 return .none
 
-            case .delegate:
-                return .none
-
             case .deleteButtonTapped:
                 state.destination = .alert(.deleteGroup)
                 return .none
@@ -69,34 +65,51 @@ struct GroupDetail: Reducer {
             case let .destination(.presented(.alert(alertAction))):
                 switch alertAction {
                 case .confirmDeletion:
+                    guard let id = state.group.id else {
+                        return .none
+                    }
+
                     return .run { send in
-                        await send(.delegate(.deleteGroup), animation: .default)
+                        try personClient.deleteGroup(id)
                         await self.dismiss()
+                    } catch: { error, send in
+                        await send(.editGroupResult(.failure(error)))
                     }
                 }
-
-            case .destination:
-                return .none
 
             case .doneEditingButtonTapped:
                 guard case let .some(.edit(editState)) = state.destination
                 else { return .none }
-                state.group = editState.group
-                state.destination = nil
-                return .none
+
+                let group = editState.group
+
+                return .run { send in
+                    try personClient.updateGroup(group)
+                    await send(.editGroupResult(.success(group)))
+                } catch: { error, send in
+                    await send(.editGroupResult(.failure(error)))
+                }
 
             case .editButtonTapped:
                 state.destination = .edit(GroupForm.State(group: state.group))
+                return .none
+
+            case .destination:
+                return .none
+
+            case let .editGroupResult(.success(group)):
+                print("📝 success edit group")
+                state.group = group
+                state.destination = nil
+                return .none
+
+            case .editGroupResult(.failure(_)):
+                print("📝 failed edit group")
                 return .none
             }
         }
         .ifLet(\.$destination, action: /Action.destination) {
             Destination()
-        }
-        .onChange(of: \.group) { oldValue, newValue in
-            Reduce { state, action in
-                    .send(.delegate(.groupUpdated(newValue)))
-            }
         }
     }
 }
@@ -168,10 +181,10 @@ extension AlertState where Action == GroupDetail.Destination.Action.Alert {
             TextState("Yes")
         }
         ButtonState(role: .cancel) {
-            TextState("Nevermind")
+            TextState("Cancel")
         }
     } message: {
-        TextState("Are you sure you want to delete this meeting?")
+        TextState("Are you sure you want to delete this?")
     }
 }
 

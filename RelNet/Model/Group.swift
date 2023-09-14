@@ -13,7 +13,7 @@ import FirebaseFirestoreSwift
 struct Group: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
     var name: String = ""
-    var description: String?
+    var description: String = ""
 
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
@@ -25,5 +25,22 @@ extension Group {
         name: "😄demo name",
         description: "this is description."
     )
+
+    func toDictionary() -> [String: Any] {
+        var dictionary: [String: Any] = [
+            "name": name,
+            "description": description
+        ]
+
+        if let createdAt {
+            dictionary["createdAt"] = createdAt
+        }
+
+        if let updatedAt {
+            dictionary["updatedAt"] = updatedAt
+        }
+
+        return dictionary
+    }
 }
 

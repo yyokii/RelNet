@@ -31,15 +31,8 @@ struct PersonForm: Reducer {
     enum Action: BindableAction, Equatable, Sendable {
         case binding(BindingAction<State>)
 
-        case addPersonButtonTapped
-        case addPersonResult(TaskResult<Person>)
         case contactedTodayButtonTapped
-        case dismissButtonTapped
     }
-
-    @Dependency(\.dismiss) var dismiss
-    @Dependency(\.personClient) private var personClient
-    @Dependency(\.authenticationClient) private var authenticationClient
 
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -48,38 +41,20 @@ struct PersonForm: Reducer {
             case .binding:
                 return .none
 
-            case .addPersonButtonTapped:
-                let addPerson = state.person
-                return .run { send in
-                    try personClient.addPerson(addPerson)
-                    await send(.addPersonResult(.success(addPerson)))
-                } catch: { error, send in
-                    await send(.addPersonResult(.failure(error)))
-                }
-
             case .contactedTodayButtonTapped:
                 state.person.lastContacted = Date()
-                return .none
-
-            case .dismissButtonTapped:
-                return .run { _ in
-                    await self.dismiss()
-                }
-
-            case .addPersonResult(.success(_)):
-                print("📝 success add person")
-                return .run { _ in
-                    await self.dismiss()
-                }
-
-            case .addPersonResult(.failure(_)):
-                print("📝 failed add person")
                 return .none
             }
         }
     }
 }
 
+/**
+ Person情報の入力ができる画面
+
+ どの画面から本画面を表示するかでtoolbarに表示するボタンが変更するので、利用するViewにおいて
+ toolbarの設定とその処理を担うようにしている。
+ */
 struct PersonFormView: View {
     let store: StoreOf<PersonForm>
 
@@ -138,19 +113,6 @@ struct PersonFormView: View {
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)
-            .navigationTitle("New Person")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Dismiss") {
-                        viewStore.send(.dismissButtonTapped)
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Add") {
-                        viewStore.send(.addPersonButtonTapped)
-                    }
-                }
-            }
         }
     }
 }

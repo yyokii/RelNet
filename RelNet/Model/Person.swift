@@ -18,10 +18,7 @@ struct Person: Codable, Identifiable, Equatable {
     var birthdate: Date?
     var groupIDs: [String] = []
     var notes: String = ""
-    var phoneNumbers: [String]?
-    var emailAddresses: [String]?
     var address: String?
-    var imageURL: String?
     var lastContacted: Date?
 
     @ServerTimestamp var createdAt: Timestamp?
@@ -49,10 +46,39 @@ extension Person {
         birthdate: Date(),
         groupIDs: ["id-1"],
         notes: "this is note.",
-        phoneNumbers: ["00012341234"],
-        emailAddresses: ["demo@demomail.com"],
         address: "Japan",
-        imageURL: "https://picsum.photos/200",
         lastContacted: Date()
     )
+
+    func toDictionary() -> [String: Any] {
+        var dictionary: [String: Any] = [
+            "firstName": firstName,
+            "lastName": lastName,
+            "nickname": nickname,
+            "groupIDs": groupIDs,
+            "notes": notes
+        ]
+
+        if let birthdate {
+            dictionary["birthdate"] = birthdate
+        }
+
+        if let address {
+            dictionary["address"] = address
+        }
+
+        if let lastContacted {
+            dictionary["lastContacted"] = lastContacted
+        }
+
+        if let createdAt {
+            dictionary["createdAt"] = createdAt
+        }
+
+        if let updatedAt {
+            dictionary["updatedAt"] = updatedAt
+        }
+
+        return dictionary
+    }
 }

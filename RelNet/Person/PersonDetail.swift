@@ -18,20 +18,19 @@ struct PersonDetail: Reducer {
     }
 
     enum Action: Equatable, Sendable {
+        // User Action
         case cancelEditButtonTapped
-        case delegate(Delegate)
         case deleteButtonTapped
-        case destination(PresentationAction<Destination.Action>)
         case doneEditingButtonTapped
         case editButtonTapped
 
-        enum Delegate: Equatable {
-            case deletePerson
-            case personUpdated(Person)
-        }
+        // Other Action
+        case destination(PresentationAction<Destination.Action>)
+        case editPersonResult(TaskResult<Person>)
     }
 
     @Dependency(\.dismiss) var dismiss
+    @Dependency(\.personClient) private var personClient
 
     struct Destination: Reducer {
         enum State: Equatable {
@@ -60,9 +59,6 @@ struct PersonDetail: Reducer {
                 state.destination = nil
                 return .none
 
-            case .delegate:
-                return .none
-
             case .deleteButtonTapped:
                 state.destination = .alert(.deletePerson)
                 return .none
@@ -70,34 +66,51 @@ struct PersonDetail: Reducer {
             case let .destination(.presented(.alert(alertAction))):
                 switch alertAction {
                 case .confirmDeletion:
+                    guard let id = state.person.id else {
+                        return .none
+                    }
+
                     return .run { send in
-                        await send(.delegate(.deletePerson), animation: .default)
+                        try personClient.deletePerson(id)
                         await self.dismiss()
+                    } catch: { error, send in
+                        await send(.editPersonResult(.failure(error)))
                     }
                 }
-
-            case .destination:
-                return .none
 
             case .doneEditingButtonTapped:
                 guard case let .some(.edit(editState)) = state.destination
                 else { return .none }
-                state.person = editState.person
-                state.destination = nil
-                return .none
+
+                let person = editState.person
+
+                return .run { send in
+                    try personClient.updatePerson(person)
+                    await send(.editPersonResult(.success(person)))
+                } catch: { error, send in
+                    await send(.editPersonResult(.failure(error)))
+                }
 
             case .editButtonTapped:
                 state.destination = .edit(PersonForm.State(person: state.person, group: state.groups))
+                return .none
+
+            case .destination:
+                return .none
+
+            case let .editPersonResult(.success(person)):
+                print("📝 success edit person")
+                state.person = person
+                state.destination = nil
+                return .none
+
+            case .editPersonResult(.failure(_)):
+                print("📝 failed edit person")
                 return .none
             }
         }
         .ifLet(\.$destination, action: /Action.destination) {
             Destination()
-        }
-        .onChange(of: \.person) { oldValue, newValue in
-            Reduce { state, action in
-                    .send(.delegate(.personUpdated(newValue)))
-            }
         }
     }
 }
@@ -124,7 +137,7 @@ struct PersonDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle(viewStore.person.firstName ?? "")
+            .navigationTitle(viewStore.person.firstName)
             .toolbar {
                 Button("Edit") {
                     viewStore.send(.editButtonTapped)
@@ -142,7 +155,7 @@ struct PersonDetailView: View {
             ) { store in
                 NavigationStack {
                     PersonFormView(store: store)
-                        .navigationTitle(viewStore.person.firstName ?? "")
+                        .navigationTitle(viewStore.person.firstName)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
@@ -169,10 +182,10 @@ extension AlertState where Action == PersonDetail.Destination.Action.Alert {
             TextState("Yes")
         }
         ButtonState(role: .cancel) {
-            TextState("Nevermind")
+            TextState("Cancel")
         }
     } message: {
-        TextState("Are you sure you want to delete this meeting?")
+        TextState("Are you sure you want to delete this?")
     }
 }
 
