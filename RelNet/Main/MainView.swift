@@ -346,19 +346,6 @@ struct GroupCardView: View {
     }
 }
 
-//struct TrailingIconLabelStyle: LabelStyle {
-//    func makeBody(configuration: Configuration) -> some View {
-//        HStack {
-//            configuration.title
-//            configuration.icon
-//        }
-//    }
-//}
-
-//extension LabelStyle where Self == TrailingIconLabelStyle {
-//    static var trailingIcon: Self { Self() }
-//}
-
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
