@@ -15,11 +15,11 @@ struct PersonForm: Reducer {
     struct State: Equatable, Sendable {
         @BindingState var focus: Field? = .firstName
         @BindingState var person: Person
-        let group: IdentifiedArrayOf<Group>
+        let groups: IdentifiedArrayOf<Group>
 
-        init(person: Person, group: IdentifiedArrayOf<Group>) {
+        init(person: Person, groups: IdentifiedArrayOf<Group>) {
             self.person = person
-            self.group = group
+            self.groups = groups
         }
 
         enum Field: Hashable {
@@ -81,22 +81,25 @@ struct PersonFormView: View {
                     Text("Basic Info")
                 }
 
-//                Section {
-//                    ForEach(groups) { group in
-//                        HStack {
-//                            Label(group.name, systemImage: "paintpalette")
-//                                .padding(4)
+                Section {
+                    Text("hoge")
+//                    VStack {
+//                        ForEach(viewStore.groups) { group in
+//                            HStack {
+//                                Label(group.name, systemImage: "paintpalette")
+//                                    .padding(4)
 //
-//                            Button {
-//                                viewStore.send(.contactedTodayButtonTapped)
-//                            } label: {
-//                                Text("設定")
+//                                Button {
+//                                    print("")
+//                                } label: {
+//                                    Text("設定")
+//                                }
 //                            }
 //                        }
 //                    }
-//                } header: {
-//                    Text("Groups")
-//                }
+                } header: {
+                    Text("Groups")
+                }
                 
                 Section {
                     VStack {
@@ -141,7 +144,7 @@ struct PersonForm_Previews: PreviewProvider {
                 store: Store(
                     initialState: PersonForm.State(
                         person: .mock,
-                        group: .init(uniqueElements: [.mock])
+                        groups: .init(uniqueElements: [.mock])
                     )
                 ) {
                     PersonForm()

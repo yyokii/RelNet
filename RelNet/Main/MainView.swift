@@ -89,7 +89,7 @@ struct Main: Reducer {
                 return .none
 
             case .addPersonButtonTapped:
-                state.destination = .addPerson(PersonForm.State(person: Person(), group: state.groups))
+                state.destination = .addPerson(PersonForm.State(person: Person(), groups: state.groups))
                 return .none
 
             case .confirmAddGroupButtonTapped:

@@ -1,15 +1,3 @@
-* StoreTaskって何？.finish()？
-
-  * ```swift
-    .task {
-        await viewStore.send(.listenGroups).finish()
-        await viewStore.send(.listenPersons).finish()
-    }
-    ```
-
-    のようにすると後半のは呼ばれないのなぜ
-
-  * そもそもの.taskの処理の理解が必要そう
 
 * AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
 
@@ -33,10 +21,6 @@
   * 共有Stateを作成
 
 * sheet表示の時の引数、雰囲気で渡している
-
-* DismissEffect
-
-  * https://pointfreeco.github.io/swift-composable-architecture/main/documentation/composablearchitecture/dismisseffect
 
 * 依存する~client作成する際に、プロパティを**@Sendable**にしているのはなんで？
 
@@ -108,15 +92,3 @@
   * NavigationStackStoreを利用している時、子viewが遷移する時に親のpath.stateをstateに指定するんだ？これはstack管理のため？
   * sampleのstandup においてAppFeatureにおいてNavigationStackを利用しているが、AppFeatureのようなRootでTabView使いたいときってnavigationのdestinationどうすればいいのだろうか。愚直にAppFeatureでNavigationStackなものをTabで表示し遷移すると別タブでもその状態が再現される
     * AppFeatureで管理しなければいい話ではあるが、それでいいのか
-
-* stack point
-
-  * ```swift
-    .ifLet(\.$destination, action: /Action.destination) {
-                Destination()
-            }
-    ```
-
-    これのつけ忘れで、
-
-    `To fix this, invoke "BindingReducer()" from your feature reducer's "body".` が発生しバインディングがうまくいかず、どこ直せばいいか分からずスタックした。

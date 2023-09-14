@@ -92,7 +92,7 @@ struct PersonDetail: Reducer {
                 }
 
             case .editButtonTapped:
-                state.destination = .edit(PersonForm.State(person: state.person, group: state.groups))
+                state.destination = .edit(PersonForm.State(person: state.person, groups: state.groups))
                 return .none
 
             case .destination:
