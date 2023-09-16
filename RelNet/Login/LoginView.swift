@@ -23,7 +23,6 @@ struct Login: Reducer, Sendable {
 
     enum Action: Equatable, Sendable {
         case alert(PresentationAction<AlertAction>)
-        case loginResponse(TaskResult<AuthenticationResponse>)
         case view(View)
 
         enum View: BindableAction, Equatable, Sendable {
@@ -45,32 +44,24 @@ struct Login: Reducer, Sendable {
             case .alert:
                 return .none
 
-            case let .loginResponse(.success(response)):
-                state.isLoginRequestInFlight = false
-                return .none
-
-            case let .loginResponse(.failure(error)):
-                state.alert = AlertState { TextState(error.localizedDescription) }
-                state.isLoginRequestInFlight = false
-                return .none
-
             case .view(.binding):
                 state.isFormValid = !state.email.isEmpty && !state.password.isEmpty
                 return .none
 
             case .view(.loginButtonTapped):
                 state.isLoginRequestInFlight = true
-                return .run { [email = state.email, password = state.password] send in
-                    await send(
-                        .loginResponse(
-                            await TaskResult {
-                                try await self.authenticationClient.login(
-                                    .init(email: email, password: password)
-                                )
-                            }
-                        )
-                    )
-                }
+//                return .run { [email = state.email, password = state.password] send in
+//                    await send(
+//                        .loginResponse(
+//                            await TaskResult {
+//                                try await self.authenticationClient.login(
+//                                    .init(email: email, password: password)
+//                                )
+//                            }
+//                        )
+//                    )
+//                }
+                return .none
             }
         }
         .ifLet(\.$alert, action: /Action.alert)
@@ -155,11 +146,7 @@ struct LoginView_Previews: PreviewProvider {
             LoginView(
                 store: Store(initialState: Login.State()) {
                     Login()
-                } withDependencies: {
-                    $0.authenticationClient.login = { _ in
-                        AuthenticationResponse(token: "deadbeef")
-                    }
-                }
+                } withDependencies: { _ in }
             )
         }
     }

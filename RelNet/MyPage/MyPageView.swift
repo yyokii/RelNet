@@ -158,11 +158,7 @@ struct MyPageView_Previews: PreviewProvider {
             MyPageView(
                 store: Store(initialState: MyPage.State()) {
                     MyPage()
-                } withDependencies: {
-                    $0.authenticationClient.login = { _ in
-                        AuthenticationResponse(token: "deadbeef")
-                    }
-                }
+                } withDependencies: { _ in }
             )
         }
     }

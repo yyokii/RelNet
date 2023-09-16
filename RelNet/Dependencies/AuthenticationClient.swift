@@ -13,21 +13,18 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct AuthenticationClient: Sendable {
-    var login: @Sendable (LoginRequest) async throws -> AuthenticationResponse
-    var signInWithGoogle: @Sendable () async throws -> User
     var currentUser: @Sendable () -> User?
+    var signInWithGoogle: @Sendable () async throws -> User
 
     init(
-        login: @escaping @Sendable (LoginRequest) async throws -> AuthenticationResponse,
-        signInWithGoogle: @escaping @Sendable () async throws -> User,
-        currentUser: @escaping @Sendable () -> User?
+        currentUser: @escaping @Sendable () -> User?,
+        signInWithGoogle: @escaping @Sendable () async throws -> User
     ) {
         // Create Google Sign In configuration object.
         let clientID = FirebaseApp.app()!.options.clientID!
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
 
-        self.login = login
         self.signInWithGoogle = signInWithGoogle
         self.currentUser = currentUser
     }
@@ -42,12 +39,8 @@ extension DependencyValues {
 
 extension AuthenticationClient: DependencyKey {
     public static let liveValue = Self(
-        login: { request in
-            guard request.email.contains("@") && request.password == "password"
-            else { throw AuthenticationClientError.invalidUserPassword }
-
-            try await Task.sleep(nanoseconds: NSEC_PER_SEC)
-            return AuthenticationResponse(token: "deadbeef")
+        currentUser: {
+            Auth.auth().currentUser
         },
         signInWithGoogle: {
             if GIDSignIn.sharedInstance.hasPreviousSignIn() {
@@ -76,9 +69,6 @@ extension AuthenticationClient: DependencyKey {
                     throw AuthenticationClientError.notFoundUser
                 }
             }
-        },
-        currentUser: {
-            Auth.auth().currentUser
         }
     )
 }

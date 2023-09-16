@@ -58,11 +58,16 @@ struct AppView: View {
                     myProfileTab
                 }
             } else {
-                Text("need to signin")
-                Button {
-                    viewStore.send(.signInWithGoogleButtonTapped)
-                } label: {
-                    Text("sign in with google")
+                VStack {
+                    Text("need to signin")
+                    Button {
+                        viewStore.send(.signInWithGoogleButtonTapped)
+                    } label: {
+                        Text("sign in with google")
+                    }
+                }
+                .onAppear {
+                    viewStore.send(.onAppear)
                 }
             }
         }
