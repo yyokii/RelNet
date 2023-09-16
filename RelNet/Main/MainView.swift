@@ -26,6 +26,7 @@ struct Main: Reducer {
     }
 
     enum Action: Equatable {
+        // TODO: enum作成して分けてもいいかも
         // User Action
         case addGroupButtonTapped
         case addPersonButtonTapped
@@ -40,7 +41,7 @@ struct Main: Reducer {
         case addGroupResult(TaskResult<Group>)
         case addPersonResult(TaskResult<Person>)
         case destination(PresentationAction<Destination.Action>)
-        case listenGroups
+        case listenGroups // TODO: task等のライフスタイルの命名にしたいが、複数待受けできるんだっけ
         case listenPersons
         case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
         case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)

@@ -20,8 +20,9 @@ struct MyPage: Reducer, Sendable {
 
     enum Action: Equatable, Sendable {
         case alert(PresentationAction<AlertAction>)
-        case inquiryTapped
-        case versionTapped(AppVersion)
+        case inquiryButtonTapped
+        case signOutButtonTapped
+        case versionButtonTapped(AppVersion)
     }
 
     enum AlertAction: Equatable, Sendable {}
@@ -36,10 +37,15 @@ struct MyPage: Reducer, Sendable {
             case .alert:
                 return .none
 
-            case .inquiryTapped:
+            case .inquiryButtonTapped:
                 state.openInquiry = true
                 return .none
-            case .versionTapped(let appVersion):
+
+            case .signOutButtonTapped:
+                // TODO: アラートを出す
+                return .none
+
+            case .versionButtonTapped(let appVersion):
                 UIPasteboard.general.string = appVersion.versionText
                 return .none
             }
@@ -84,8 +90,17 @@ struct MyPageView: View {
                         inquiry(viewStore: viewStore)
                         version(viewStore: viewStore)
                     }
+
+                    Section("アカウント") {
+                        Button {
+                            viewStore.send(.signOutButtonTapped)
+                        } label: {
+                            Text("サインアウト")
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                    }
                 }
-                .navigationTitle("アプリについて")
+                .navigationTitle("Me")
             }
             .alert(store: self.store.scope(state: \.$alert, action: MyPage.Action.alert))
         }
@@ -119,7 +134,7 @@ private extension MyPageView {
 
     func inquiry(viewStore: ViewStore<MyPage.State, MyPage.Action>) -> some View {
         Button(action: {
-            viewStore.send(.inquiryTapped)
+            viewStore.send(.inquiryButtonTapped)
         }) {
             rowTitle(symbolName: "mail", iconColor: .green, title: "お問い合わせ")
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -129,7 +144,7 @@ private extension MyPageView {
         .sheet(isPresented:
                 viewStore.binding(
                     get: \.openInquiry,
-                    send: MyPage.Action.inquiryTapped
+                    send: MyPage.Action.inquiryButtonTapped
                 )
         ) {
             SafariView(url: .init(string: "https://www.google.com/?hl=ja")!)
@@ -138,7 +153,7 @@ private extension MyPageView {
 
     func version(viewStore: ViewStore<MyPage.State, MyPage.Action>) -> some View {
         Button(action: {
-            viewStore.send(.versionTapped(appVersion))
+            viewStore.send(.versionButtonTapped(appVersion))
         }) {
             HStack {
                 rowTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: "バージョン")

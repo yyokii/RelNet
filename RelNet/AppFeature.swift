@@ -11,13 +11,17 @@ import ComposableArchitecture
 
 struct AppFeature: Reducer {
     struct State: Equatable {
-        var isSignIn: Bool = false
+        var appUser: AppUser?
     }
 
     enum Action: Equatable {
         case onAppear
         case signInWithGoogleButtonTapped
-        case updateSignInState(Bool)
+        case updateSignInState(Bool) // TODO: ~Responseという命名が適切
+
+        // Other Action
+        case task
+        case listenAuthStateResponse(TaskResult<AppUser?>)
     }
 
     @Dependency(\.authenticationClient) private var authenticationClient
@@ -26,8 +30,6 @@ struct AppFeature: Reducer {
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
-                let user = authenticationClient.currentUser()
-                state.isSignIn = user != nil
                 return .none
 
             case .signInWithGoogleButtonTapped:
@@ -40,7 +42,24 @@ struct AppFeature: Reducer {
                 }
 
             case let .updateSignInState(isSignIn):
-                state.isSignIn = isSignIn
+                // TODO: fix
+                return .none
+
+            case .task:
+                return .run { send in
+                    for try await result in try await self.authenticationClient.listenAuthState() {
+                        await send(.listenAuthStateResponse(.success(result)))
+                    }
+                } catch: { error, send in
+                    await send(.listenAuthStateResponse(.failure(error)))
+                }
+
+            case let .listenAuthStateResponse(.success(user)):
+                state.appUser = user
+                return .none
+
+            case let .listenAuthStateResponse(.failure(error)):
+                print(error.localizedDescription)
                 return .none
             }
         }
@@ -52,24 +71,24 @@ struct AppView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
-            if viewStore.isSignIn {
-                TabView {
-                    mainTab
-                    myProfileTab
-                }
-            } else {
-                VStack {
-                    Text("need to signin")
-                    Button {
-                        viewStore.send(.signInWithGoogleButtonTapped)
-                    } label: {
-                        Text("sign in with google")
+            VStack {
+                if viewStore.appUser != nil {
+                    TabView {
+                        mainTab
+                        myProfileTab
+                    }
+                } else {
+                    VStack {
+                        Text("need to signin")
+                        Button {
+                            viewStore.send(.signInWithGoogleButtonTapped)
+                        } label: {
+                            Text("sign in with google")
+                        }
                     }
                 }
-                .onAppear {
-                    viewStore.send(.onAppear)
-                }
             }
+            .task { await viewStore.send(.task).finish() }
         }
     }
 }
@@ -77,11 +96,7 @@ struct AppView: View {
 private extension AppView {
     var mainTab: some View {
         NavigationStack {
-            MainView(
-                store: Store(initialState: Main.State()) {
-                    Main()
-                }
-            )
+            MainView(store: Store(initialState: Main.State()) { Main() })
         }
         .tabItem {
             Label("groups", systemImage: "rectangle.3.group.fill")
@@ -89,9 +104,11 @@ private extension AppView {
     }
 
     var myProfileTab: some View {
-        Text("this is my profile")
-            .tabItem {
-                Label("persons", systemImage: "person.crop.circle.fill")
-            }
+        NavigationStack {
+            MyPageView(store: Store(initialState: MyPage.State()) { MyPage() })
+        }
+        .tabItem {
+            Label("persons", systemImage: "person.crop.circle.fill")
+        }
     }
 }

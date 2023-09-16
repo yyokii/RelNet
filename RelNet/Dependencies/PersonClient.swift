@@ -11,7 +11,8 @@ import ComposableArchitecture
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct PersonClient {
+// TODO: @Sendable
+struct PersonClient  {
 
     @Dependency(\.authenticationClient) private static var authenticationClient
 

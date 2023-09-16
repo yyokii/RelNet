@@ -13,12 +13,17 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct AuthenticationClient: Sendable {
+    // TODO: AppUserを利用する
     var currentUser: @Sendable () -> User?
+    var listenAuthState: @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>
     var signInWithGoogle: @Sendable () async throws -> User
+    var signOut: @Sendable () async throws -> Void
 
     init(
         currentUser: @escaping @Sendable () -> User?,
-        signInWithGoogle: @escaping @Sendable () async throws -> User
+        listenAuthState: @escaping @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>,
+        signInWithGoogle: @escaping @Sendable () async throws -> User,
+        signOut: @escaping @Sendable () async throws -> Void
     ) {
         // Create Google Sign In configuration object.
         let clientID = FirebaseApp.app()!.options.clientID!
@@ -26,7 +31,9 @@ struct AuthenticationClient: Sendable {
         GIDSignIn.sharedInstance.configuration = config
 
         self.signInWithGoogle = signInWithGoogle
+        self.listenAuthState = listenAuthState
         self.currentUser = currentUser
+        self.signOut = signOut
     }
 }
 
@@ -41,6 +48,27 @@ extension AuthenticationClient: DependencyKey {
     public static let liveValue = Self(
         currentUser: {
             Auth.auth().currentUser
+        },
+        listenAuthState: {
+            AsyncThrowingStream { continuation in
+                guard let user = Auth.auth().currentUser else {
+                    continuation.finish(throwing: PersonClientError.notFoundUser)
+                    return
+                }
+
+                let listenerHandle = Auth.auth().addStateDidChangeListener { auth, user in
+                    if let user {
+                        let appUser = AppUser(from: user)
+                        continuation.yield(appUser)
+                    } else {
+                        continuation.yield(nil)
+                    }
+                }
+
+                continuation.onTermination = { _ in
+                    Auth.auth().removeStateDidChangeListener(listenerHandle)
+                }
+            }
         },
         signInWithGoogle: {
             if GIDSignIn.sharedInstance.hasPreviousSignIn() {
@@ -68,6 +96,13 @@ extension AuthenticationClient: DependencyKey {
                 } catch {
                     throw AuthenticationClientError.notFoundUser
                 }
+            }
+        },
+        signOut: {
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                throw AuthenticationClientError.general(error)
             }
         }
     )
@@ -103,30 +138,20 @@ private extension AuthenticationClient {
     }
 }
 
-struct LoginRequest: Sendable {
-    public var email: String
-    public var password: String
+struct AppUser: Equatable {
+    let uid: String
+    let name: String?
+    let photoURL: URL?
 
-    public init(
-        email: String,
-        password: String
-    ) {
-        self.email = email
-        self.password = password
+    init(from firebaseUser: User) {
+        self.uid = firebaseUser.uid
+        self.name = firebaseUser.displayName
+        self.photoURL = firebaseUser.photoURL
     }
 }
 
-struct AuthenticationResponse: Equatable, Sendable {
-    public var token: String
-
-    public init(
-        token: String
-    ) {
-        self.token = token
-    }
-}
-
-enum AuthenticationClientError: Equatable, LocalizedError, Sendable {
+enum AuthenticationClientError: LocalizedError, Sendable {
+    case general(Error?)
     case invalidUserPassword
     case invalidIntermediateToken
     case notFoundClientID
@@ -135,6 +160,8 @@ enum AuthenticationClientError: Equatable, LocalizedError, Sendable {
 
     var errorDescription: String? {
         switch self {
+        case let .general(error):
+            return "failed. \(String(describing: error?.localizedDescription))"
         case .invalidUserPassword:
             return "Unknown user or invalid password."
         case .invalidIntermediateToken:
