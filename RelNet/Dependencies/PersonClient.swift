@@ -11,19 +11,18 @@ import ComposableArchitecture
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-// TODO: @Sendable
-struct PersonClient  {
+struct PersonClient: Sendable {
 
     @Dependency(\.authenticationClient) private static var authenticationClient
 
-    var listenGroups: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
-    var listenPersons: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
-    var addGroup: (_ group: Group) throws -> Group
-    var addPerson: (_ person: Person) throws -> Person
-    var deleteGroup: (_ id: String) throws -> Void
-    var deletePerson: (_ id: String) throws -> Void
-    var updateGroup: (_ group: Group) throws -> Group
-    var updatePerson: (_ person: Person) throws -> Person
+    var listenGroups: @Sendable () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
+    var listenPersons: @Sendable () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
+    var addGroup: @Sendable (_ group: Group) throws -> Group
+    var addPerson: @Sendable (_ person: Person) throws -> Person
+    var deleteGroup: @Sendable (_ id: String) throws -> Void
+    var deletePerson: @Sendable (_ id: String) throws -> Void
+    var updateGroup: @Sendable (_ group: Group) throws -> Group
+    var updatePerson: @Sendable (_ person: Person) throws -> Person
 }
 
 extension DependencyValues {
