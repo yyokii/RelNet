@@ -6,6 +6,9 @@
 
 * ViewStateを作成しているコードがたまにあるがどんな時に有効だろうか？
 
+
+  * 編集機能で編集確定するまでは元のstateを変更させたくない場合に、ViewStateとして暫定stateを切り出すことで暫定状態を表現できる
+
 * AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
 
 * Standupsにおいて、AppFeatureでdestinationの設定しているのはなんで？子viewでlink設定するのではだめ？

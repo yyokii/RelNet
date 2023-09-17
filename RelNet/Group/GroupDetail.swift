@@ -82,12 +82,14 @@ struct GroupDetail: Reducer {
                 else { return .none }
 
                 let group = editState.group
-
                 return .run { send in
-                    try personClient.updateGroup(group)
-                    await send(.editGroupResult(.success(group)))
-                } catch: { error, send in
-                    await send(.editGroupResult(.failure(error)))
+                    await send(
+                        .editGroupResult(
+                            await TaskResult {
+                                try personClient.updateGroup(group)
+                            }
+                        )
+                    )
                 }
 
             case .editButtonTapped:

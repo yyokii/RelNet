@@ -85,10 +85,13 @@ struct PersonDetail: Reducer {
                 let person = editState.person
 
                 return .run { send in
-                    try personClient.updatePerson(person)
-                    await send(.editPersonResult(.success(person)))
-                } catch: { error, send in
-                    await send(.editPersonResult(.failure(error)))
+                    await send (
+                        .editPersonResult(
+                            await TaskResult {
+                                try  self.personClient.updatePerson(person)
+                            }
+                        )
+                    )
                 }
 
             case .editButtonTapped:

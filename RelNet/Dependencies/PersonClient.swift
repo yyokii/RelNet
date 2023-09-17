@@ -18,12 +18,12 @@ struct PersonClient  {
 
     var listenGroups: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Group>, Error>
     var listenPersons: () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
-    var addGroup: (_ group: Group) throws -> Void
-    var addPerson: (_ person: Person) throws -> Void
+    var addGroup: (_ group: Group) throws -> Group
+    var addPerson: (_ person: Person) throws -> Person
     var deleteGroup: (_ id: String) throws -> Void
     var deletePerson: (_ id: String) throws -> Void
-    var updateGroup: (_ group: Group) throws -> Void
-    var updatePerson: (_ person: Person) throws -> Void
+    var updateGroup: (_ group: Group) throws -> Group
+    var updatePerson: (_ person: Person) throws -> Person
 }
 
 extension DependencyValues {
@@ -98,6 +98,8 @@ extension PersonClient: DependencyKey {
                     .document(user.uid)
                     .collection(FirestorePath.groups.rawValue)
                     .addDocument(from: group)
+
+                return group
             } catch {
                 throw PersonClientError.general(error)
             }
@@ -113,6 +115,8 @@ extension PersonClient: DependencyKey {
                     .document(user.uid)
                     .collection(FirestorePath.persons.rawValue)
                     .addDocument(from: person)
+
+                return person
             } catch {
                 throw PersonClientError.general(error)
             }
@@ -159,6 +163,8 @@ extension PersonClient: DependencyKey {
                 .collection(FirestorePath.groups.rawValue)
                 .document(id)
                 .setData(updateGroup.toDictionary())
+
+            return group
         },
         updatePerson: { person in
             guard let user = authenticationClient.currentUser() else {
@@ -178,6 +184,8 @@ extension PersonClient: DependencyKey {
                 .collection(FirestorePath.persons.rawValue)
                 .document(id)
                 .setData(updatePerson.toDictionary())
+
+            return person
         }
     )
 
@@ -207,12 +215,12 @@ extension PersonClient: TestDependencyKey {
                 continuation.finish()
             }
         },
-        addGroup: { _ in },
-        addPerson: { _ in },
+        addGroup: { _ in .mock },
+        addPerson: { _ in .mock },
         deleteGroup: { _ in },
         deletePerson: { _ in },
-        updateGroup: { _ in },
-        updatePerson: { _ in }
+        updateGroup: { _ in .mock },
+        updatePerson: { _ in .mock }
     )
 }
 

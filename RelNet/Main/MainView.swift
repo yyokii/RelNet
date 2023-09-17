@@ -101,10 +101,13 @@ struct Main: Reducer {
                 let group = formState.group
 
                 return .run { send in
-                    try personClient.addGroup(group)
-                    await send(.addGroupResult(.success(group)))
-                } catch: { error, send in
-                    await send(.addGroupResult(.failure(error)))
+                    await send (
+                        .addGroupResult(
+                            await TaskResult {
+                                try personClient.addGroup(group)
+                            }
+                        )
+                    )
                 }
 
             case .confirmAddPersonButtonTapped:
@@ -115,10 +118,13 @@ struct Main: Reducer {
                 let person = formState.person
 
                 return .run { send in
-                    try personClient.addPerson(person)
-                    await send(.addPersonResult(.success(person)))
-                } catch: { error, send in
-                    await send(.addPersonResult(.failure(error)))
+                    await send (
+                        .addPersonResult(
+                            await TaskResult {
+                                try personClient.addPerson(person)
+                            }
+                        )
+                    )
                 }
 
             case .dismissAddGroupButtonTapped:
