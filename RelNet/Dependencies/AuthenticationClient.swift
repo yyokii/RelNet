@@ -13,16 +13,16 @@ import FirebaseAuth
 import GoogleSignIn
 
 struct AuthenticationClient: Sendable {
-    // TODO: AppUserを利用する
-    var currentUser: @Sendable () -> User?
+
+    var currentUser: @Sendable () -> AppUser?
     var listenAuthState: @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>
-    var signInWithGoogle: @Sendable () async throws -> User
+    var signInWithGoogle: @Sendable () async throws -> AppUser
     var signOut: @Sendable () async throws -> Void
 
     init(
-        currentUser: @escaping @Sendable () -> User?,
+        currentUser: @escaping @Sendable () -> AppUser?,
         listenAuthState: @escaping @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>,
-        signInWithGoogle: @escaping @Sendable () async throws -> User,
+        signInWithGoogle: @escaping @Sendable () async throws -> AppUser,
         signOut: @escaping @Sendable () async throws -> Void
     ) {
         // Create Google Sign In configuration object.
@@ -47,7 +47,8 @@ extension DependencyValues {
 extension AuthenticationClient: DependencyKey {
     public static let liveValue = Self(
         currentUser: {
-            Auth.auth().currentUser
+            let user =  Auth.auth().currentUser
+            return .init(from: user)
         },
         listenAuthState: {
             AsyncThrowingStream { continuation in
@@ -109,7 +110,7 @@ extension AuthenticationClient: DependencyKey {
 }
 
 private extension AuthenticationClient {
-    private static func authenticateUser(for user: GIDGoogleUser) async throws -> User {
+    private static func authenticateUser(for user: GIDGoogleUser) async throws -> AppUser {
         guard let idToken = user.idToken?.tokenString else {
             throw AuthenticationClientError.notFoundUser
         }
@@ -125,7 +126,13 @@ private extension AuthenticationClient {
                     print(error.localizedDescription)
                     continuation.resume(with: .failure(AuthenticationClientError.notFoundUser))
                 } else {
-                    continuation.resume(with: .success(result!.user))
+                    guard let user = result?.user,
+                          let appUser = AppUser(from: user) else {
+                        continuation.resume(with: .failure(AuthenticationClientError.notFoundUser))
+                        return
+                    }
+
+                    continuation.resume(with: .success(appUser))
                 }
             }
         }
@@ -143,10 +150,14 @@ struct AppUser: Equatable {
     let name: String?
     let photoURL: URL?
 
-    init(from firebaseUser: User) {
-        self.uid = firebaseUser.uid
-        self.name = firebaseUser.displayName
-        self.photoURL = firebaseUser.photoURL
+    init?(from firebaseUser: User?) {
+        if let firebaseUser {
+            self.uid = firebaseUser.uid
+            self.name = firebaseUser.displayName
+            self.photoURL = firebaseUser.photoURL
+        } else {
+            return nil
+        }
     }
 }
 
