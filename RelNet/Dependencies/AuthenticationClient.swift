@@ -73,6 +73,7 @@ extension AuthenticationClient: DependencyKey {
         },
         signInWithGoogle: {
             if GIDSignIn.sharedInstance.hasPreviousSignIn() {
+                // TODO: これ必要？サインアウトした後は任意のアカウントでサインインしたいはず
                 do {
                     let user = try await GIDSignIn.sharedInstance.restorePreviousSignIn()
                     return try await authenticateUser(for: user)

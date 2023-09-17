@@ -12,20 +12,23 @@ import Dispatch
 
 struct MyPage: Reducer, Sendable {
     struct State: Equatable {
-        @PresentationState var alert: AlertState<AlertAction>?
+        @PresentationState var alert: AlertState<Action.Alert>?
         var openInquiry: Bool = false
 
         init() {}
     }
 
     enum Action: Equatable, Sendable {
-        case alert(PresentationAction<AlertAction>)
+        case alert(PresentationAction<Alert>)
         case inquiryButtonTapped
         case signOutButtonTapped
+        case signOutResponse(TaskResult<VoidSuccess>)
         case versionButtonTapped(AppVersion)
-    }
 
-    enum AlertAction: Equatable, Sendable {}
+        enum Alert: Equatable {
+            case confirmSignOut
+        }
+    }
 
     @Dependency(\.authenticationClient) var authenticationClient
 
@@ -34,6 +37,18 @@ struct MyPage: Reducer, Sendable {
     var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+
+            case .alert(.presented(.confirmSignOut)):
+                return .run { send in
+                    await send(
+                        .signOutResponse(
+                            await TaskResult {
+                                try await authenticationClient.signOut()
+                            }
+                        )
+                    )
+                }
+
             case .alert:
                 return .none
 
@@ -42,7 +57,14 @@ struct MyPage: Reducer, Sendable {
                 return .none
 
             case .signOutButtonTapped:
-                // TODO: アラートを出す
+                state.alert = .signOut
+                return .none
+
+            case .signOutResponse(.success):
+                return .none
+
+            case let .signOutResponse(.failure(error)):
+                print(error.localizedDescription)
                 return .none
 
             case .versionButtonTapped(let appVersion):
@@ -108,6 +130,25 @@ struct MyPageView: View {
     }
 }
 
+extension AlertState where Action == MyPage.Action.Alert {
+    static let signOut = Self {
+        TextState("Sign Out")
+    } actions: {
+        ButtonState(role: .cancel) {
+            TextState("Cancel")
+        }
+        ButtonState(role: .destructive, action: .confirmSignOut) {
+            TextState("Yes, sign out")
+        }
+    } message: {
+        TextState(
+      """
+      Sign out now?
+      """
+        )
+    }
+}
+
 private extension MyPageView {
     var topCard: some View {
         Text("top card")
@@ -161,7 +202,7 @@ private extension MyPageView {
                 Text(appVersion.versionText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
