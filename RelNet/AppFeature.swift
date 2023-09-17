@@ -17,7 +17,7 @@ struct AppFeature: Reducer {
     enum Action: Equatable {
         case onAppear
         case signInWithGoogleButtonTapped
-        case updateSignInState(Bool) // TODO: ~Responseという命名が適切
+        case signInWithGoogleResponse(TaskResult<AppUser>)
 
         // Other Action
         case task
@@ -35,15 +35,14 @@ struct AppFeature: Reducer {
             case .signInWithGoogleButtonTapped:
                 // TODO: 別のReducerにしたいかも
                 return .run { send in
-                    let _ = try await authenticationClient.signInWithGoogle()
-                    await send(.updateSignInState(true))
-                } catch: { error, send in
-                    await send(.updateSignInState(false))
+                    await send(
+                      .signInWithGoogleResponse(
+                        await TaskResult {
+                          try await self.authenticationClient.signInWithGoogle()
+                        }
+                      )
+                    )
                 }
-
-            case let .updateSignInState(isSignIn):
-                // TODO: fix
-                return .none
 
             case .task:
                 return .run { send in
@@ -59,6 +58,14 @@ struct AppFeature: Reducer {
                 return .none
 
             case let .listenAuthStateResponse(.failure(error)):
+                print(error.localizedDescription)
+                return .none
+
+            case let .signInWithGoogleResponse(.success(user)):
+                state.appUser = user
+                return .none
+
+            case let .signInWithGoogleResponse(.failure(error)):
                 print(error.localizedDescription)
                 return .none
             }

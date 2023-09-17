@@ -1,4 +1,9 @@
 
+* TaskResultって何？
+
+
+  * resultと役割的に同じなのは分かるが違いをわかりたい
+
 * ViewStateを作成しているコードがたまにあるがどんな時に有効だろうか？
 
 * AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
