@@ -211,8 +211,11 @@ struct MainView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                groupList(viewStore)
-                personsList(viewStore)
+                VStack(alignment: .leading, spacing: 32) {
+                    groupList(viewStore)
+                    personsList(viewStore)
+                }
+                .padding()
             }
             .navigationTitle("RelNet")
             .task {
@@ -286,36 +289,64 @@ struct MainView: View {
 private extension MainView {
     func groupList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
         VStack {
-            Text("Groups")
-            Button {
-                viewStore.send(.addGroupButtonTapped)
-            } label: {
-                Image(systemName: "plus")
-            }
-            ForEach(viewStore.state.groups) { group in
-                Button {
-                    viewStore.send(.groupCardTapped(group))
-                } label: {
-                    GroupCardView(group: group)
+            listHeader(
+                title: "Groups",
+                moreAction: {},
+                addAction: { viewStore.send(.addGroupButtonTapped) }
+            )
+
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 8) {
+                    ForEach(viewStore.state.groups) { group in
+                        Button {
+                            viewStore.send(.groupCardTapped(group))
+                        } label: {
+                            GroupCardView(group: group)
+                        }
+                    }
                 }
             }
         }
     }
 
     func personsList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
-        VStack {
-            Text("Persons")
-            Button {
-                viewStore.send(.addPersonButtonTapped)
-            } label: {
-                Image(systemName: "plus")
-            }
-            ForEach(viewStore.state.persons) { person in
-                Button {
-                    viewStore.send(.personCardTapped(person))
-                } label: {
-                    PersonCardView(person: person)
+        VStack(alignment: .leading) {
+            listHeader(
+                title: "Persons",
+                moreAction: {},
+                addAction: { viewStore.send(.addPersonButtonTapped) }
+            )
+
+            LazyVStack(alignment: .leading, spacing: 8) {
+                ForEach(viewStore.state.persons) { person in
+                    Button {
+                        viewStore.send(.personCardTapped(person))
+                    } label: {
+                        PersonCardView(person: person)
+                    }
                 }
+            }
+        }
+    }
+
+    func listHeader(title: String, moreAction: @escaping () -> Void, addAction: @escaping () -> Void) -> some View {
+        HStack(spacing: 8) {
+            Text(title)
+                .font(.headline)
+
+            Button {
+                moreAction()
+            } label: {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 18))
+            }
+
+            Spacer()
+
+            Button {
+                addAction()
+            } label: {
+                Text("追加")
             }
         }
     }
@@ -344,8 +375,9 @@ struct GroupCardView: View {
         VStack(alignment: .leading) {
             Text(self.group.name)
                 .font(.headline)
+                .lineLimit(2)
         }
-        .padding()
+        .frame(width: 80, height: 80)
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.orange)
