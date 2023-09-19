@@ -36,6 +36,8 @@ struct Main: Reducer {
         case dismissAddPersonButtonTapped
         case groupCardTapped(Group)
         case personCardTapped(Person)
+        case moreGroupsButtonTapped
+        case morePersonsButtonTapped
 
         // Other Action
         case addGroupResult(TaskResult<Group>)
@@ -52,6 +54,7 @@ struct Main: Reducer {
             case addGroup(GroupForm.State)
             case addPerson(PersonForm.State)
             case groupDetail(GroupDetail.State)
+            case groupsList(GroupsList.State)
             case personDetail(PersonDetail.State)
         }
 
@@ -59,6 +62,7 @@ struct Main: Reducer {
             case addGroup(GroupForm.Action)
             case addPerson(PersonForm.Action)
             case groupDetail(GroupDetail.Action)
+            case groupsList(GroupsList.Action)
             case personDetail(PersonDetail.Action)
         }
 
@@ -71,6 +75,9 @@ struct Main: Reducer {
             }
             Scope(state: /State.groupDetail, action: /Action.groupDetail) {
                 GroupDetail()
+            }
+            Scope(state: /State.groupsList, action: /Action.groupsList) {
+                GroupsList()
             }
             Scope(state: /State.personDetail, action: /Action.personDetail) {
                 PersonDetail()
@@ -141,6 +148,13 @@ struct Main: Reducer {
 
             case let .personCardTapped(person):
                 state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
+                return .none
+
+            case .moreGroupsButtonTapped:
+                state.destination = .groupsList(.init(groups: state.groups))
+                return .none
+
+            case .morePersonsButtonTapped:
                 return .none
 
             case .addGroupResult(.success(_)):
@@ -233,6 +247,14 @@ struct MainView: View {
             }
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
+                state: /Main.Destination.State.groupsList,
+                action: Main.Destination.Action.groupsList
+            ) {
+                GroupsListView(store: $0)
+                    .navigationTitle("Groups")
+            }
+            .navigationDestination(
+                store: store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /Main.Destination.State.personDetail,
                 action: Main.Destination.Action.personDetail
             ) {
@@ -291,7 +313,7 @@ private extension MainView {
         VStack {
             listHeader(
                 title: "Groups",
-                moreAction: {},
+                moreAction: { viewStore.send(.moreGroupsButtonTapped) },
                 addAction: { viewStore.send(.addGroupButtonTapped) }
             )
 
@@ -313,7 +335,7 @@ private extension MainView {
         VStack(alignment: .leading) {
             listHeader(
                 title: "Persons",
-                moreAction: {},
+                moreAction: nil,
                 addAction: { viewStore.send(.addPersonButtonTapped) }
             )
 
@@ -329,16 +351,24 @@ private extension MainView {
         }
     }
 
-    func listHeader(title: String, moreAction: @escaping () -> Void, addAction: @escaping () -> Void) -> some View {
+    func listHeader(title: String, moreAction: (() -> Void)?, addAction: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
-            Text(title)
-                .font(.headline)
-
-            Button {
-                moreAction()
-            } label: {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 18))
+            if let moreAction {
+                Button {
+                    moreAction()
+                } label: {
+                    HStack {
+                        Text(title)
+                            .font(.headline)
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 18))
+                            .bold()
+                    }
+                }
+                .buttonStyle(.plain)
+            } else {
+                Text(title)
+                    .font(.headline)
             }
 
             Spacer()

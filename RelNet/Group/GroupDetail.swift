@@ -32,10 +32,12 @@ struct GroupDetail: Reducer {
     @Dependency(\.personClient) private var personClient
 
     struct Destination: Reducer {
+
         enum State: Equatable {
             case alert(AlertState<Action.Alert>)
             case edit(GroupForm.State)
         }
+
         enum Action: Equatable, Sendable {
             case alert(Alert)
             case edit(GroupForm.Action)
@@ -44,6 +46,7 @@ struct GroupDetail: Reducer {
                 case confirmDeletion
             }
         }
+
         var body: some ReducerOf<Self> {
             Scope(state: /State.edit, action: /Action.edit) {
                 GroupForm()
