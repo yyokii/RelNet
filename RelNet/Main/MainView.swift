@@ -323,7 +323,7 @@ private extension MainView {
                         Button {
                             viewStore.send(.groupCardTapped(group))
                         } label: {
-                            GroupCardView(group: group)
+                            GroupCard(group: group)
                         }
                     }
                 }
@@ -394,23 +394,6 @@ struct PersonCardView: View {
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.cyan)
-        }
-    }
-}
-
-struct GroupCardView: View {
-    let group: Group
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(self.group.name)
-                .font(.headline)
-                .lineLimit(2)
-        }
-        .frame(width: 80, height: 80)
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.orange)
         }
     }
 }

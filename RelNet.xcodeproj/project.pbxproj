@@ -30,6 +30,7 @@
 		F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A932A9B98C300511A67 /* PersonDetail.swift */; };
 		F55BE3502AB6ED1700289320 /* TaskResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE34F2AB6ED1700289320 /* TaskResult.swift */; };
 		F55BE3522AB92B6B00289320 /* GroupList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3512AB92B6B00289320 /* GroupList.swift */; };
+		F55BE3552AB9E30B00289320 /* GroupCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3542AB9E30B00289320 /* GroupCard.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
 		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
@@ -82,6 +83,7 @@
 		F5418A932A9B98C300511A67 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
 		F55BE34F2AB6ED1700289320 /* TaskResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskResult.swift; sourceTree = "<group>"; };
 		F55BE3512AB92B6B00289320 /* GroupList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupList.swift; sourceTree = "<group>"; };
+		F55BE3542AB9E30B00289320 /* GroupCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCard.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
 		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
@@ -153,10 +155,11 @@
 		F5405BD82A96F347002FA0C9 /* RelNet */ = {
 			isa = PBXGroup;
 			children = (
-				F5418A8E2A9B758E00511A67 /* Extensions */,
 				F5418A882A973EAC00511A67 /* App */,
-				F5405C042A96F579002FA0C9 /* Dependencies */,
+				F5418A8E2A9B758E00511A67 /* Extensions */,
 				F5405C172A970223002FA0C9 /* Model */,
+				F5405C042A96F579002FA0C9 /* Dependencies */,
+				F55BE3532AB9E2E100289320 /* Components */,
 				F5DC3BAD2AB1BDC9005528F9 /* Main */,
 				F5DC3B952AA57EBA005528F9 /* Person */,
 				F5DC3B962AA57ED2005528F9 /* Group */,
@@ -232,6 +235,14 @@
 				F55BE34F2AB6ED1700289320 /* TaskResult.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F55BE3532AB9E2E100289320 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F55BE3542AB9E30B00289320 /* GroupCard.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		F5DC3B952AA57EBA005528F9 /* Person */ = {
@@ -448,6 +459,7 @@
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
 				F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */,
 				F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */,
+				F55BE3552AB9E30B00289320 /* GroupCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

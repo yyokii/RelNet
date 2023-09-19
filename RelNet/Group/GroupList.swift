@@ -70,7 +70,7 @@ struct GroupsListView: View {
                         Button {
                             viewStore.send(.groupItemTapped(group))
                         } label: {
-                            GroupCardView(group: group)
+                            GroupCard(group: group)
                         }
                     }
                 }
