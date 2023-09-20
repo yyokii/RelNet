@@ -26,6 +26,7 @@ struct PersonDetail: Reducer {
 
         // Other Action
         case destination(PresentationAction<Destination.Action>)
+        case deletePersonResult(TaskResult<String>)
         case editPersonResult(TaskResult<Person>)
     }
 
@@ -71,10 +72,13 @@ struct PersonDetail: Reducer {
                     }
 
                     return .run { send in
-                        try personClient.deletePerson(id)
-                        await self.dismiss()
-                    } catch: { error, send in
-                        await send(.editPersonResult(.failure(error)))
+                        await send(
+                            .deletePersonResult(
+                                await TaskResult {
+                                    try personClient.deletePerson(id)
+                                }
+                            )
+                        )
                     }
                 }
 
@@ -99,6 +103,16 @@ struct PersonDetail: Reducer {
                 return .none
 
             case .destination:
+                return .none
+
+            case .deletePersonResult(.success(_)):
+                print("📝 success delete person")
+                return .run { _ in
+                    await dismiss()
+                }
+
+            case .deletePersonResult(.failure(_)):
+                print("📝 failed delete person")
                 return .none
 
             case let .editPersonResult(.success(person)):

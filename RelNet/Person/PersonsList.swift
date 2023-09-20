@@ -44,6 +44,14 @@ struct PersonsList: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
+            case let .destination(.presented(.personDetail(.deletePersonResult(.success(deletedPersonId))))):
+                guard let index = state.persons.firstIndex(where: { $0.id == deletedPersonId }) else {
+                    return .none
+                }
+
+                state.persons.remove(at: index)
+                return .none
+
             case let .destination(.presented(.personDetail(.editPersonResult(.success(updatedPerson))))):
                 guard let index = state.persons.firstIndex(where: { $0.id == updatedPerson.id }) else {
                     return .none
@@ -54,6 +62,7 @@ struct PersonsList: Reducer {
                 } else {
                     state.persons.remove(at: index)
                 }
+
                 return .none
 
             case .destination:

@@ -250,8 +250,8 @@
 		F5DC3B952AA57EBA005528F9 /* Person */ = {
 			isa = PBXGroup;
 			children = (
-				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
 				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
+				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
 				F55BE3562AB9E62B00289320 /* PersonsList.swift */,
 			);
 			path = Person;
