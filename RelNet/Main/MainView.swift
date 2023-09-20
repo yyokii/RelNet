@@ -53,7 +53,6 @@ struct Main: Reducer {
         enum State: Equatable {
             case addGroup(GroupForm.State)
             case addPerson(PersonForm.State)
-            case groupDetail(GroupDetail.State) // TODO: これが不要になるかも
             case groupsList(GroupsList.State)
             case personDetail(PersonDetail.State)
             case personsList(PersonsList.State)
@@ -62,7 +61,6 @@ struct Main: Reducer {
         enum Action: Equatable {
             case addGroup(GroupForm.Action)
             case addPerson(PersonForm.Action)
-            case groupDetail(GroupDetail.Action)
             case groupsList(GroupsList.Action)
             case personDetail(PersonDetail.Action)
             case personsList(PersonsList.Action)
@@ -74,9 +72,6 @@ struct Main: Reducer {
             }
             Scope(state: /State.addPerson, action: /Action.addPerson) {
                 PersonForm()
-            }
-            Scope(state: /State.groupDetail, action: /Action.groupDetail) {
-                GroupDetail()
             }
             Scope(state: /State.groupsList, action: /Action.groupsList) {
                 GroupsList()
@@ -249,13 +244,6 @@ struct MainView: View {
             }
             .task {
                 await viewStore.send(.listenPersons).finish()
-            }
-            .navigationDestination(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.groupDetail,
-                action: Main.Destination.Action.groupDetail
-            ) {
-                GroupDetailView(store: $0)
             }
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
