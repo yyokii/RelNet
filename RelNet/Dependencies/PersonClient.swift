@@ -19,8 +19,8 @@ struct PersonClient: Sendable {
     var listenPersons: @Sendable () async throws -> AsyncThrowingStream<IdentifiedArrayOf<Person>, Error>
     var addGroup: @Sendable (_ group: Group) throws -> Group
     var addPerson: @Sendable (_ person: Person) throws -> Person
-    var deleteGroup: @Sendable (_ id: String) throws -> Void
-    var deletePerson: @Sendable (_ id: String) throws -> Void
+    var deleteGroup: @Sendable (_ id: String) throws -> String
+    var deletePerson: @Sendable (_ id: String) throws -> String
     var updateGroup: @Sendable (_ group: Group) throws -> Group
     var updatePerson: @Sendable (_ person: Person) throws -> Person
 }
@@ -131,6 +131,8 @@ extension PersonClient: DependencyKey {
                 .collection(FirestorePath.groups.rawValue)
                 .document(id)
                 .delete()
+
+            return id
         },
         deletePerson: { id in
             guard let user = authenticationClient.currentUser() else {
@@ -143,6 +145,8 @@ extension PersonClient: DependencyKey {
                 .collection(FirestorePath.persons.rawValue)
                 .document(id)
                 .delete()
+
+            return id
         },
         updateGroup: { group in
             guard let user = authenticationClient.currentUser() else {
@@ -216,8 +220,8 @@ extension PersonClient: TestDependencyKey {
         },
         addGroup: { _ in .mock },
         addPerson: { _ in .mock },
-        deleteGroup: { _ in },
-        deletePerson: { _ in },
+        deleteGroup: { _ in "deletedID" },
+        deletePerson: { _ in "deletedID" },
         updateGroup: { _ in .mock },
         updatePerson: { _ in .mock }
     )

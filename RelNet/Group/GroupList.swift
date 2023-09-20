@@ -13,7 +13,7 @@ struct GroupsList: Reducer {
 
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
-        let groups: IdentifiedArrayOf<Group>
+        var groups: IdentifiedArrayOf<Group>
     }
 
     enum Action: Equatable {
@@ -42,6 +42,21 @@ struct GroupsList: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
+            case let .destination(.presented(.groupDetail(.deleteGroupResult(.success(deletedGroupId))))):
+                guard let index = state.groups.firstIndex(where: { $0.id == deletedGroupId }) else {
+                    return .none
+                }
+
+                state.groups.remove(at: index)
+                return .none
+
+            case let .destination(.presented(.groupDetail(.editGroupResult(.success(updatedGroup))))):
+                guard let index = state.groups.firstIndex(where: { $0.id == updatedGroup.id }) else {
+                    return .none
+                }
+
+                state.groups[index] = updatedGroup
+                return .none
 
             case .destination:
                 return .none

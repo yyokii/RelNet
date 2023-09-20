@@ -25,6 +25,7 @@ struct GroupDetail: Reducer {
 
         // Other Action
         case destination(PresentationAction<Destination.Action>)
+        case deleteGroupResult(TaskResult<String>)
         case editGroupResult(TaskResult<Group>)
     }
 
@@ -71,12 +72,15 @@ struct GroupDetail: Reducer {
                     guard let id = state.group.id else {
                         return .none
                     }
-
+                    
                     return .run { send in
-                        try personClient.deleteGroup(id)
-                        await self.dismiss()
-                    } catch: { error, send in
-                        await send(.editGroupResult(.failure(error)))
+                        await send(
+                            .deleteGroupResult(
+                                await TaskResult {
+                                    try personClient.deleteGroup(id)
+                                }
+                            )
+                        )
                     }
                 }
 
@@ -100,6 +104,16 @@ struct GroupDetail: Reducer {
                 return .none
 
             case .destination:
+                return .none
+
+            case .deleteGroupResult(.success(_)):
+                print("📝 success delete group")
+                return .run { _ in
+                    await dismiss()
+                }
+
+            case .deleteGroupResult(.failure(_)):
+                print("📝 failed delete group")
                 return .none
 
             case let .editGroupResult(.success(group)):
