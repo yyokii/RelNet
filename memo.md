@@ -4,6 +4,8 @@
 
   * 子でadd処理して親でそれをlistで表示している場合の伝達とか
 
+  * https://github.com/pointfreeco/swift-composable-architecture/discussions/2429
+
 * https://zenn.dev/kalupas226/articles/87b1f7b245915c
 
 * TaskResultって何？

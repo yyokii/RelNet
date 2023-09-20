@@ -53,9 +53,10 @@ struct Main: Reducer {
         enum State: Equatable {
             case addGroup(GroupForm.State)
             case addPerson(PersonForm.State)
-            case groupDetail(GroupDetail.State)
+            case groupDetail(GroupDetail.State) // TODO: これが不要になるかも
             case groupsList(GroupsList.State)
             case personDetail(PersonDetail.State)
+            case personsList(PersonsList.State)
         }
 
         enum Action: Equatable {
@@ -64,6 +65,7 @@ struct Main: Reducer {
             case groupDetail(GroupDetail.Action)
             case groupsList(GroupsList.Action)
             case personDetail(PersonDetail.Action)
+            case personsList(PersonsList.Action)
         }
 
         var body: some ReducerOf<Self> {
@@ -81,6 +83,9 @@ struct Main: Reducer {
             }
             Scope(state: /State.personDetail, action: /Action.personDetail) {
                 PersonDetail()
+            }
+            Scope(state: /State.personsList, action: /Action.personsList) {
+                PersonsList()
             }
         }
     }
@@ -143,7 +148,14 @@ struct Main: Reducer {
                 return .none
 
             case let .groupCardTapped(group):
-                state.destination = .groupDetail(GroupDetail.State(group: group))
+                guard let groupId = group.id else {
+                    return .none
+                }
+
+                let personsInGroup = state.persons.filter { person in
+                    person.groupIDs.contains(groupId)
+                }
+                state.destination = .personsList(.init(selectedGroup: group, groups: state.groups, persons: personsInGroup))
                 return .none
 
             case let .personCardTapped(person):
@@ -259,6 +271,13 @@ struct MainView: View {
                 action: Main.Destination.Action.personDetail
             ) {
                 PersonDetailView(store: $0)
+            }
+            .navigationDestination(
+                store: store.scope(state: \.$destination, action: { .destination($0) }),
+                state: /Main.Destination.State.personsList,
+                action: Main.Destination.Action.personsList
+            ) {
+                PersonsListView(store: $0)
             }
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),

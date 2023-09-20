@@ -5,7 +5,6 @@
 //  Created by Higashihara Yoki on 2023/09/19.
 //
 
-import Foundation
 import SwiftUI
 
 import ComposableArchitecture
@@ -38,7 +37,6 @@ struct GroupsList: Reducer {
         }
     }
 
-    @Dependency(\.authenticationClient) private var authenticationClient
     @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
