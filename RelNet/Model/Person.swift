@@ -119,6 +119,18 @@ extension Person {
         groupIDs: ["id-1"]
     )
 
+    static let mock3 = Self (
+        id: UUID().uuidString,
+        firstName: "DemoFirst3",
+        lastName: "DemoLast3",
+        nickname: "Nick3",
+        birthdate: Date(),
+        notes: "this is note.",
+        address: "Japan",
+        lastContacted: Date(),
+        groupIDs: ["id-1"]
+    )
+
     func toDictionary() -> [String: Any] {
         var dictionary: [String: Any] = [
             "firstName": firstName,

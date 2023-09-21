@@ -377,7 +377,8 @@ private extension MainView {
                 } label: {
                     HStack {
                         Text(title)
-                            .font(.headline)
+                            .font(.title3)
+                            .bold()
                         Image(systemName: "chevron.right")
                             .font(.system(size: 18))
                             .bold()
@@ -386,7 +387,8 @@ private extension MainView {
                 .buttonStyle(.plain)
             } else {
                 Text(title)
-                    .font(.headline)
+                    .font(.title3)
+                    .bold()
             }
 
             Spacer()
@@ -396,22 +398,6 @@ private extension MainView {
             } label: {
                 Text("追加")
             }
-        }
-    }
-}
-
-struct PersonCardView: View {
-    let person: Person
-
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(self.person.name)
-                .font(.headline)
-        }
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.cyan)
         }
     }
 }

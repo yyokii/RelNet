@@ -12,14 +12,29 @@ struct SortedPersonsView: View {
     let onTapPerson: (Person) -> Void
 
     var body: some View {
-        LazyVStack(alignment: .leading, spacing: 8) {
+        LazyVStack(alignment: .leading, spacing: 12) {
             ForEach(sortedItems.keys.sorted(), id: \.self) { key in
-                Section(header: Text(key)) {
-                    ForEach(sortedItems[key]!, id: \.self) { person in
-                        Button {
-                            onTapPerson(person)
-                        } label: {
-                            PersonCardView(person: person)
+                VStack(alignment: .leading) {
+                    Text(key)
+                        .foregroundColor(.adaptiveWhite)
+                        .padding(8)
+                        .background {
+                            Circle()
+                                .fill(Color.adaptiveBlack)
+                        }
+
+                    LazyVStack(alignment: .leading, spacing: 8) {
+                        ForEach(sortedItems[key]!, id: \.self) { person in
+                            Button {
+                                onTapPerson(person)
+                            } label: {
+                                Text(person.name)
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.horizontal)
                         }
                     }
                 }
@@ -38,7 +53,7 @@ struct SortedPersonsView: View {
 struct SortedPersonsView_Previews: PreviewProvider {
     static var previews: some View {
         SortedPersonsView(
-            sortedItems: ["あ": [.mock], "い": [.mock2]],
+            sortedItems: ["あ": [.mock], "い": [.mock2, .mock3]],
             onTapPerson: { person in
                 print("\(person.name) is tapped")
             }
