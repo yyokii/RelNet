@@ -158,7 +158,7 @@ struct Main: Reducer {
                 return .none
 
             case .moreGroupsButtonTapped:
-                state.destination = .groupsList(.init(groups: state.groups))
+                state.destination = .groupsList(.init(groups: state.groups, persons: state.persons))
                 return .none
 
             case .morePersonsButtonTapped:
