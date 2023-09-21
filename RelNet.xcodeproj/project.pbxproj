@@ -10,7 +10,6 @@
 		F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BD92A96F347002FA0C9 /* RelNetApp.swift */; };
 		F5405BDE2A96F348002FA0C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5405BDD2A96F348002FA0C9 /* Assets.xcassets */; };
 		F5405BE12A96F348002FA0C9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F5405BE02A96F348002FA0C9 /* Preview Assets.xcassets */; };
-		F5405BEB2A96F349002FA0C9 /* RelNetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BEA2A96F349002FA0C9 /* RelNetTests.swift */; };
 		F5405BF52A96F349002FA0C9 /* RelNetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BF42A96F349002FA0C9 /* RelNetUITests.swift */; };
 		F5405BF72A96F349002FA0C9 /* RelNetUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405BF62A96F349002FA0C9 /* RelNetUITestsLaunchTests.swift */; };
 		F5405C072A96FC38002FA0C9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C062A96FC38002FA0C9 /* FirebaseAnalytics */; };
@@ -33,6 +32,8 @@
 		F55BE3552AB9E30B00289320 /* GroupCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3542AB9E30B00289320 /* GroupCard.swift */; };
 		F55BE3572AB9E62B00289320 /* PersonsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3562AB9E62B00289320 /* PersonsList.swift */; };
 		F55BE3592ABBE51500289320 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3582ABBE51500289320 /* String+Extension.swift */; };
+		F55BE35B2ABC266000289320 /* SortedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35A2ABC266000289320 /* SortedListView.swift */; };
+		F55BE35D2ABC931F00289320 /* PersonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35C2ABC931F00289320 /* PersonTests.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
 		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
@@ -71,7 +72,6 @@
 		F5405BDD2A96F348002FA0C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F5405BE02A96F348002FA0C9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F5405BE62A96F349002FA0C9 /* RelNetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RelNetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F5405BEA2A96F349002FA0C9 /* RelNetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetTests.swift; sourceTree = "<group>"; };
 		F5405BF02A96F349002FA0C9 /* RelNetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RelNetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5405BF42A96F349002FA0C9 /* RelNetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetUITests.swift; sourceTree = "<group>"; };
 		F5405BF62A96F349002FA0C9 /* RelNetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetUITestsLaunchTests.swift; sourceTree = "<group>"; };
@@ -88,6 +88,8 @@
 		F55BE3542AB9E30B00289320 /* GroupCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCard.swift; sourceTree = "<group>"; };
 		F55BE3562AB9E62B00289320 /* PersonsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonsList.swift; sourceTree = "<group>"; };
 		F55BE3582ABBE51500289320 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		F55BE35A2ABC266000289320 /* SortedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedListView.swift; sourceTree = "<group>"; };
+		F55BE35C2ABC931F00289320 /* PersonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTests.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
 		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
@@ -185,7 +187,7 @@
 		F5405BE92A96F349002FA0C9 /* RelNetTests */ = {
 			isa = PBXGroup;
 			children = (
-				F5405BEA2A96F349002FA0C9 /* RelNetTests.swift */,
+				F55BE35C2ABC931F00289320 /* PersonTests.swift */,
 			);
 			path = RelNetTests;
 			sourceTree = "<group>";
@@ -246,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				F55BE3542AB9E30B00289320 /* GroupCard.swift */,
+				F55BE35A2ABC266000289320 /* SortedListView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -456,6 +459,7 @@
 				F5418A902A9B759B00511A67 /* Binding+Extension.swift in Sources */,
 				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
 				F55BE3572AB9E62B00289320 /* PersonsList.swift in Sources */,
+				F55BE35B2ABC266000289320 /* SortedListView.swift in Sources */,
 				F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */,
 				F5DC3BA42AA69401005528F9 /* AppVersion.swift in Sources */,
 				F55BE3522AB92B6B00289320 /* GroupList.swift in Sources */,
@@ -475,7 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F5405BEB2A96F349002FA0C9 /* RelNetTests.swift in Sources */,
+				F55BE35D2ABC931F00289320 /* PersonTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,7 +696,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RelNet.app/RelNet";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = EAZT2D654U;
@@ -712,7 +716,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/RelNet.app/RelNet";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = EAZT2D654U;

@@ -19,6 +19,20 @@ struct PersonsList: Reducer {
         var selectedGroup: Group
         let groups: IdentifiedArrayOf<Group>
         var persons: IdentifiedArrayOf<Person>
+
+        var sortedPersons: Dictionary<String, [Person]> {
+            var dict: Dictionary<String, [Person]> = [:]
+            for person in persons {
+                let initial = person.nameInitial
+                if dict[initial] != nil {
+                    dict[initial]?.append(person)
+                } else {
+                    dict[initial] = [person]
+                }
+            }
+
+            return dict
+        }
     }
 
     enum Action: Equatable {
@@ -174,28 +188,29 @@ struct PersonsListView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                HStack {
-                    Button {
-                        viewStore.send(.deleteGroupButtonTapped)
-                    } label: {
-                        Text("Groupを削除")
-                    }
-
-                    Button {
-                        viewStore.send(.editGroupButtonTapped)
-                    } label: {
-                        Text("Groupを編集")
-                    }
-                }
-                LazyVStack {
-                    ForEach(viewStore.state.persons) { person in
+                VStack {
+                    HStack {
                         Button {
-                            viewStore.send(.personItemTapped(person))
+                            viewStore.send(.deleteGroupButtonTapped)
                         } label: {
-                            PersonCardView(person: person)
+                            Text("Groupを削除")
+                        }
+
+                        Button {
+                            viewStore.send(.editGroupButtonTapped)
+                        } label: {
+                            Text("Groupを編集")
                         }
                     }
+
+                    SortedPersonsView(
+                        sortedItems: viewStore.state.sortedPersons,
+                        onTapPerson: { person in
+                            viewStore.send(.personItemTapped(person))
+                        }
+                    )
                 }
+                .padding()
             }
             .navigationTitle("\(viewStore.state.selectedGroup.name) persons")
             .alert(

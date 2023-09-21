@@ -18,6 +18,20 @@ struct Main: Reducer {
         var groups: IdentifiedArrayOf<Group> = []
         var persons: IdentifiedArrayOf<Person> = []
 
+        var sortedPersons: Dictionary<String, [Person]> {
+            var dict: Dictionary<String, [Person]> = [:]
+            for person in persons {
+                let initial = person.nameInitial
+                if dict[initial] != nil {
+                    dict[initial]?.append(person)
+                } else {
+                    dict[initial] = [person]
+                }
+            }
+
+            return dict
+        }
+
         init(
             destination: Destination.State? = nil
         ) {
@@ -35,7 +49,7 @@ struct Main: Reducer {
         case dismissAddGroupButtonTapped
         case dismissAddPersonButtonTapped
         case groupCardTapped(Group)
-        case personCardTapped(Person)
+        case personItemTapped(Person)
         case moreGroupsButtonTapped
         case morePersonsButtonTapped
 
@@ -153,7 +167,7 @@ struct Main: Reducer {
                 state.destination = .personsList(.init(selectedGroup: group, groups: state.groups, persons: personsInGroup))
                 return .none
 
-            case let .personCardTapped(person):
+            case let .personItemTapped(person):
                 state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
                 return .none
 
@@ -326,7 +340,7 @@ private extension MainView {
 
             ScrollView(.horizontal) {
                 LazyHStack(spacing: 8) {
-                    ForEach(viewStore.state.groups) { group in
+                    ForEach(viewStore.groups) { group in
                         Button {
                             viewStore.send(.groupCardTapped(group))
                         } label: {
@@ -346,15 +360,12 @@ private extension MainView {
                 addAction: { viewStore.send(.addPersonButtonTapped) }
             )
 
-            LazyVStack(alignment: .leading, spacing: 8) {
-                ForEach(viewStore.state.persons) { person in
-                    Button {
-                        viewStore.send(.personCardTapped(person))
-                    } label: {
-                        PersonCardView(person: person)
-                    }
+            SortedPersonsView(
+                sortedItems: viewStore.sortedPersons,
+                onTapPerson: { person in
+                    viewStore.send(.personItemTapped(person))
                 }
-            }
+            )
         }
     }
 
