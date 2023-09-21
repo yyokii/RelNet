@@ -9,41 +9,114 @@ import SwiftUI
 
 import ComposableArchitecture
 
+/**
+ 特定のGroupに属するPersonのリスト表示機能
+ */
 struct PersonsList: Reducer {
 
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
-        let selectedGroup: Group
+        var selectedGroup: Group
         let groups: IdentifiedArrayOf<Group>
         var persons: IdentifiedArrayOf<Person>
     }
 
     enum Action: Equatable {
-        case destination(PresentationAction<Destination.Action>)
+        // User Action
+        case cancelEditGroupButtonTapped
+        case doneEditingGroupButtonTapped
+        case deleteGroupButtonTapped
+        case editGroupButtonTapped
         case personItemTapped(Person)
+
+        // Other Action
+        case destination(PresentationAction<Destination.Action>)
+        case deleteGroupResult(TaskResult<String>)
+        case editGroupResult(TaskResult<Group>)
     }
 
     struct Destination: Reducer {
         enum State: Equatable {
+            case alert(AlertState<Action.Alert>)
+            case editGroup(GroupForm.State)
             case personDetail(PersonDetail.State)
         }
 
         enum Action: Equatable {
+            case alert(Alert)
+            case editGroup(GroupForm.Action)
             case personDetail(PersonDetail.Action)
+
+            enum Alert {
+                case confirmDeletion
+            }
         }
 
         var body: some ReducerOf<Self> {
+            Scope(state: /State.editGroup, action: /Action.editGroup) {
+                GroupForm()
+            }
             Scope(state: /State.personDetail, action: /Action.personDetail) {
                 PersonDetail()
             }
         }
     }
 
+    @Dependency(\.dismiss) var dismiss
     @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
+            case .cancelEditGroupButtonTapped:
+                state.destination = nil
+                return .none
+
+            case .doneEditingGroupButtonTapped:
+                guard case let .some(.editGroup(editState)) = state.destination
+                else { return .none }
+
+                let group = editState.group
+                return .run { send in
+                    await send(
+                        .editGroupResult(
+                            await TaskResult {
+                                try personClient.updateGroup(group)
+                            }
+                        )
+                    )
+                }
+
+            case .deleteGroupButtonTapped:
+                state.destination = .alert(.deleteGroup)
+                return .none
+
+            case .editGroupButtonTapped:
+                state.destination = .editGroup(.init(group: state.selectedGroup))
+                return .none
+
+            case let .personItemTapped(person):
+                state.destination = .personDetail(.init(person: person, groups: state.groups))
+                return .none
+
+            case let .destination(.presented(.alert(alertAction))):
+                switch alertAction {
+                case .confirmDeletion:
+                    guard let id = state.selectedGroup.id else {
+                        return .none
+                    }
+
+                    return .run { send in
+                        await send(
+                            .deleteGroupResult(
+                                await TaskResult {
+                                    try personClient.deleteGroup(id)
+                                }
+                            )
+                        )
+                    }
+                }
+
             case let .destination(.presented(.personDetail(.deletePersonResult(.success(deletedPersonId))))):
                 guard let index = state.persons.firstIndex(where: { $0.id == deletedPersonId }) else {
                     return .none
@@ -68,8 +141,24 @@ struct PersonsList: Reducer {
             case .destination:
                 return .none
 
-            case let .personItemTapped(person):
-                state.destination = .personDetail(.init(person: person, groups: state.groups))
+            case .deleteGroupResult(.success(_)):
+                print("📝 success delete group")
+                return .run { _ in
+                    await dismiss()
+                }
+
+            case .deleteGroupResult(.failure(_)):
+                print("📝 failed delete group")
+                return .none
+
+            case let .editGroupResult(.success(group)):
+                print("📝 success edit group")
+                state.selectedGroup = group
+                state.destination = nil
+                return .none
+
+            case .editGroupResult(.failure(_)):
+                print("📝 failed edit group")
                 return .none
             }
         }
@@ -85,6 +174,19 @@ struct PersonsListView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
+                HStack {
+                    Button {
+                        viewStore.send(.deleteGroupButtonTapped)
+                    } label: {
+                        Text("Groupを削除")
+                    }
+
+                    Button {
+                        viewStore.send(.editGroupButtonTapped)
+                    } label: {
+                        Text("Groupを編集")
+                    }
+                }
                 LazyVStack {
                     ForEach(viewStore.state.persons) { person in
                         Button {
@@ -96,6 +198,11 @@ struct PersonsListView: View {
                 }
             }
             .navigationTitle("\(viewStore.state.selectedGroup.name) persons")
+            .alert(
+                store: store.scope(state: \.$destination, action: { .destination($0) }),
+                state: /PersonsList.Destination.State.alert,
+                action: PersonsList.Destination.Action.alert
+            )
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /PersonsList.Destination.State.personDetail,
@@ -103,7 +210,44 @@ struct PersonsListView: View {
             ) {
                 PersonDetailView(store: $0)
             }
+            .sheet(
+                store: store.scope(state: \.$destination, action: { .destination($0) }),
+                state: /PersonsList.Destination.State.editGroup,
+                action: PersonsList.Destination.Action.editGroup
+            ) { store in
+                NavigationStack {
+                    GroupFormView(store: store)
+                        .navigationTitle(viewStore.selectedGroup.name)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") {
+                                    viewStore.send(.cancelEditGroupButtonTapped)
+                                }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") {
+                                    viewStore.send(.doneEditingGroupButtonTapped)
+                                }
+                            }
+                        }
+                }
+            }
         }
+    }
+}
+
+extension AlertState where Action == PersonsList.Destination.Action.Alert {
+    static let deleteGroup = Self {
+        TextState("Delete?")
+    } actions: {
+        ButtonState(role: .destructive, action: .confirmDeletion) {
+            TextState("Yes")
+        }
+        ButtonState(role: .cancel) {
+            TextState("Cancel")
+        }
+    } message: {
+        TextState("グループを削除します。人の情報は削除されません、ご安心ください。")
     }
 }
 
