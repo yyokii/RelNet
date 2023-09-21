@@ -10,6 +10,9 @@ import SwiftUI
 import ComposableArchitecture
 import SwiftUINavigation
 
+/**
+ Person情報の入力ができる機能
+ */
 struct PersonForm: Reducer {
 
     struct State: Equatable, Sendable {
