@@ -1,5 +1,5 @@
 //
-//  Binding.swift
+//  Binding+Extension.swift
 //  RelNet
 //
 //  Created by Higashihara Yoki on 2023/08/27.

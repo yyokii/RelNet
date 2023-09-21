@@ -1,5 +1,5 @@
 //
-//  TaskResult.swift
+//  TaskResult+Extension.swift
 //  RelNet
 //
 //  Created by Higashihara Yoki on 2023/09/17.

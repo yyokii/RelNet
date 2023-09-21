@@ -12,8 +12,10 @@ import FirebaseFirestoreSwift
 
 struct Person: Codable, Identifiable, Equatable {
     @DocumentID var id: String?
-    var firstName: String = ""
-    var lastName: String = ""
+    var firstName: String = "" // 姓
+    var firstNameFurigana: String?
+    var lastName: String = "" // 名
+    var lastNameFurigana: String?
     var nickname: String = ""
     var birthdate: Date?
     var notes: String = ""
@@ -58,6 +60,14 @@ extension Person {
             "groupIDs": groupIDs,
             "notes": notes
         ]
+
+        if let firstNameFurigana {
+            dictionary["firstNameFurigana"] = firstNameFurigana
+        }
+
+        if let lastNameFurigana {
+            dictionary["lastNameFurigana"] = lastNameFurigana
+        }
 
         if let birthdate {
             dictionary["birthdate"] = birthdate

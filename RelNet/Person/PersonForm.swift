@@ -13,7 +13,7 @@ import SwiftUINavigation
 struct PersonForm: Reducer {
 
     struct State: Equatable, Sendable {
-        @BindingState var focus: Field? = .firstName
+        @BindingState var focus: Field? = .lastName
         @BindingState var person: Person
         let groups: IdentifiedArrayOf<Group>
 
@@ -29,10 +29,15 @@ struct PersonForm: Reducer {
     }
 
     enum Action: BindableAction, Equatable, Sendable {
-        case binding(BindingAction<State>)
 
+        // User Action
+        case binding(BindingAction<State>)
         case contactedTodayButtonTapped
         case groupButtonTapped(Group)
+
+        // Other
+        case firstNameEndEditing
+        case lastNameEndEditing
     }
 
     var body: some ReducerOf<Self> {
@@ -51,6 +56,14 @@ struct PersonForm: Reducer {
                     return .none
                 }
                 state.person.updateGroupID(id)
+                return .none
+
+            case .firstNameEndEditing:
+                state.person.firstNameFurigana = state.person.firstName.furigana
+                return .none
+
+            case .lastNameEndEditing:
+                state.person.lastNameFurigana = state.person.lastName.furigana
                 return .none
             }
         }
@@ -75,10 +88,25 @@ struct PersonFormView: View {
             Form {
                 Section {
                     VStack {
-                        TextField("first name", text: viewStore.$person.firstName)
-                            .focused(self.$focus, equals: .firstName)
-                        TextField("last name", text: viewStore.$person.lastName)
+                        TextField("姓", text: viewStore.$person.lastName)
                             .focused(self.$focus, equals: .lastName)
+                            .onChange(of: viewStore.state.focus) { focus in
+                                if focus != .lastName {
+                                    viewStore.send(.lastNameEndEditing)
+                                }
+                            }
+
+                        TextField("姓（フリガナ）", text: viewStore.$person.lastNameFurigana.toUnwrapped(defaultValue: ""))
+
+                        TextField("名", text: viewStore.$person.firstName)
+                            .focused(self.$focus, equals: .firstName)
+
+                        TextField("名（フリガナ）", text: viewStore.$person.firstNameFurigana.toUnwrapped(defaultValue: ""))
+                            .onChange(of: viewStore.state.focus) { focus in
+                                if focus != .firstName {
+                                    viewStore.send(.firstNameEndEditing)
+                                }
+                            }
                         
                         TextField("nickname", text: viewStore.$person.nickname)
 
