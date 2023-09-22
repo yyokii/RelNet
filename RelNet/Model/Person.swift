@@ -32,7 +32,8 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
         } else if
             !firstName.isEmpty,
             !lastName.isEmpty {
-            return firstName + " " + lastName
+            // TODO: 言語設定で変更する
+            return lastName + " " + firstName
         } else {
             return firstName.isEmpty ? lastName : firstName
         }
