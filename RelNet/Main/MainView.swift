@@ -339,7 +339,7 @@ private extension MainView {
             )
 
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 8) {
+                LazyHStack(spacing: 12) {
                     ForEach(viewStore.groups) { group in
                         Button {
                             viewStore.send(.groupCardTapped(group))
@@ -349,6 +349,7 @@ private extension MainView {
                     }
                 }
             }
+            .scrollIndicators(.hidden)
         }
     }
 

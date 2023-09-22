@@ -11,15 +11,31 @@ struct GroupCard: View {
     let group: Group
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center, spacing: 4) {
+            // TODO: 絵文字設定できるようにする？
+            Text("🦄")
+                .font(.system(size: 32))
             Text(self.group.name)
                 .font(.headline)
                 .lineLimit(2)
+                .foregroundColor(.adaptiveWhite)
+                .bold()
         }
-        .frame(width: 80, height: 80)
+        .padding(8)
+        .frame(width: 120, height: 120)
         .background {
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.orange)
+                .fill(Color.adaptiveBlack)
         }
     }
 }
+
+#if DEBUG
+
+struct GroupCard_Previews: PreviewProvider {
+    static var previews: some View {
+        GroupCard(group: .mock)
+    }
+}
+
+#endif
