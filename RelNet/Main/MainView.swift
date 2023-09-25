@@ -247,10 +247,20 @@ struct MainView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
+                    listHeader(
+                        title: "Groups",
+                        moreAction: { viewStore.send(.moreGroupsButtonTapped) },
+                        addAction: { viewStore.send(.addGroupButtonTapped) }
+                    )
+                    .padding(.top)
+                    .padding(.horizontal)
+
+                    // 横スクロールのViewにholizontalのpaddingをつけないようにするために個々のViewに.padding()を設定している。
                     groupList(viewStore)
+
                     personsList(viewStore)
+                        .padding(.horizontal)
                 }
-                .padding()
             }
             .navigationTitle("RelNet")
             .task {
@@ -331,26 +341,19 @@ struct MainView: View {
 
 private extension MainView {
     func groupList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
-        VStack {
-            listHeader(
-                title: "Groups",
-                moreAction: { viewStore.send(.moreGroupsButtonTapped) },
-                addAction: { viewStore.send(.addGroupButtonTapped) }
-            )
-
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 12) {
-                    ForEach(viewStore.groups) { group in
-                        Button {
-                            viewStore.send(.groupCardTapped(group))
-                        } label: {
-                            GroupCard(group: group)
-                        }
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 12) {
+                ForEach(viewStore.groups) { group in
+                    Button {
+                        viewStore.send(.groupCardTapped(group))
+                    } label: {
+                        GroupCard(group: group)
                     }
+                    .padding(.leading)
                 }
             }
-            .scrollIndicators(.hidden)
         }
+        .scrollIndicators(.hidden)
     }
 
     func personsList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
