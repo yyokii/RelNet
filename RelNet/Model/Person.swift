@@ -13,16 +13,19 @@ import FirebaseFirestoreSwift
 struct Person: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
     var firstName: String = "" // 名
-    var firstNameFurigana: String?
     var lastName: String = "" // 姓
-    var lastNameFurigana: String?
     var nickname: String = ""
-    var birthdate: Date?
+    var hobbies: String = ""
+    var likes: String = ""
+    var dislikes: String = ""
     var notes: String = ""
-    var address: String?
-    var lastContacted: Date?
     private(set) var groupIDs: [String] = []
 
+    var firstNameFurigana: String?
+    var lastNameFurigana: String?
+    var birthdate: Date?
+    var address: String?
+    var lastContacted: Date?
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
@@ -101,11 +104,14 @@ extension Person {
         firstName: "DemoFirst",
         lastName: "DemoLast",
         nickname: "Nick",
+        hobbies: "sanpo",
+        likes: "soba",
+        dislikes: "no love all",
+        notes: "this is note",
+        groupIDs: ["id-1"],
         birthdate: Date(),
-        notes: "this is note.",
-        address: "Japan",
-        lastContacted: Date(),
-        groupIDs: ["id-1"]
+        address: "tokyo",
+        lastContacted: Date()
     )
 
     static let mock2 = Self (
@@ -113,11 +119,14 @@ extension Person {
         firstName: "DemoFirst2",
         lastName: "DemoLast2",
         nickname: "Nick2",
+        hobbies: "sanpo",
+        likes: "soba",
+        dislikes: "no love all",
+        notes: "this is note",
+        groupIDs: ["id-2"],
         birthdate: Date(),
-        notes: "this is note.",
-        address: "Japan",
-        lastContacted: Date(),
-        groupIDs: ["id-1"]
+        address: "tokyo",
+        lastContacted: Date()
     )
 
     static let mock3 = Self (
@@ -125,11 +134,14 @@ extension Person {
         firstName: "DemoFirst3",
         lastName: "DemoLast3",
         nickname: "Nick3",
+        hobbies: "sanpo",
+        likes: "soba",
+        dislikes: "no love all",
+        notes: "this is note",
+        groupIDs: ["id-3"],
         birthdate: Date(),
-        notes: "this is note.",
-        address: "Japan",
-        lastContacted: Date(),
-        groupIDs: ["id-1"]
+        address: "tokyo",
+        lastContacted: Date()
     )
 
     func toDictionary() -> [String: Any] {
@@ -137,8 +149,11 @@ extension Person {
             "firstName": firstName,
             "lastName": lastName,
             "nickname": nickname,
+            "hobbies": hobbies,
+            "likes": likes,
+            "dislikes": dislikes,
+            "notes": notes,
             "groupIDs": groupIDs,
-            "notes": notes
         ]
 
         if let firstNameFurigana {
