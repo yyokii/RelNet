@@ -256,9 +256,9 @@ struct MainView: View {
                     .padding(.horizontal)
 
                     // 横スクロールのViewにholizontalのpaddingをつけないようにするために個々のViewに.padding()を設定している。
-                    groupList(viewStore)
+                    groupList
 
-                    personsList(viewStore)
+                    personsList
                         .padding(.horizontal)
                 }
             }
@@ -340,36 +340,40 @@ struct MainView: View {
 }
 
 private extension MainView {
-    func groupList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
-        ScrollView(.horizontal) {
-            LazyHStack(spacing: 12) {
-                ForEach(viewStore.groups) { group in
-                    Button {
-                        viewStore.send(.groupCardTapped(group))
-                    } label: {
-                        GroupCard(group: group)
+    var groupList: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            ScrollView(.horizontal) {
+                LazyHStack(spacing: 12) {
+                    ForEach(viewStore.groups) { group in
+                        Button {
+                            viewStore.send(.groupCardTapped(group))
+                        } label: {
+                            GroupCard(group: group)
+                        }
+                        .padding(.leading)
                     }
-                    .padding(.leading)
                 }
             }
+            .scrollIndicators(.hidden)
         }
-        .scrollIndicators(.hidden)
     }
 
-    func personsList(_ viewStore: ViewStore<Main.State, Main.Action>) -> some View {
-        VStack(alignment: .leading) {
-            listHeader(
-                title: "Persons",
-                moreAction: nil,
-                addAction: { viewStore.send(.addPersonButtonTapped) }
-            )
+    var personsList: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            VStack(alignment: .leading) {
+                listHeader(
+                    title: "Persons",
+                    moreAction: nil,
+                    addAction: { viewStore.send(.addPersonButtonTapped) }
+                )
 
-            SortedPersonsView(
-                sortedItems: viewStore.sortedPersons,
-                onTapPerson: { person in
-                    viewStore.send(.personItemTapped(person))
-                }
-            )
+                SortedPersonsView(
+                    sortedItems: viewStore.sortedPersons,
+                    onTapPerson: { person in
+                        viewStore.send(.personItemTapped(person))
+                    }
+                )
+            }
         }
     }
 
