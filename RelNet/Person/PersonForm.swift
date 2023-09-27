@@ -113,6 +113,12 @@ struct PersonFormView: View {
                         
                         TextField("nickname", text: viewStore.$person.nickname)
 
+                        TextField("hobbies", text: viewStore.$person.hobbies)
+
+                        TextField("likes", text: viewStore.$person.likes)
+
+                        TextField("dislikes", text: viewStore.$person.dislikes)
+
                         // TODO: 年いる？あまり入れれない気がする、年と月日を分けるとか？
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
