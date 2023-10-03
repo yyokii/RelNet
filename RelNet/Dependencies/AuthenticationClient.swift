@@ -72,32 +72,22 @@ extension AuthenticationClient: DependencyKey {
             }
         },
         signInWithGoogle: {
-            if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-                // TODO: これ必要？サインアウトした後は任意のアカウントでサインインしたいはず
-                do {
-                    let user = try await GIDSignIn.sharedInstance.restorePreviousSignIn()
-                    return try await authenticateUser(for: user)
-                } catch {
-                    throw AuthenticationClientError.notFoundUser
-                }
-            } else {
-                guard let clientID = FirebaseApp.app()?.options.clientID else {
-                    throw AuthenticationClientError.notFoundClientID
-                }
+            guard let clientID = FirebaseApp.app()?.options.clientID else {
+                throw AuthenticationClientError.notFoundClientID
+            }
 
-                let configuration = GIDConfiguration(clientID: clientID)
+            let configuration = GIDConfiguration(clientID: clientID)
 
-                guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                      let rootViewController = await windowScene.windows.first?.rootViewController else {
-                    throw AuthenticationClientError.notFoundRootVC
-                }
+            guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                  let rootViewController = await windowScene.windows.first?.rootViewController else {
+                throw AuthenticationClientError.notFoundRootVC
+            }
 
-                do {
-                    let result = try await signInOnMainThread(withPresenting: rootViewController)
-                    return try await authenticateUser(for: result.user)
-                } catch {
-                    throw AuthenticationClientError.notFoundUser
-                }
+            do {
+                let result = try await signInOnMainThread(withPresenting: rootViewController)
+                return try await authenticateUser(for: result.user)
+            } catch {
+                throw AuthenticationClientError.notFoundUser
             }
         },
         signOut: {

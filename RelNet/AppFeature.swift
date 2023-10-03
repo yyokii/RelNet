@@ -17,11 +17,11 @@ struct AppFeature: Reducer {
     enum Action: Equatable {
         case onAppear
         case signInWithGoogleButtonTapped
-        case signInWithGoogleResponse(TaskResult<AppUser>)
 
         // Other Action
         case task
         case listenAuthStateResponse(TaskResult<AppUser?>)
+        case signInWithGoogleResponse(TaskResult<AppUser>)
     }
 
     @Dependency(\.authenticationClient) private var authenticationClient
