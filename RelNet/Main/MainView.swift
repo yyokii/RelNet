@@ -343,14 +343,14 @@ private extension MainView {
     var groupList: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView(.horizontal) {
-                LazyHStack(spacing: 12) {
+                LazyHStack(spacing: 0) {
                     ForEach(viewStore.groups) { group in
                         Button {
                             viewStore.send(.groupCardTapped(group))
                         } label: {
                             GroupCard(group: group)
                         }
-                        .padding(.leading)
+                        .padding(.horizontal, 8)
                     }
                 }
             }

@@ -82,11 +82,19 @@ struct GroupsList: Reducer {
 
 struct GroupsListView: View {
     let store: StoreOf<GroupsList>
+    let groupCardColumns: [GridItem] = Array(
+        repeating: .init(
+            .flexible(minimum: GroupCard.size.width, maximum: GroupCard.size.height),
+            spacing: 24,
+            alignment: .center
+        ),
+        count: 2
+    )
 
     var body: some View {
         WithViewStore(self.store, observe: \.groups) { viewStore in
             ScrollView {
-                LazyVStack {
+                LazyVGrid(columns: groupCardColumns, spacing: 24) {
                     ForEach(viewStore.state) { group in
                         Button {
                             viewStore.send(.groupItemTapped(group))
@@ -95,6 +103,7 @@ struct GroupsListView: View {
                         }
                     }
                 }
+                .padding(.top)
             }
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GroupCard: View {
+    static let size: CGSize = .init(width: 120, height: 120)
+
     let group: Group
 
     var body: some View {
@@ -22,7 +24,10 @@ struct GroupCard: View {
                 .bold()
         }
         .padding(8)
-        .frame(width: 120, height: 120)
+        .frame(
+            width: GroupCard.size.width,
+            height: GroupCard.size.height
+        )
         .background {
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color.adaptiveBlack)
