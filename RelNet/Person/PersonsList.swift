@@ -188,31 +188,18 @@ struct PersonsListView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                VStack {
-                    HStack {
-                        Button {
-                            viewStore.send(.deleteGroupButtonTapped)
-                        } label: {
-                            Text("Groupを削除")
-                        }
-
-                        Button {
-                            viewStore.send(.editGroupButtonTapped)
-                        } label: {
-                            Text("Groupを編集")
-                        }
+                SortedPersonsView(
+                    sortedItems: viewStore.state.sortedPersons,
+                    onTapPerson: { person in
+                        viewStore.send(.personItemTapped(person))
                     }
-
-                    SortedPersonsView(
-                        sortedItems: viewStore.state.sortedPersons,
-                        onTapPerson: { person in
-                            viewStore.send(.personItemTapped(person))
-                        }
-                    )
-                }
+                )
                 .padding()
             }
             .navigationTitle("\(viewStore.state.selectedGroup.name) persons")
+            .toolbar {
+                headerMenu
+            }
             .alert(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
                 state: /PersonsList.Destination.State.alert,
@@ -246,6 +233,38 @@ struct PersonsListView: View {
                             }
                         }
                 }
+            }
+        }
+    }
+}
+
+private extension PersonsListView {
+    var headerMenu: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            Menu {
+                HapticButton {
+                    viewStore.send(.editGroupButtonTapped)
+                } label: {
+                    HStack {
+                        Text("編集する")
+                        Image(systemName: "pencil")
+                            .font(.system(size: 20))
+                            .foregroundColor(.primary)
+                    }
+                }
+
+                HapticButton {
+                    viewStore.send(.deleteGroupButtonTapped)
+                } label: {
+                    Text("削除する")
+                    Image(systemName: "trash")
+                        .font(.system(size: 16))
+                        .foregroundColor(.primary)
+                }
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 20))
+                    .foregroundColor(.primary)
             }
         }
     }
