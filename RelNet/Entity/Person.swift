@@ -29,16 +29,18 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
+    /*
+     表示優先度: full name → firstName or lastName → nickname
+     */
     var name: String {
-        if !nickname.isEmpty {
-            return nickname
-        } else if
-            !firstName.isEmpty,
-            !lastName.isEmpty {
+        if !firstName.isEmpty,
+           !lastName.isEmpty {
             // TODO: 言語設定で変更する
             return lastName + " " + firstName
-        } else {
+        } else if nickname.isEmpty {
             return firstName.isEmpty ? lastName : firstName
+        } else {
+            return nickname
         }
     }
 

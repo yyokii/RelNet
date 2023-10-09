@@ -95,9 +95,7 @@ struct MyPageView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
-
             VStack {
-
                 topCard
                     .padding(.horizontal)
                     .padding(.vertical)
@@ -154,20 +152,9 @@ private extension MyPageView {
         Text("top card")
     }
 
-    func rowTitle(symbolName: String, iconColor: Color, title: String) -> some View {
-        HStack {
-            IconWithRoundedBackground(
-                systemName: symbolName,
-                backgroundColor: iconColor
-            )
-            Text(title)
-                .font(.system(size: 14))
-        }
-    }
-
     var demo: some View {
         HStack {
-            rowTitle(symbolName: "square.stack", iconColor: .blue, title: "demo")
+            RoundedIconAndTitle(symbolName: "square.stack", iconColor: .blue, title: "demo")
             Spacer()
             Text("demo")
         }
@@ -177,7 +164,7 @@ private extension MyPageView {
         Button(action: {
             viewStore.send(.inquiryButtonTapped)
         }) {
-            rowTitle(symbolName: "mail", iconColor: .green, title: "お問い合わせ")
+            RoundedIconAndTitle(symbolName: "mail", iconColor: .green, title: "お問い合わせ")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
         }
@@ -197,7 +184,7 @@ private extension MyPageView {
             viewStore.send(.versionButtonTapped(appVersion))
         }) {
             HStack {
-                rowTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: "バージョン")
+                RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: "バージョン")
                 Spacer()
                 Text(appVersion.versionText)
             }

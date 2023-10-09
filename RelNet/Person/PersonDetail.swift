@@ -151,9 +151,15 @@ struct PersonDetailView: View {
         WithViewStore(self.store, observe: ViewState.init) { viewStore in
             List {
                 Section {
-                    Text(viewStore.person.lastName)
-                    Text(viewStore.person.firstName)
-                    Text(viewStore.person.nickname)
+                    if !viewStore.person.nickname.isEmpty {
+                        nicknameRow("ニックネーム")
+                    }
+                    birthdateRow(dateString: "2000/09/24")
+                    addressRow(viewStore.person.address ?? "")
+                    hobbiesRow(viewStore.person.hobbies)
+                    likesRow(viewStore.person.likes)
+                    dislikesRow(viewStore.person.dislikes)
+                    lastContactedRow(dateString: "2020/02/02")
                 } header: {
                     Text("Basic Info")
                 }
@@ -176,7 +182,7 @@ struct PersonDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
             }
-            .navigationTitle(viewStore.person.firstName)
+            .navigationTitle(viewStore.person.name)
             .toolbar {
                 Button("Edit") {
                     viewStore.send(.editButtonTapped)
@@ -213,7 +219,45 @@ struct PersonDetailView: View {
     }
 }
 
-extension AlertState where Action == PersonDetail.Destination.Action.Alert {
+private extension PersonDetailView {
+    func nicknameRow(_ name: String) -> some View {
+        textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: name)
+    }
+
+    func birthdateRow(dateString: String) -> some View {
+        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: dateString)
+    }
+
+    func addressRow(_ address: String) -> some View {
+        textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: address)
+    }
+
+    func hobbiesRow(_ hobbies: String) -> some View {
+        textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: hobbies)
+    }
+
+    func likesRow(_ likes: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなもの", text: likes)
+    }
+
+    func dislikesRow(_ dislikes: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手なもの", text: dislikes)
+    }
+
+    func lastContactedRow(dateString: String) -> some View {
+        textRowItem(symbolName: "figure.wave", iconColor: .brown, title: "最後に会った日", text: dateString)
+    }
+
+    func textRowItem(symbolName: String, iconColor: Color, title: String, text: String) -> some View {
+        HStack(alignment: .center, spacing: 24) {
+            RoundedIconAndTitle(symbolName: symbolName, iconColor: iconColor, title: title)
+            Text(text)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+    }
+}
+
+private extension AlertState where Action == PersonDetail.Destination.Action.Alert {
     static let deletePerson = Self {
         TextState("Delete?")
     } actions: {

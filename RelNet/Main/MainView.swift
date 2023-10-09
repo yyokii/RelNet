@@ -122,9 +122,10 @@ struct Main: Reducer {
                 let group = formState.group
 
                 return .run { send in
+                    // TODO: この形式で他も書き換える
                     await send (
                         .addGroupResult(
-                            await TaskResult {
+                            .init {
                                 try personClient.addGroup(group)
                             }
                         )
@@ -253,14 +254,12 @@ struct MainView: View {
                         addAction: { viewStore.send(.addGroupButtonTapped) }
                     )
                     .padding(.top)
-                    .padding(.horizontal)
 
-                    // 横スクロールのViewにholizontalのpaddingをつけないようにするために個々のViewに.padding()を設定している。
                     groupList
 
                     personsList
-                        .padding(.horizontal)
                 }
+                .padding(.horizontal)
             }
             .navigationTitle("RelNet")
             .task {
@@ -342,19 +341,16 @@ struct MainView: View {
 private extension MainView {
     var groupList: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView(.horizontal) {
-                LazyHStack(spacing: 0) {
-                    ForEach(viewStore.groups) { group in
-                        Button {
-                            viewStore.send(.groupCardTapped(group))
-                        } label: {
-                            GroupCard(group: group)
-                        }
-                        .padding(.horizontal, 8)
+            FlowLayout(alignment: .leading, spacing: 8) {
+                ForEach(viewStore.groups) { group in
+                    Button {
+                        viewStore.send(.groupCardTapped(group))
+                    } label: {
+                        Text(group.name)
+                            .groupItemText()
                     }
                 }
             }
-            .scrollIndicators(.hidden)
         }
     }
 

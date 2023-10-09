@@ -35,13 +35,14 @@
 		F55BE35B2ABC266000289320 /* SortedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35A2ABC266000289320 /* SortedListView.swift */; };
 		F55BE35D2ABC931F00289320 /* PersonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35C2ABC931F00289320 /* PersonTests.swift */; };
 		F55BE3622ABCA24100289320 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3612ABCA24100289320 /* Color.swift */; };
+		F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */; };
+		F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB632AD11967001263C1 /* FlowLayout.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
 		F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */; };
 		F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */; };
 		F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B982AA57F39005528F9 /* LoginView.swift */; };
 		F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */; };
 		F5DC3B9E2AA5EE92005528F9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */; };
-		F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */; };
 		F5DC3BA22AA6110A005528F9 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA12AA6110A005528F9 /* SafariView.swift */; };
 		F5DC3BA42AA69401005528F9 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BA32AA69401005528F9 /* AppVersion.swift */; };
 		F5DC3BA72AA71894005528F9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA62AA71894005528F9 /* GoogleSignIn */; };
@@ -92,13 +93,14 @@
 		F55BE35A2ABC266000289320 /* SortedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedListView.swift; sourceTree = "<group>"; };
 		F55BE35C2ABC931F00289320 /* PersonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTests.swift; sourceTree = "<group>"; };
 		F55BE3612ABCA24100289320 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedIconAndTitle.swift; sourceTree = "<group>"; };
+		F5AEDB632AD11967001263C1 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupForm.swift; sourceTree = "<group>"; };
 		F5DC3B8E2A9F8EB8005528F9 /* GroupDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetail.swift; sourceTree = "<group>"; };
 		F5DC3B982AA57F39005528F9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationClient.swift; sourceTree = "<group>"; };
 		F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
-		F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconWithRoundedBackground.swift; sourceTree = "<group>"; };
 		F5DC3BA12AA6110A005528F9 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		F5DC3BA32AA69401005528F9 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		F5DC3BAA2AA7191A005528F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -165,7 +167,7 @@
 			children = (
 				F5418A882A973EAC00511A67 /* App */,
 				F5418A8E2A9B758E00511A67 /* Extensions */,
-				F5405C172A970223002FA0C9 /* Model */,
+				F5405C172A970223002FA0C9 /* Entity */,
 				F5405C042A96F579002FA0C9 /* Dependencies */,
 				F55BE3532AB9E2E100289320 /* Components */,
 				F55BE3602ABCA22B00289320 /* StyleGuide */,
@@ -214,14 +216,14 @@
 			path = Dependencies;
 			sourceTree = "<group>";
 		};
-		F5405C172A970223002FA0C9 /* Model */ = {
+		F5405C172A970223002FA0C9 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
 				F5405C182A970233002FA0C9 /* Person.swift */,
 				F5DC3B8A2A9D6E30005528F9 /* Group.swift */,
 				F5DC3BA32AA69401005528F9 /* AppVersion.swift */,
 			);
-			path = Model;
+			path = Entity;
 			sourceTree = "<group>";
 		};
 		F5418A882A973EAC00511A67 /* App */ = {
@@ -252,6 +254,8 @@
 			children = (
 				F55BE3542AB9E30B00289320 /* GroupCard.swift */,
 				F55BE35A2ABC266000289320 /* SortedListView.swift */,
+				F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */,
+				F5AEDB632AD11967001263C1 /* FlowLayout.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -296,7 +300,6 @@
 			isa = PBXGroup;
 			children = (
 				F5DC3B9D2AA5EE92005528F9 /* MyPageView.swift */,
-				F5DC3B9F2AA5F68A005528F9 /* IconWithRoundedBackground.swift */,
 				F5DC3BA12AA6110A005528F9 /* SafariView.swift */,
 			);
 			path = MyPage;
@@ -465,7 +468,7 @@
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F55BE3502AB6ED1700289320 /* TaskResult+Extension.swift in Sources */,
 				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,
-				F5DC3BA02AA5F68A005528F9 /* IconWithRoundedBackground.swift in Sources */,
+				F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
 				F5418A902A9B759B00511A67 /* Binding+Extension.swift in Sources */,
 				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
@@ -480,6 +483,7 @@
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
 				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
+				F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
 				F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */,
 				F5DC3B8F2A9F8EB8005528F9 /* GroupDetail.swift in Sources */,
