@@ -50,7 +50,6 @@ struct Main: Reducer {
         case dismissAddPersonButtonTapped
         case groupCardTapped(Group)
         case personItemTapped(Person)
-        case moreGroupsButtonTapped
         case morePersonsButtonTapped
 
         // Other Action
@@ -67,7 +66,6 @@ struct Main: Reducer {
         enum State: Equatable {
             case addGroup(GroupForm.State)
             case addPerson(PersonForm.State)
-            case groupsList(GroupsList.State)
             case personDetail(PersonDetail.State)
             case personsList(PersonsList.State)
         }
@@ -75,7 +73,6 @@ struct Main: Reducer {
         enum Action: Equatable {
             case addGroup(GroupForm.Action)
             case addPerson(PersonForm.Action)
-            case groupsList(GroupsList.Action)
             case personDetail(PersonDetail.Action)
             case personsList(PersonsList.Action)
         }
@@ -86,9 +83,6 @@ struct Main: Reducer {
             }
             Scope(state: /State.addPerson, action: /Action.addPerson) {
                 PersonForm()
-            }
-            Scope(state: /State.groupsList, action: /Action.groupsList) {
-                GroupsList()
             }
             Scope(state: /State.personDetail, action: /Action.personDetail) {
                 PersonDetail()
@@ -172,10 +166,6 @@ struct Main: Reducer {
                 state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
                 return .none
 
-            case .moreGroupsButtonTapped:
-                state.destination = .groupsList(.init(groups: state.groups, persons: state.persons))
-                return .none
-
             case .morePersonsButtonTapped:
                 return .none
 
@@ -249,8 +239,8 @@ struct MainView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
                     listHeader(
-                        title: "Groups",
-                        moreAction: { viewStore.send(.moreGroupsButtonTapped) },
+                        title: "グループ",
+                        moreAction: nil,
                         addAction: { viewStore.send(.addGroupButtonTapped) }
                     )
                     .padding(.top)
@@ -267,14 +257,6 @@ struct MainView: View {
             }
             .task {
                 await viewStore.send(.listenPersons).finish()
-            }
-            .navigationDestination(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.groupsList,
-                action: Main.Destination.Action.groupsList
-            ) {
-                GroupsListView(store: $0)
-                    .navigationTitle("Groups")
             }
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
