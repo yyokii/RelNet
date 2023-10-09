@@ -238,20 +238,13 @@ struct MainView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
-                    listHeader(
-                        title: "グループ",
-                        moreAction: nil,
-                        addAction: { viewStore.send(.addGroupButtonTapped) }
-                    )
-                    .padding(.top)
-
                     groupList
-
+                        .padding(.top)
                     personsList
                 }
                 .padding(.horizontal)
             }
-            .navigationTitle("RelNet")
+            .navigationTitle("knot")
             .task {
                 await viewStore.send(.listenGroups).finish()
             }
@@ -323,13 +316,20 @@ struct MainView: View {
 private extension MainView {
     var groupList: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            FlowLayout(alignment: .leading, spacing: 8) {
-                ForEach(viewStore.groups) { group in
-                    Button {
-                        viewStore.send(.groupCardTapped(group))
-                    } label: {
-                        Text(group.name)
-                            .groupItemText()
+            VStack(alignment: .leading, spacing: 24) {
+                listHeader(
+                    iconName: "rectangle.3.group.fill",
+                    title: "グループ",
+                    addAction: { viewStore.send(.addGroupButtonTapped) }
+                )
+                FlowLayout(alignment: .leading, spacing: 8) {
+                    ForEach(viewStore.groups) { group in
+                        Button {
+                            viewStore.send(.groupCardTapped(group))
+                        } label: {
+                            Text(group.name)
+                                .groupItemText()
+                        }
                     }
                 }
             }
@@ -338,10 +338,10 @@ private extension MainView {
 
     var personsList: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 24) {
                 listHeader(
-                    title: "Persons",
-                    moreAction: nil,
+                    iconName: "person.2",
+                    title: "人物",
                     addAction: { viewStore.send(.addPersonButtonTapped) }
                 )
 
@@ -355,27 +355,23 @@ private extension MainView {
         }
     }
 
-    func listHeader(title: String, moreAction: (() -> Void)?, addAction: @escaping () -> Void) -> some View {
-        HStack(spacing: 8) {
-            if let moreAction {
-                Button {
-                    moreAction()
-                } label: {
-                    HStack {
-                        Text(title)
-                            .font(.title3)
-                            .bold()
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 18))
-                            .bold()
-                    }
+    func listHeader(
+        iconName: String,
+        title: String,
+        addAction: @escaping () -> Void
+    ) -> some View {
+        HStack(spacing: 0) {
+            Label(
+                title: {
+                    Text(title)
+                },
+                icon: {
+                    Image(systemName: iconName)
+                        .frame(width: 20)
                 }
-                .buttonStyle(.plain)
-            } else {
-                Text(title)
-                    .font(.title3)
-                    .bold()
-            }
+            )
+            .font(.title3)
+            .bold()
 
             Spacer()
 
