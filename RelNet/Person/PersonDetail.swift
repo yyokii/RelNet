@@ -17,17 +17,28 @@ struct PersonDetail: Reducer {
         let groups: IdentifiedArrayOf<Group>
     }
 
-    enum Action: Equatable, Sendable {
-        // User Action
-        case cancelEditButtonTapped
-        case deleteButtonTapped
-        case doneEditingButtonTapped
-        case editButtonTapped
-
-        // Other Action
+    enum Action: TCAFeatureAction, Equatable, Sendable {
+        case view(ViewAction)
+        case `internal`(InternalAction)
+        case delegate(DelegateAction)
         case destination(PresentationAction<Destination.Action>)
-        case deletePersonResult(TaskResult<String>)
-        case editPersonResult(TaskResult<Person>)
+
+        enum ViewAction: Equatable {
+            case cancelEditButtonTapped
+            case deleteButtonTapped
+            case doneEditingButtonTapped
+            case editButtonTapped
+        }
+
+        enum InternalAction: Equatable {
+            case deletePersonResult(TaskResult<String>)
+            case editPersonResult(TaskResult<Person>)
+        }
+
+        enum DelegateAction: Equatable {
+            case deletePerson(String)
+            case updatePerson(Person)
+        }
     }
 
     @Dependency(\.dismiss) var dismiss
@@ -56,13 +67,62 @@ struct PersonDetail: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
-            case .cancelEditButtonTapped:
-                state.destination = nil
-                return .none
+            case let .view(viewAction):
+                switch viewAction {
+                case .cancelEditButtonTapped:
+                    state.destination = nil
+                    return .none
 
-            case .deleteButtonTapped:
-                state.destination = .alert(.deletePerson)
-                return .none
+                case .deleteButtonTapped:
+                    state.destination = .alert(.deletePerson)
+                    return .none
+
+                case .doneEditingButtonTapped:
+                    guard case let .some(.edit(editState)) = state.destination
+                    else { return .none }
+
+                    let person = editState.person
+
+                    return .run { send in
+                        await send (
+                            .internal(.editPersonResult(
+                                await TaskResult {
+                                    try  self.personClient.updatePerson(person)
+                                }
+                            ))
+                        )
+                    }
+
+                case .editButtonTapped:
+                    state.destination = .edit(PersonForm.State(person: state.person, groups: state.groups))
+                    return .none
+                }
+
+            case let .internal(internalAction):
+                switch internalAction {
+                case let .deletePersonResult(.success(id)):
+                    print("📝 success delete person")
+                    return .run { send in
+                        await dismiss()
+                        await send(.delegate(.deletePerson(id)))
+                    }
+
+                case .deletePersonResult(.failure(_)):
+                    print("📝 failed delete person")
+                    return .none
+
+                case let .editPersonResult(.success(person)):
+                    print("📝 success edit person")
+                    state.person = person
+                    state.destination = nil
+                    return .run { send in
+                        await send(.delegate(.updatePerson(person)))
+                    }
+
+                case .editPersonResult(.failure(_)):
+                    print("📝 failed edit person")
+                    return .none
+                }
 
             case let .destination(.presented(.alert(alertAction))):
                 switch alertAction {
@@ -73,56 +133,19 @@ struct PersonDetail: Reducer {
 
                     return .run { send in
                         await send(
-                            .deletePersonResult(
+                            .internal(.deletePersonResult(
                                 await TaskResult {
                                     try personClient.deletePerson(id)
                                 }
-                            )
+                            ))
                         )
                     }
                 }
 
-            case .doneEditingButtonTapped:
-                guard case let .some(.edit(editState)) = state.destination
-                else { return .none }
-
-                let person = editState.person
-
-                return .run { send in
-                    await send (
-                        .editPersonResult(
-                            await TaskResult {
-                                try  self.personClient.updatePerson(person)
-                            }
-                        )
-                    )
-                }
-
-            case .editButtonTapped:
-                state.destination = .edit(PersonForm.State(person: state.person, groups: state.groups))
-                return .none
-
             case .destination:
                 return .none
 
-            case .deletePersonResult(.success(_)):
-                print("📝 success delete person")
-                return .run { _ in
-                    await dismiss()
-                }
-
-            case .deletePersonResult(.failure(_)):
-                print("📝 failed delete person")
-                return .none
-
-            case let .editPersonResult(.success(person)):
-                print("📝 success edit person")
-                state.person = person
-                state.destination = nil
-                return .none
-
-            case .editPersonResult(.failure(_)):
-                print("📝 failed edit person")
+            case .delegate:
                 return .none
             }
         }
@@ -176,7 +199,7 @@ struct PersonDetailView: View {
 
                 Section {
                     Button("Delete") {
-                        viewStore.send(.deleteButtonTapped)
+                        viewStore.send(.view(.deleteButtonTapped))
                     }
                     .foregroundColor(.red)
                     .frame(maxWidth: .infinity)
@@ -185,7 +208,7 @@ struct PersonDetailView: View {
             .navigationTitle(viewStore.person.name)
             .toolbar {
                 Button("Edit") {
-                    viewStore.send(.editButtonTapped)
+                    viewStore.send(.view(.editButtonTapped))
                 }
             }
             .alert(
@@ -204,12 +227,12 @@ struct PersonDetailView: View {
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
-                                    viewStore.send(.cancelEditButtonTapped)
+                                    viewStore.send(.view(.cancelEditButtonTapped))
                                 }
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Done") {
-                                    viewStore.send(.doneEditingButtonTapped)
+                                    viewStore.send(.view(.doneEditingButtonTapped))
                                 }
                             }
                         }

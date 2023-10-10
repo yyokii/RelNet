@@ -35,6 +35,7 @@
 		F55BE35D2ABC931F00289320 /* PersonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35C2ABC931F00289320 /* PersonTests.swift */; };
 		F55BE3622ABCA24100289320 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3612ABCA24100289320 /* Color.swift */; };
 		F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF3592AD455CA0064C18D /* Button+Extensions.swift */; };
+		F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */; };
 		F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */; };
 		F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB632AD11967001263C1 /* FlowLayout.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
@@ -93,6 +94,7 @@
 		F55BE35C2ABC931F00289320 /* PersonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTests.swift; sourceTree = "<group>"; };
 		F55BE3612ABCA24100289320 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
+		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
 		F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedIconAndTitle.swift; sourceTree = "<group>"; };
 		F5AEDB632AD11967001263C1 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -246,6 +248,7 @@
 				F55BE34F2AB6ED1700289320 /* TaskResult+Extension.swift */,
 				F55BE3582ABBE51500289320 /* String+Extension.swift */,
 				F59EF3592AD455CA0064C18D /* Button+Extensions.swift */,
+				F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -464,6 +467,7 @@
 				F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */,
 				F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */,
 				F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */,
+				F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */,
 				F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */,
 				F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */,
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,

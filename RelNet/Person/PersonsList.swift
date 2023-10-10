@@ -131,7 +131,7 @@ struct PersonsList: Reducer {
                     }
                 }
 
-            case let .destination(.presented(.personDetail(.deletePersonResult(.success(deletedPersonId))))):
+            case let .destination(.presented(.personDetail(.delegate(.deletePerson(deletedPersonId))))):
                 guard let index = state.persons.firstIndex(where: { $0.id == deletedPersonId }) else {
                     return .none
                 }
@@ -139,7 +139,7 @@ struct PersonsList: Reducer {
                 state.persons.remove(at: index)
                 return .none
 
-            case let .destination(.presented(.personDetail(.editPersonResult(.success(updatedPerson))))):
+            case let .destination(.presented(.personDetail(.delegate(.updatePerson(updatedPerson))))):
                 guard let index = state.persons.firstIndex(where: { $0.id == updatedPerson.id }) else {
                     return .none
                 }
