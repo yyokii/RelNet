@@ -16,7 +16,9 @@ struct SortedPersonsView: View {
             ForEach(sortedItems.keys.sorted(), id: \.self) { key in
                 VStack(alignment: .leading) {
                     Text(key)
+                        .font(.headline)
                         .foregroundColor(.adaptiveWhite)
+                        .frame(width: 16, height: 16)
                         .padding(8)
                         .background {
                             Circle()
@@ -53,7 +55,7 @@ struct SortedPersonsView: View {
 struct SortedPersonsView_Previews: PreviewProvider {
     static var previews: some View {
         SortedPersonsView(
-            sortedItems: ["あ": [.mock], "い": [.mock2, .mock3]],
+            sortedItems: ["A": [.mock], "T": [.mock], "あ": [.mock], "い": [.mock2, .mock3]],
             onTapPerson: { person in
                 print("\(person.name) is tapped")
             }
