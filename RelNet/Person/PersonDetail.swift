@@ -160,6 +160,7 @@ struct PersonDetailView: View {
 
     struct ViewState: Equatable {
         let person: Person
+        // Personに設定されているgroupのname配列
         let groupNames: [String]
 
         init(state: PersonDetail.State) {
@@ -172,37 +173,37 @@ struct PersonDetailView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: ViewState.init) { viewStore in
-            List {
-                Section {
-                    if !viewStore.person.nickname.isEmpty {
-                        nicknameRow("ニックネーム")
-                    }
-                    birthdateRow(dateString: "2000/09/24")
-                    addressRow(viewStore.person.address ?? "")
-                    hobbiesRow(viewStore.person.hobbies)
-                    likesRow(viewStore.person.likes)
-                    dislikesRow(viewStore.person.dislikes)
-                    lastContactedRow(dateString: "2020/02/02")
-                } header: {
-                    Text("Basic Info")
-                }
-
-                if !viewStore.person.groupIDs.isEmpty {
-                    Section {
-                        ForEach(viewStore.groupNames.indices, id: \.self) { index in
-                            Text(viewStore.groupNames[index])
+            VStack(alignment: .leading, spacing: 12) {
+                List {
+                    if !viewStore.groupNames.isEmpty {
+                        VStack {
+                            groupList
                         }
-                    } header: {
-                        Text("Group")
+                        .listRowBackground(Color.clear)
+                        .offset(x: -18)
                     }
-                }
 
-                Section {
-                    Button("Delete") {
-                        viewStore.send(.view(.deleteButtonTapped))
+                    Section {
+                        if !viewStore.person.nickname.isEmpty {
+                            nicknameRow("ニックネーム")
+                        }
+                        birthdateRow(dateString: "2000/09/24")
+                        addressRow(viewStore.person.address ?? "")
+                        hobbiesRow(viewStore.person.hobbies)
+                        likesRow(viewStore.person.likes)
+                        dislikesRow(viewStore.person.dislikes)
+                        lastContactedRow(dateString: "2020/02/02")
+                    } header: {
+                        Text("Basic Info")
                     }
-                    .foregroundColor(.red)
-                    .frame(maxWidth: .infinity)
+
+                    Section {
+                        Button("Delete") {
+                            viewStore.send(.view(.deleteButtonTapped))
+                        }
+                        .foregroundColor(.red)
+                        .frame(maxWidth: .infinity)
+                    }
                 }
             }
             .navigationTitle(viewStore.person.name)
@@ -243,6 +244,17 @@ struct PersonDetailView: View {
 }
 
 private extension PersonDetailView {
+    var groupList: some View {
+        WithViewStore(self.store, observe: ViewState.init) { viewStore in
+            FlowLayout(alignment: .leading, spacing: 8) {
+                ForEach(viewStore.groupNames.indices, id: \.self) { index in
+                    Text(viewStore.groupNames[index])
+                        .groupItemText()
+                }
+            }
+        }
+    }
+
     func nicknameRow(_ name: String) -> some View {
         textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: name)
     }
@@ -296,7 +308,7 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
 }
 
 struct PersonDetail_Previews: PreviewProvider {
-    static var previews: some View {
+    static var content: some View {
         NavigationStack {
             PersonDetailView(
                 store: Store(initialState: PersonDetail.State(person: .mock, groups: .init(uniqueElements: [.mock]))) {
@@ -304,5 +316,13 @@ struct PersonDetail_Previews: PreviewProvider {
                 }
             )
         }
+    }
+    
+    static var previews: some View {
+        content
+            .environment(\.colorScheme, .light)
+
+        content
+            .environment(\.colorScheme, .dark)
     }
 }

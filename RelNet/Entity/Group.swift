@@ -21,7 +21,7 @@ struct Group: Codable, Identifiable, Equatable, Hashable {
 
 extension Group {
     static let mock = Self (
-        id: UUID().uuidString,
+        id: "id-1",
         name: "😄demo name",
         description: "this is description."
     )
