@@ -125,31 +125,6 @@ struct PersonFormView: View {
                 } header: {
                     Text("Basic Info")
                 }
-
-                Section {
-                    VStack(alignment: .leading) {
-                        ForEach(viewStore.groups) { group in
-                            HStack {
-                                Label(group.name, systemImage: "paintpalette")
-
-                                Spacer()
-
-                                Button {
-                                    viewStore.send(.groupButtonTapped(group))
-                                } label: {
-                                    if viewStore.person.groupIDs.contains(group.id ?? "") {
-                                        Text("解除")
-                                    } else {
-                                        Text("設定")
-                                    }
-                                }
-                                .buttonStyle(BorderlessButtonStyle())
-                            }
-                        }
-                    }
-                } header: {
-                    Text("Groups")
-                }
                 
                 Section {
                     VStack {
@@ -164,8 +139,38 @@ struct PersonFormView: View {
                 } header: {
                     Text("Additional Info")
                 }
+
+                Section {
+                    groupList
+                } header: {
+                    Text("Groups")
+                }
+                .listRowBackground(Color.clear)
             }
             .bind(viewStore.$focus, to: self.$focus)
+        }
+    }
+}
+
+private extension PersonFormView {
+    var groupList: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            FlowLayout(alignment: .center, spacing: 8) {
+                ForEach(viewStore.groups) { group in
+                    Button {
+                        viewStore.send(.groupButtonTapped(group))
+                    } label: {
+                        Text(group.name)
+                            .groupItemText()
+                    }
+                    .buttonStyle(.plain)
+                    .background {
+                        let isSelectedGroup = viewStore.person.groupIDs.contains(group.id ?? "")
+                        return RoundedRectangle(cornerRadius: GroupItemModifier.cornerRadius)
+                            .fill( isSelectedGroup ? .blue.opacity(0.3) : .clear)
+                    }
+                }
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  GroupCard.swift
+//  GroupItemModifier.swift
 //  RelNet
 //
 //  Created by Higashihara Yoki on 2023/09/19.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-private struct GroupItemModifier: ViewModifier {
+struct GroupItemModifier: ViewModifier {
+    public static let cornerRadius: CGFloat = 10
+
     func body(content: Content) -> some View {
         content
             .font(.subheadline)
@@ -16,7 +18,7 @@ private struct GroupItemModifier: ViewModifier {
             .padding(.vertical, 8)
             .padding(.horizontal)
             .background {
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: GroupItemModifier.cornerRadius)
                     .fill(.secondary)
                     .opacity(0.2)
             }
@@ -32,7 +34,7 @@ extension Text {
 
 #if DEBUG
 
-struct GroupCard_Previews: PreviewProvider {
+struct GroupItemModifier_Previews: PreviewProvider {
     static var content: some View {
         NavigationView {
             Text("group name")
