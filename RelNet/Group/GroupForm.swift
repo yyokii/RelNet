@@ -67,7 +67,7 @@ struct GroupForm_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             GroupFormView(
-                store: Store(initialState: GroupForm.State(group: .mock)) {
+                store: Store(initialState: GroupForm.State(group: .mock())) {
                     GroupForm()
                 }
             )

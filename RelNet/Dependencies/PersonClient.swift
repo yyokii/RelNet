@@ -201,8 +201,8 @@ extension PersonClient: TestDependencyKey {
             // TODO: previewに反映されない
             AsyncThrowingStream { continuation in
                 let persons: [Group] = [
-                    .mock,
-                    .mock
+                    .mock(id: "id-1"),
+                    .mock(id: "id-2")
                 ]
                 continuation.yield(IdentifiedArray(uniqueElements: persons))
                 continuation.finish()
@@ -211,19 +211,19 @@ extension PersonClient: TestDependencyKey {
         listenPersons: {
             AsyncThrowingStream { continuation in
                 let persons: [Person] = [
-                    .mock,
-                    .mock
+                    .mock(id: "id-1"),
+                    .mock(id: "id-2")
                 ]
                 continuation.yield(IdentifiedArray(uniqueElements: persons))
                 continuation.finish()
             }
         },
-        addGroup: { _ in .mock },
-        addPerson: { _ in .mock },
+        addGroup: { _ in .mock() },
+        addPerson: { _ in .mock() },
         deleteGroup: { _ in "deletedID" },
         deletePerson: { _ in "deletedID" },
-        updateGroup: { _ in .mock },
-        updatePerson: { _ in .mock }
+        updateGroup: { _ in .mock() },
+        updatePerson: { _ in .mock() }
     )
 }
 

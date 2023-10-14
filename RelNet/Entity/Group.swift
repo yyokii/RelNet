@@ -20,11 +20,18 @@ struct Group: Codable, Identifiable, Equatable, Hashable {
 }
 
 extension Group {
-    static let mock = Self (
-        id: "id-1",
-        name: "😄demo name",
-        description: "this is description."
-    )
+    static func mock(
+        id: String = UUID().uuidString,
+        name: String = "🦄 demo",
+        description: String = "this is description"
+    ) -> Self {
+        .init(
+            id: id,
+            name: name,
+            description: description
+        )
+    }
+
 
     func toDictionary() -> [String: Any] {
         var dictionary: [String: Any] = [

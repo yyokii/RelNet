@@ -181,8 +181,8 @@ struct PersonForm_Previews: PreviewProvider {
             PersonFormView(
                 store: Store(
                     initialState: PersonForm.State(
-                        person: .mock,
-                        groups: .init(uniqueElements: [.mock])
+                        person: .mock(),
+                        groups: .init(uniqueElements: [.mock()])
                     )
                 ) {
                     PersonForm()

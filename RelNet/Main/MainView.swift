@@ -318,7 +318,6 @@ private extension MainView {
         WithViewStore(self.store, observe: \.groups) { viewStore in
             VStack(alignment: .leading, spacing: 24) {
                 listHeader(
-                    iconName: "rectangle.3.group.fill",
                     title: "グループ",
                     addAction: { viewStore.send(.addGroupButtonTapped) }
                 )
@@ -340,7 +339,6 @@ private extension MainView {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 24) {
                 listHeader(
-                    iconName: "person.2",
                     title: "人物",
                     addAction: { viewStore.send(.addPersonButtonTapped) }
                 )
@@ -356,22 +354,13 @@ private extension MainView {
     }
 
     func listHeader(
-        iconName: String,
         title: String,
         addAction: @escaping () -> Void
     ) -> some View {
         HStack(spacing: 0) {
-            Label(
-                title: {
-                    Text(title)
-                },
-                icon: {
-                    Image(systemName: iconName)
-                        .frame(width: 20)
-                }
-            )
-            .font(.title3)
-            .bold()
+            Text(title)
+                .font(.title3)
+                .bold()
 
             Spacer()
 

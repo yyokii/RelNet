@@ -285,13 +285,15 @@ extension AlertState where Action == PersonsList.Destination.Action.Alert {
     }
 }
 
-struct PersonsList_Previews: PreviewProvider {
-    static var previews: some View {
+#if DEBUG
+
+#Preview {
+    NavigationView {
         PersonsListView(
             store: Store(initialState: PersonsList.State(
-                selectedGroup: .mock,
-                groups: .init(uniqueElements: [.mock, .mock]),
-                persons: .init(uniqueElements: [.mock, .mock])
+                selectedGroup: .mock(id: "id-1"),
+                groups: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")]),
+                persons: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")])
             )) {
                 PersonsList()
             }
@@ -299,4 +301,4 @@ struct PersonsList_Previews: PreviewProvider {
     }
 }
 
-
+#endif

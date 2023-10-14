@@ -211,7 +211,7 @@ struct GroupDetail_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             GroupDetailView(
-                store: Store(initialState: GroupDetail.State(group: .mock)) {
+                store: Store(initialState: GroupDetail.State(group: .mock())) {
                     GroupDetail()
                 }
             )

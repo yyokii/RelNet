@@ -55,7 +55,7 @@ struct SortedPersonsView: View {
 struct SortedPersonsView_Previews: PreviewProvider {
     static var previews: some View {
         SortedPersonsView(
-            sortedItems: ["A": [.mock], "T": [.mock], "あ": [.mock], "い": [.mock2, .mock3]],
+            sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
             onTapPerson: { person in
                 print("\(person.name) is tapped")
             }

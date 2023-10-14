@@ -101,50 +101,35 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
 }
 
 extension Person {
-    static let mock = Self (
-        id: UUID().uuidString,
-        firstName: "DemoFirst",
-        lastName: "DemoLast",
-        nickname: "Nick",
-        hobbies: "sanpo",
-        likes: "soba",
-        dislikes: "no love all",
-        notes: "this is note",
-        groupIDs: ["id-1"],
-        birthdate: Date(),
-        address: "tokyo",
-        lastContacted: Date()
-    )
-
-    static let mock2 = Self (
-        id: UUID().uuidString,
-        firstName: "DemoFirst2",
-        lastName: "DemoLast2",
-        nickname: "Nick2",
-        hobbies: "sanpo",
-        likes: "soba",
-        dislikes: "no love all",
-        notes: "this is note",
-        groupIDs: ["id-2"],
-        birthdate: Date(),
-        address: "tokyo",
-        lastContacted: Date()
-    )
-
-    static let mock3 = Self (
-        id: UUID().uuidString,
-        firstName: "DemoFirst3",
-        lastName: "DemoLast3",
-        nickname: "Nick3",
-        hobbies: "sanpo",
-        likes: "soba",
-        dislikes: "no love all",
-        notes: "this is note",
-        groupIDs: ["id-3"],
-        birthdate: Date(),
-        address: "tokyo",
-        lastContacted: Date()
-    )
+    static func mock(
+        id: String = UUID().uuidString,
+        firstName: String = "DemoFirst",
+        lastName: String = "DemoLast",
+        nickname: String = "Nick",
+        hobbies: String = "sanpo",
+        likes: String = "soba",
+        dislikes: String = "no love all",
+        notes: String = "this is note",
+        groupIDs: [String] = ["id-1"],
+        birthdate: Date = Date(),
+        address: String = "tokyo",
+        lastContacted: Date = Date()
+    ) -> Self {
+        .init(
+            id: id,
+            firstName: firstName,
+            lastName: lastName,
+            nickname: nickname,
+            hobbies: hobbies,
+            likes: likes,
+            dislikes: dislikes,
+            notes: notes,
+            groupIDs: groupIDs,
+            birthdate: birthdate,
+            address: address,
+            lastContacted: lastContacted
+        )
+    }
 
     func toDictionary() -> [String: Any] {
         var dictionary: [String: Any] = [

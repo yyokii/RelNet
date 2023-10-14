@@ -307,11 +307,12 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
     }
 }
 
+#if DEBUG
 struct PersonDetail_Previews: PreviewProvider {
     static var content: some View {
         NavigationStack {
             PersonDetailView(
-                store: Store(initialState: PersonDetail.State(person: .mock, groups: .init(uniqueElements: [.mock]))) {
+                store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
                     PersonDetail()
                 }
             )
@@ -326,3 +327,4 @@ struct PersonDetail_Previews: PreviewProvider {
             .environment(\.colorScheme, .dark)
     }
 }
+#endif
