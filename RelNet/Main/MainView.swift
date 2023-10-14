@@ -315,7 +315,7 @@ struct MainView: View {
 
 private extension MainView {
     var groupList: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(self.store, observe: \.groups) { viewStore in
             VStack(alignment: .leading, spacing: 24) {
                 listHeader(
                     iconName: "rectangle.3.group.fill",
@@ -323,7 +323,7 @@ private extension MainView {
                     addAction: { viewStore.send(.addGroupButtonTapped) }
                 )
                 FlowLayout(alignment: .leading, spacing: 8) {
-                    ForEach(viewStore.groups) { group in
+                    ForEach(viewStore.state) { group in
                         Button {
                             viewStore.send(.groupCardTapped(group))
                         } label: {
