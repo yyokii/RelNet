@@ -1,22 +1,24 @@
 
+* delegateとかの他との連携処理まとめ
+
+* 状態から行動まで、すべてが値型であり、状態を進化させる方法は単なる関数
+
+    [![img](https://d3rccdn33rt8ze.cloudfront.net/favicons/favicon-16x16.png)Episode #244: Tour of the Composable Architecture: Introducing Standups](https://www.pointfree.co/episodes/ep244-tour-of-the-composable-architecture-1-0-standups-part-1#downloads)
+    
 * 子から親へ伝搬したい時は？
 
-
-  * 子でadd処理して親でそれをlistで表示している場合の伝達とか
-
-  * https://github.com/pointfreeco/swift-composable-architecture/discussions/2429
+    * 子でadd処理して親でそれをlistで表示している場合の伝達とか
+    * https://github.com/pointfreeco/swift-composable-architecture/discussions/2429
+    * 単純に子のactionは親のactionで扱うことが可能
 
 * https://zenn.dev/kalupas226/articles/87b1f7b245915c
-
 * TaskResultって何？
 
-
-  * resultと役割的に同じなのは分かるが違いをわかりたい
+    * resultと役割的に同じなのは分かるが違いをわかりたい
 
 * ViewStateを作成しているコードがたまにあるがどんな時に有効だろうか？
 
-
-  * 編集機能で編集確定するまでは元のstateを変更させたくない場合に、ViewStateとして暫定stateを切り出すことで暫定状態を表現できる
+    * 
 
 * AsyncThrowingStreamを利用したclientを利用するviewのpreview方法
 
