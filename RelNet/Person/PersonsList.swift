@@ -240,32 +240,30 @@ struct PersonsListView: View {
 
 private extension PersonsListView {
     var headerMenu: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            Menu {
-                HapticButton {
-                    viewStore.send(.editGroupButtonTapped)
-                } label: {
-                    HStack {
-                        Text("編集する")
-                        Image(systemName: "pencil")
-                            .font(.system(size: 20))
-                            .foregroundColor(.primary)
-                    }
-                }
-
-                HapticButton {
-                    viewStore.send(.deleteGroupButtonTapped)
-                } label: {
-                    Text("削除する")
-                    Image(systemName: "trash")
-                        .font(.system(size: 16))
+        Menu {
+            HapticButton {
+                store.send(.editGroupButtonTapped)
+            } label: {
+                HStack {
+                    Text("編集する")
+                    Image(systemName: "pencil")
+                        .font(.system(size: 20))
                         .foregroundColor(.primary)
                 }
+            }
+
+            HapticButton {
+                store.send(.deleteGroupButtonTapped)
             } label: {
-                Image(systemName: "ellipsis")
-                    .font(.system(size: 20))
+                Text("削除する")
+                Image(systemName: "trash")
+                    .font(.system(size: 16))
                     .foregroundColor(.primary)
             }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.system(size: 20))
+                .foregroundColor(.primary)
         }
     }
 }
