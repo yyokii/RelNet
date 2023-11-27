@@ -181,13 +181,16 @@ extension PersonClient: DependencyKey {
             var updatePerson = person
             updatePerson.updatedAt = Timestamp(date: Date())
 
-            db
-                .collection(FirestorePath.users.rawValue)
-                .document(user.uid)
-                .collection(FirestorePath.persons.rawValue)
-                .document(id)
-                .setData(updatePerson.toDictionary())
-
+            do {
+                try db
+                    .collection(FirestorePath.users.rawValue)
+                    .document(user.uid)
+                    .collection(FirestorePath.persons.rawValue)
+                    .document(id)
+                    .setData(from: updatePerson)
+            } catch {
+                throw PersonClientError.failedToUpdate(error)
+            }
             return person
         }
     )
@@ -229,6 +232,8 @@ extension PersonClient: TestDependencyKey {
 
 enum PersonClientError: LocalizedError, Sendable {
     case general(Error?)
+
+    case failedToUpdate(Error?)
     case notFoundID
     case notFoundUser
 
@@ -236,6 +241,8 @@ enum PersonClientError: LocalizedError, Sendable {
         switch self {
         case let .general(error):
             return "failed. \(String(describing: error?.localizedDescription))"
+        case let .failedToUpdate(error):
+            return "failed to update. \(String(describing: error?.localizedDescription))"
         case .notFoundID:
             return "not found id"
         case .notFoundUser:

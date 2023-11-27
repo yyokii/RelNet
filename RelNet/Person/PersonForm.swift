@@ -91,6 +91,7 @@ struct PersonFormView: View {
             Form {
                 Section {
                     VStack {
+                        // TODO: 家族や食べ物、音楽などの person 情報を入力できるようにする
                         TextField("姓", text: viewStore.$person.lastName)
                             .focused(self.$focus, equals: .lastName)
                             .onChange(of: viewStore.state.focus) { focus in

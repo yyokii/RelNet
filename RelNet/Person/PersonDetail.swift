@@ -184,11 +184,9 @@ struct PersonDetailView: View {
                     }
 
                     Section {
-                        if !viewStore.person.nickname.isEmpty {
-                            nicknameRow("ニックネーム")
-                        }
+                        nicknameRow(viewStore.person.nickname)
                         birthdateRow(dateString: "2000/09/24")
-                        addressRow(viewStore.person.address ?? "")
+                        addressRow(viewStore.person.address)
                         hobbiesRow(viewStore.person.hobbies)
                         likesRow(viewStore.person.likes)
                         dislikesRow(viewStore.person.dislikes)
@@ -198,19 +196,42 @@ struct PersonDetailView: View {
                     }
 
                     Section {
-                        Button("Delete") {
-                            viewStore.send(.view(.deleteButtonTapped))
-                        }
-                        .foregroundColor(.red)
-                        .frame(maxWidth: .infinity)
+                        parentsRow(viewStore.person.parents)
+                        siblingRow(viewStore.person.sibling)
+                        petsRow(viewStore.person.pets)
+                    } header: {
+                        Text("Family")
+                    }
+
+                    Section {
+                        likeFoodsRow(viewStore.person.likeFoods)
+                        likeSweetsRow(viewStore.person.likeSweets)
+                        allergiesRow(viewStore.person.allergies)
+                        dislikeFoodsRow(viewStore.person.dislikeFoods)
+                    } header: {
+                        Text("Food")
+                    }
+
+                    Section {
+                        likeCategoriesRow(viewStore.person.likeMusicCategories)
+                        likeArtistsRow(viewStore.person.likeArtists)
+                        likeMusicsRow(viewStore.person.likeMusics)
+                        playableInstrumentsRow(viewStore.person.playableInstruments)
+                    } header: {
+                        Text("Music")
+                    }
+
+                    Section {
+                        travelCountriesRow(viewStore.person.travelCountries)
+                        favoriteLocationsRow(viewStore.person.favoriteLocations)
+                    } header: {
+                        Text("Travel")
                     }
                 }
             }
             .navigationTitle(viewStore.person.name)
             .toolbar {
-                Button("Edit") {
-                    viewStore.send(.view(.editButtonTapped))
-                }
+                headerMenu
             }
             .alert(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
@@ -244,6 +265,34 @@ struct PersonDetailView: View {
 }
 
 private extension PersonDetailView {
+    var headerMenu: some View {
+        Menu {
+            HapticButton {
+                store.send(.view(.editButtonTapped))
+            } label: {
+                HStack {
+                    Text("編集する")
+                    Image(systemName: "pencil")
+                        .font(.system(size: 20))
+                        .foregroundColor(.primary)
+                }
+            }
+
+            HapticButton {
+                store.send(.view(.deleteButtonTapped))
+            } label: {
+                Text("削除する")
+                Image(systemName: "trash")
+                    .font(.system(size: 16))
+                    .foregroundColor(.primary)
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+                .font(.system(size: 20))
+                .foregroundColor(.primary)
+        }
+    }
+
     var groupList: some View {
         WithViewStore(self.store, observe: ViewState.init) { viewStore in
             FlowLayout(alignment: .leading, spacing: 8) {
@@ -255,6 +304,7 @@ private extension PersonDetailView {
         }
     }
 
+    // MARK: 基本情報
     func nicknameRow(_ name: String) -> some View {
         textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: name)
     }
@@ -272,13 +322,73 @@ private extension PersonDetailView {
     }
 
     func likesRow(_ likes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなもの", text: likes)
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好き", text: likes)
     }
 
     func dislikesRow(_ dislikes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手なもの", text: dislikes)
+        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: dislikes)
+    }
+    
+    // MARK: 家族
+    func parentsRow(_ parents: String) -> some View {
+        textRowItem(symbolName: "heart", iconColor: .blue, title: "両親", text: parents)
     }
 
+    func siblingRow(_ sibling: String) -> some View {
+        textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: sibling)
+    }
+
+    func petsRow(_ pets: String) -> some View {
+        textRowItem(symbolName: "tortoise", iconColor: .pink, title: "ペット", text: pets)
+    }
+
+    // MARK: 食べ物
+
+    func likeFoodsRow(_ likes: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好き", text: likes)
+    }
+
+    func likeSweetsRow(_ sweets: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなお菓子", text: sweets)
+    }
+
+    func allergiesRow(_ allergies: String) -> some View {
+        textRowItem(symbolName: "eyes", iconColor: .indigo, title: "アレルギー", text: allergies)
+    }
+
+    func dislikeFoodsRow(_ dislikes: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: dislikes)
+    }
+
+    // MARK: 音楽
+
+    func likeCategoriesRow(_ categories: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなジャンル", text: categories)
+    }
+
+    func likeArtistsRow(_ artists: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなアーティスト", text: artists)
+    }
+
+    func likeMusicsRow(_ musics: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きな曲", text: musics)
+    }
+
+    func playableInstrumentsRow(_ instruments: String) -> some View {
+        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "できる楽器", text: instruments)
+    }
+
+    // MARK: 旅行
+
+    func travelCountriesRow(_ countries: String) -> some View {
+        textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: countries)
+    }
+
+    func favoriteLocationsRow(_ countries: String) -> some View {
+        textRowItem(symbolName: "airplane", iconColor: .orange, title: "思い出の場所", text: countries)
+    }
+
+    // TODO: これは別UIでもいいかも
     func lastContactedRow(dateString: String) -> some View {
         textRowItem(symbolName: "figure.wave", iconColor: .brown, title: "最後に会った日", text: dateString)
     }
@@ -308,23 +418,23 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
 }
 
 #if DEBUG
-struct PersonDetail_Previews: PreviewProvider {
-    static var content: some View {
-        NavigationStack {
-            PersonDetailView(
-                store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
-                    PersonDetail()
-                }
-            )
-        }
-    }
-    
-    static var previews: some View {
-        content
-            .environment(\.colorScheme, .light)
 
-        content
-            .environment(\.colorScheme, .dark)
-    }
+let PreviewPersonDetailView: some View = NavigationStack {
+    PersonDetailView(
+        store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
+            PersonDetail()
+        }
+    )
 }
+
+#Preview("light") {
+    PreviewPersonDetailView
+        .environment(\.colorScheme, .light)
+}
+
+#Preview("dark") {
+    PreviewPersonDetailView
+        .environment(\.colorScheme, .dark)
+}
+
 #endif

@@ -10,22 +10,51 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
+/// 人を表す
+///
+/// 空の初期値を持ち、Dateなどの「空」を表現できないものについてのみオプショナルとしている。
 struct Person: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
+
+    // MARK: Basic info
+    // TODO: 名前は性名で分けると多言語で大変なのでnameにする
     var firstName: String = "" // 名
     var lastName: String = "" // 姓
+    var firstNameFurigana: String?
+    var lastNameFurigana: String?
     var nickname: String = ""
+    var birthdate: Date?
+    var address: String = ""
     var hobbies: String = ""
     var likes: String = ""
     var dislikes: String = ""
-    var notes: String = ""
+    var lastContacted: Date?
+    // TODO: OrderedSet にする
     private(set) var groupIDs: [String] = []
 
-    var firstNameFurigana: String?
-    var lastNameFurigana: String?
-    var birthdate: Date?
-    var address: String?
-    var lastContacted: Date?
+    // MARK: Family
+    var parents: String = ""
+    var sibling: String = ""
+    var pets: String = ""
+
+    // MARK: Food
+    var likeFoods: String = ""
+    var likeSweets: String = ""
+    var allergies: String = ""
+    var dislikeFoods: String = ""
+
+    // MARK: Music
+    var likeMusicCategories: String = ""
+    var likeArtists: String = ""
+    var likeMusics: String = ""
+    var playableInstruments: String = ""
+
+    // MARK: Travel
+    var travelCountries: String = ""
+    var favoriteLocations: String = ""
+
+    var notes: String = ""
+
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
@@ -98,81 +127,6 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
         // If no suitable name or nickname is found
         return otherCategory
     }
-}
-
-extension Person {
-    static func mock(
-        id: String = UUID().uuidString,
-        firstName: String = "DemoFirst",
-        lastName: String = "DemoLast",
-        nickname: String = "Nick",
-        hobbies: String = "sanpo",
-        likes: String = "soba",
-        dislikes: String = "no love all",
-        notes: String = "this is note",
-        groupIDs: [String] = ["id-1"],
-        birthdate: Date = Date(),
-        address: String = "tokyo",
-        lastContacted: Date = Date()
-    ) -> Self {
-        .init(
-            id: id,
-            firstName: firstName,
-            lastName: lastName,
-            nickname: nickname,
-            hobbies: hobbies,
-            likes: likes,
-            dislikes: dislikes,
-            notes: notes,
-            groupIDs: groupIDs,
-            birthdate: birthdate,
-            address: address,
-            lastContacted: lastContacted
-        )
-    }
-
-    func toDictionary() -> [String: Any] {
-        var dictionary: [String: Any] = [
-            "firstName": firstName,
-            "lastName": lastName,
-            "nickname": nickname,
-            "hobbies": hobbies,
-            "likes": likes,
-            "dislikes": dislikes,
-            "notes": notes,
-            "groupIDs": groupIDs,
-        ]
-
-        if let firstNameFurigana {
-            dictionary["firstNameFurigana"] = firstNameFurigana
-        }
-
-        if let lastNameFurigana {
-            dictionary["lastNameFurigana"] = lastNameFurigana
-        }
-
-        if let birthdate {
-            dictionary["birthdate"] = birthdate
-        }
-
-        if let address {
-            dictionary["address"] = address
-        }
-
-        if let lastContacted {
-            dictionary["lastContacted"] = lastContacted
-        }
-
-        if let createdAt {
-            dictionary["createdAt"] = createdAt
-        }
-
-        if let updatedAt {
-            dictionary["updatedAt"] = updatedAt
-        }
-
-        return dictionary
-    }
 
     mutating func updateGroupID(_ id: String) {
         if !groupIDs.contains(id) {
@@ -180,5 +134,42 @@ extension Person {
         } else {
             groupIDs.removeAll { $0 == id }
         }
+    }
+}
+
+extension Person {
+    static func mock(
+        id: String = UUID().uuidString,
+        groupIDs: [String] = ["id-1"]
+    ) -> Self {
+        .init(
+            id: id,
+            firstName: "first",
+            lastName: "last",
+            firstNameFurigana: "ファースト",
+            lastNameFurigana: "ラスト",
+            nickname: "nick",
+            birthdate: Date(),
+            address: "東京",
+            hobbies: "散歩",
+            likes: "蕎麦",
+            dislikes: "no",
+            lastContacted: Date(),
+            groupIDs: groupIDs,
+            parents: "parents",
+            sibling: "sibling",
+            pets: "猫",
+            likeFoods: "蕎麦",
+            likeSweets: "モンブラン",
+            allergies: "なし",
+            dislikeFoods: "なし",
+            likeMusicCategories: "なんでも",
+            likeArtists: "たくさん",
+            likeMusics: "たくさん",
+            playableInstruments: "ピアノ",
+            travelCountries: "オーストラリア、ニュージーランド",
+            favoriteLocations: "ニュージーランド",
+            notes: "this is note"
+        )
     }
 }
