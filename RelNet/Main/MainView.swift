@@ -5,10 +5,9 @@
 //  Created by Higashihara Yoki on 2023/09/13.
 //
 
+import ComposableArchitecture
 import Foundation
 import SwiftUI
-
-import ComposableArchitecture
 
 struct Main: Reducer {
 
@@ -18,8 +17,8 @@ struct Main: Reducer {
         var groups: IdentifiedArrayOf<Group> = []
         var persons: IdentifiedArrayOf<Person> = []
 
-        var sortedPersons: Dictionary<String, [Person]> {
-            var dict: Dictionary<String, [Person]> = [:]
+        var sortedPersons: [String: [Person]] {
+            var dict: [String: [Person]] = [:]
             for person in persons {
                 let initial = person.nameInitial
                 if dict[initial] != nil {
@@ -56,7 +55,7 @@ struct Main: Reducer {
         case addGroupResult(TaskResult<Group>)
         case addPersonResult(TaskResult<Person>)
         case destination(PresentationAction<Destination.Action>)
-        case listenGroups // TODO: task等のライフスタイルの命名にしたいが、複数待受けできるんだっけ
+        case listenGroups  // TODO: task等のライフスタイルの命名にしたいが、複数待受けできるんだっけ
         case listenPersons
         case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
         case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)
@@ -117,7 +116,7 @@ struct Main: Reducer {
 
                 return .run { send in
                     // TODO: この形式で他も書き換える
-                    await send (
+                    await send(
                         .addGroupResult(
                             .init {
                                 try personClient.addGroup(group)
@@ -134,7 +133,7 @@ struct Main: Reducer {
                 let person = formState.person
 
                 return .run { send in
-                    await send (
+                    await send(
                         .addPersonResult(
                             await TaskResult {
                                 try personClient.addPerson(person)

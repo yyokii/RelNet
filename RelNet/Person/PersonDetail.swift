@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/08/27.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 
 struct PersonDetail: Reducer {
 
@@ -84,12 +83,14 @@ struct PersonDetail: Reducer {
                     let person = editState.person
 
                     return .run { send in
-                        await send (
-                            .internal(.editPersonResult(
-                                await TaskResult {
-                                    try  self.personClient.updatePerson(person)
-                                }
-                            ))
+                        await send(
+                            .internal(
+                                .editPersonResult(
+                                    await TaskResult {
+                                        try self.personClient.updatePerson(person)
+                                    }
+                                )
+                            )
                         )
                     }
 
@@ -133,11 +134,13 @@ struct PersonDetail: Reducer {
 
                     return .run { send in
                         await send(
-                            .internal(.deletePersonResult(
-                                await TaskResult {
-                                    try personClient.deletePerson(id)
-                                }
-                            ))
+                            .internal(
+                                .deletePersonResult(
+                                    await TaskResult {
+                                        try personClient.deletePerson(id)
+                                    }
+                                )
+                            )
                         )
                     }
                 }
@@ -328,7 +331,7 @@ private extension PersonDetailView {
     func dislikesRow(_ dislikes: String) -> some View {
         textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: dislikes)
     }
-    
+
     // MARK: 家族
     func parentsRow(_ parents: String) -> some View {
         textRowItem(symbolName: "heart", iconColor: .blue, title: "両親", text: parents)
@@ -419,22 +422,22 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
 
 #if DEBUG
 
-let PreviewPersonDetailView: some View = NavigationStack {
-    PersonDetailView(
-        store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
-            PersonDetail()
-        }
-    )
-}
+    let PreviewPersonDetailView: some View = NavigationStack {
+        PersonDetailView(
+            store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
+                PersonDetail()
+            }
+        )
+    }
 
-#Preview("light") {
-    PreviewPersonDetailView
-        .environment(\.colorScheme, .light)
-}
+    #Preview("light") {
+        PreviewPersonDetailView
+            .environment(\.colorScheme, .light)
+    }
 
-#Preview("dark") {
-    PreviewPersonDetailView
-        .environment(\.colorScheme, .dark)
-}
+    #Preview("dark") {
+        PreviewPersonDetailView
+            .environment(\.colorScheme, .dark)
+    }
 
 #endif

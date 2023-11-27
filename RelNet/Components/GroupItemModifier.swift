@@ -34,21 +34,21 @@ extension Text {
 
 #if DEBUG
 
-struct GroupItemModifier_Previews: PreviewProvider {
-    static var content: some View {
-        NavigationView {
-            Text("group name")
-                .groupItemText()
+    struct GroupItemModifier_Previews: PreviewProvider {
+        static var content: some View {
+            NavigationView {
+                Text("group name")
+                    .groupItemText()
+            }
+        }
+
+        static var previews: some View {
+            content
+                .environment(\.colorScheme, .light)
+
+            content
+                .environment(\.colorScheme, .dark)
         }
     }
-
-    static var previews: some View {
-        content
-            .environment(\.colorScheme, .light)
-
-        content
-            .environment(\.colorScheme, .dark)
-    }
-}
 
 #endif

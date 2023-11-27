@@ -34,8 +34,7 @@ struct FlowLayout: Layout {
             for index in row.range {
                 let xPos = bounds.minX + row.frame.minX + rowXOffset + row.xOffsets[index - row.range.lowerBound]
 
-                let rowYAlignment = (row.frame.height - subviews[index].sizeThatFits(.unspecified).height) *
-                alignment.vertical.percent
+                let rowYAlignment = (row.frame.height - subviews[index].sizeThatFits(.unspecified).height) * alignment.vertical.percent
                 let yPos = row.frame.minY + rowYAlignment + bounds.minY
 
                 subviews[index].place(at: CGPoint(x: xPos, y: yPos), anchor: .topLeading, proposal: .unspecified)
@@ -104,7 +103,7 @@ struct FlowLayout: Layout {
                 let rowWidth = maxPossibleWidth - remainingWidth
                 rows.append(
                     Row(
-                        range: index - max(itemsInRow - 1, 0) ..< index + 1,
+                        range: index - max(itemsInRow - 1, 0)..<index + 1,
                         xOffsets: xOffsets,
                         frame: CGRect(x: 0, y: rowMinY, width: rowWidth, height: rowHeight)
                     )
@@ -141,4 +140,3 @@ private extension VerticalAlignment {
         }
     }
 }
-

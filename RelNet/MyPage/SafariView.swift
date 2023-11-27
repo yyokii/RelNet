@@ -5,8 +5,8 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
-import SwiftUI
 import SafariServices
+import SwiftUI
 
 public struct SafariView: UIViewControllerRepresentable {
 

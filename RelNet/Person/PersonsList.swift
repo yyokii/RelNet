@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/09/19.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 
 /**
  特定のGroupに属するPersonのリスト表示機能
@@ -20,8 +19,8 @@ struct PersonsList: Reducer {
         let groups: IdentifiedArrayOf<Group>
         var persons: IdentifiedArrayOf<Person>
 
-        var sortedPersons: Dictionary<String, [Person]> {
-            var dict: Dictionary<String, [Person]> = [:]
+        var sortedPersons: [String: [Person]] {
+            var dict: [String: [Person]] = [:]
             for person in persons {
                 let initial = person.nameInitial
                 if dict[initial] != nil {
@@ -285,18 +284,20 @@ extension AlertState where Action == PersonsList.Destination.Action.Alert {
 
 #if DEBUG
 
-#Preview {
-    NavigationView {
-        PersonsListView(
-            store: Store(initialState: PersonsList.State(
-                selectedGroup: .mock(id: "id-1"),
-                groups: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")]),
-                persons: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")])
-            )) {
-                PersonsList()
-            }
-        )
+    #Preview {
+        NavigationView {
+            PersonsListView(
+                store: Store(
+                    initialState: PersonsList.State(
+                        selectedGroup: .mock(id: "id-1"),
+                        groups: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")]),
+                        persons: .init(uniqueElements: [.mock(id: "id-1"), .mock(id: "id-2")])
+                    )
+                ) {
+                    PersonsList()
+                }
+            )
+        }
     }
-}
 
 #endif

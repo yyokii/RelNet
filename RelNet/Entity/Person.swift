@@ -5,10 +5,9 @@
 //  Created by Higashihara Yoki on 2023/08/24.
 //
 
-import Foundation
-
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import Foundation
 
 /// 人を表す
 ///
@@ -18,8 +17,8 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
 
     // MARK: Basic info
     // TODO: 名前は性名で分けると多言語で大変なのでnameにする
-    var firstName: String = "" // 名
-    var lastName: String = "" // 姓
+    var firstName: String = ""  // 名
+    var lastName: String = ""  // 姓
     var firstNameFurigana: String?
     var lastNameFurigana: String?
     var nickname: String = ""
@@ -63,7 +62,8 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
      */
     var name: String {
         if !firstName.isEmpty,
-           !lastName.isEmpty {
+            !lastName.isEmpty
+        {
             // TODO: 言語設定で変更する
             return lastName + " " + firstName
         } else if nickname.isEmpty {
@@ -116,8 +116,7 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
         if !nickname.isEmpty {
             let initial = nickname.prefix(1)
             // Check for kanji, number or symbol for nickname initial
-            if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil ||
-               initial.rangeOfCharacter(from: CharacterSet.decimalDigits.union(CharacterSet.symbols)) != nil {
+            if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil || initial.rangeOfCharacter(from: CharacterSet.decimalDigits.union(CharacterSet.symbols)) != nil {
                 return otherCategory
             }
 

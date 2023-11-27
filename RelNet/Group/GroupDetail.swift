@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/08/30.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 
 struct GroupDetail: Reducer {
 
@@ -72,7 +71,7 @@ struct GroupDetail: Reducer {
                     guard let id = state.group.id else {
                         return .none
                     }
-                    
+
                     return .run { send in
                         await send(
                             .deleteGroupResult(

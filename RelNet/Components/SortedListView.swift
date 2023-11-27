@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SortedPersonsView: View {
-    let sortedItems: Dictionary<String, [Person]>
+    let sortedItems: [String: [Person]]
     let onTapPerson: (Person) -> Void
 
     var body: some View {
@@ -52,15 +52,15 @@ struct SortedPersonsView: View {
 
 #if DEBUG
 
-struct SortedPersonsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SortedPersonsView(
-            sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
-            onTapPerson: { person in
-                print("\(person.name) is tapped")
-            }
-        )
+    struct SortedPersonsView_Previews: PreviewProvider {
+        static var previews: some View {
+            SortedPersonsView(
+                sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
+                onTapPerson: { person in
+                    print("\(person.name) is tapped")
+                }
+            )
+        }
     }
-}
 
 #endif

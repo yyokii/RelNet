@@ -5,10 +5,9 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
 import Dispatch
+import SwiftUI
 
 struct Login: Reducer, Sendable {
     struct State: Equatable {
@@ -50,17 +49,17 @@ struct Login: Reducer, Sendable {
 
             case .view(.loginButtonTapped):
                 state.isLoginRequestInFlight = true
-//                return .run { [email = state.email, password = state.password] send in
-//                    await send(
-//                        .loginResponse(
-//                            await TaskResult {
-//                                try await self.authenticationClient.login(
-//                                    .init(email: email, password: password)
-//                                )
-//                            }
-//                        )
-//                    )
-//                }
+                //                return .run { [email = state.email, password = state.password] send in
+                //                    await send(
+                //                        .loginResponse(
+                //                            await TaskResult {
+                //                                try await self.authenticationClient.login(
+                //                                    .init(email: email, password: password)
+                //                                )
+                //                            }
+                //                        )
+                //                    )
+                //                }
                 return .none
             }
         }
@@ -87,9 +86,9 @@ struct LoginView: View {
         WithViewStore(self.store, observe: \.view, send: { .view($0) }) { viewStore in
             Form {
                 Text(
-          """
-          To login use any email and password.
-          """
+                    """
+                    To login use any email and password.
+                    """
                 )
 
                 Section {
@@ -107,7 +106,10 @@ struct LoginView: View {
                     //     unfocus before we send the action to the view store.
                     // CF: https://stackoverflow.com/a/69653555
                     _ = UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+                        #selector(UIResponder.resignFirstResponder),
+                        to: nil,
+                        from: nil,
+                        for: nil
                     )
                     viewStore.send(.loginButtonTapped)
                 } label: {
@@ -146,7 +148,8 @@ struct LoginView_Previews: PreviewProvider {
             LoginView(
                 store: Store(initialState: Login.State()) {
                     Login()
-                } withDependencies: { _ in }
+                } withDependencies: { _ in
+                }
             )
         }
     }

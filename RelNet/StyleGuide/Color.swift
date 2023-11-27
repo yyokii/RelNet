@@ -43,75 +43,73 @@ extension Color {
 
 #if canImport(UIKit)
 
-import UIKit
+    import UIKit
 
-extension Color {
+    extension Color {
 
-    public init(dynamicProvider: @escaping (UITraitCollection) -> Color) {
-        self = Self(UIColor { UIColor(dynamicProvider($0)) })
+        public init(dynamicProvider: @escaping (UITraitCollection) -> Color) {
+            self = Self(UIColor { UIColor(dynamicProvider($0)) })
+        }
+
+        public static let placeholderGray = Color(UIColor.placeholderText)
     }
-
-    public static let placeholderGray = Color(UIColor.placeholderText)
-}
 
 #endif
 
 #if DEBUG
 
-struct DemoColorView_Previews: PreviewProvider {
+    struct DemoColorView_Previews: PreviewProvider {
 
-    static var content: some View {
-        NavigationStack {
-            VStack {
-                HStack {
-                    VStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.adaptiveBlack)
-                        Text("adaptiveBlack")
-                    }
-
-                    VStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.adaptiveWhite)
-                        Text("adaptiveWhite")
-                    }
-                }
-
+        static var content: some View {
+            NavigationStack {
                 VStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundColor(.placeholderGray)
-                    Text("placeholderGray")
-                }
+                    HStack {
+                        VStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.adaptiveBlack)
+                            Text("adaptiveBlack")
+                        }
 
-                HStack {
-                    VStack {
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.appPrimary)
-                        Text("appPrimary")
+                        VStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.adaptiveWhite)
+                            Text("adaptiveWhite")
+                        }
                     }
 
                     VStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.appSecondary)
-                        Text("appSecondary")
+                            .foregroundColor(.placeholderGray)
+                        Text("placeholderGray")
                     }
+
+                    HStack {
+                        VStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.appPrimary)
+                            Text("appPrimary")
+                        }
+
+                        VStack {
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.appSecondary)
+                            Text("appSecondary")
+                        }
+                    }
+
                 }
-
-
+                .shadow(radius: 10)
+                .padding(.horizontal)
             }
-            .shadow(radius: 10)
-            .padding(.horizontal)
+        }
+
+        static var previews: some View {
+            content
+                .environment(\.colorScheme, .light)
+
+            content
+                .environment(\.colorScheme, .dark)
         }
     }
 
-    static var previews: some View {
-        content
-            .environment(\.colorScheme, .light)
-        
-        content
-            .environment(\.colorScheme, .dark)
-    }
-}
-
 #endif
-

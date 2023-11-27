@@ -5,10 +5,9 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
 import Dispatch
+import SwiftUI
 
 struct MyPage: Reducer, Sendable {
     struct State: Equatable {
@@ -140,9 +139,9 @@ extension AlertState where Action == MyPage.Action.Alert {
         }
     } message: {
         TextState(
-      """
-      Sign out now?
-      """
+            """
+            Sign out now?
+            """
         )
     }
 }
@@ -169,7 +168,8 @@ private extension MyPageView {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .sheet(isPresented:
+        .sheet(
+            isPresented:
                 viewStore.binding(
                     get: \.openInquiry,
                     send: MyPage.Action.inquiryButtonTapped
@@ -201,9 +201,9 @@ struct MyPageView_Previews: PreviewProvider {
             MyPageView(
                 store: Store(initialState: MyPage.State()) {
                     MyPage()
-                } withDependencies: { _ in }
+                } withDependencies: { _ in
+                }
             )
         }
     }
 }
-

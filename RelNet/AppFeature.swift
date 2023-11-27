@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/08/27.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 
 struct AppFeature: Reducer {
     struct State: Equatable {
@@ -36,11 +35,11 @@ struct AppFeature: Reducer {
                 // TODO: 別のReducerにしたいかも
                 return .run { send in
                     await send(
-                      .signInWithGoogleResponse(
-                        await TaskResult {
-                          try await self.authenticationClient.signInWithGoogle()
-                        }
-                      )
+                        .signInWithGoogleResponse(
+                            await TaskResult {
+                                try await self.authenticationClient.signInWithGoogle()
+                            }
+                        )
                     )
                 }
 

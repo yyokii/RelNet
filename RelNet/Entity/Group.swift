@@ -5,10 +5,9 @@
 //  Created by Higashihara Yoki on 2023/08/29.
 //
 
-import Foundation
-
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import Foundation
 
 struct Group: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
@@ -32,11 +31,10 @@ extension Group {
         )
     }
 
-
     func toDictionary() -> [String: Any] {
         var dictionary: [String: Any] = [
             "name": name,
-            "description": description
+            "description": description,
         ]
 
         if let createdAt {
@@ -50,4 +48,3 @@ extension Group {
         return dictionary
     }
 }
-

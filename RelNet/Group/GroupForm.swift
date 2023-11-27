@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/08/29.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 import SwiftUINavigation
 
 struct GroupForm: Reducer {
@@ -74,4 +73,3 @@ struct GroupForm_Previews: PreviewProvider {
         }
     }
 }
-

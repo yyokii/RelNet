@@ -5,9 +5,8 @@
 //  Created by Higashihara Yoki on 2023/08/27.
 //
 
-import SwiftUI
-
 import ComposableArchitecture
+import SwiftUI
 import SwiftUINavigation
 
 /**
@@ -111,7 +110,7 @@ struct PersonFormView: View {
                                     viewStore.send(.firstNameEndEditing)
                                 }
                             }
-                        
+
                         TextField("nickname", text: viewStore.$person.nickname)
 
                         TextField("hobbies", text: viewStore.$person.hobbies)
@@ -126,7 +125,7 @@ struct PersonFormView: View {
                 } header: {
                     Text("Basic Info")
                 }
-                
+
                 Section {
                     VStack {
                         Button {
@@ -168,7 +167,7 @@ private extension PersonFormView {
                     .background {
                         let isSelectedGroup = viewStore.person.groupIDs.contains(group.id ?? "")
                         return RoundedRectangle(cornerRadius: GroupItemModifier.cornerRadius)
-                            .fill( isSelectedGroup ? .blue.opacity(0.3) : .clear)
+                            .fill(isSelectedGroup ? .blue.opacity(0.3) : .clear)
                     }
                 }
             }

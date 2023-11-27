@@ -5,11 +5,10 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
-import Foundation
-
 import ComposableArchitecture
-import FirebaseCore
 import FirebaseAuth
+import FirebaseCore
+import Foundation
 import GoogleSignIn
 
 struct AuthenticationClient: Sendable {
@@ -48,7 +47,7 @@ extension DependencyValues {
 extension AuthenticationClient: DependencyKey {
     public static let liveValue = Self(
         currentUser: {
-            let user =  Auth.auth().currentUser
+            let user = Auth.auth().currentUser
             return .init(from: user)
         },
         listenAuthState: {
@@ -58,14 +57,15 @@ extension AuthenticationClient: DependencyKey {
                     return
                 }
 
-                let listenerHandle = Auth.auth().addStateDidChangeListener { auth, user in
-                    if let user {
-                        let appUser = AppUser(from: user)
-                        continuation.yield(appUser)
-                    } else {
-                        continuation.yield(nil)
+                let listenerHandle = Auth.auth()
+                    .addStateDidChangeListener { auth, user in
+                        if let user {
+                            let appUser = AppUser(from: user)
+                            continuation.yield(appUser)
+                        } else {
+                            continuation.yield(nil)
+                        }
                     }
-                }
 
                 continuation.onTermination = { _ in
                     Auth.auth().removeStateDidChangeListener(listenerHandle)
@@ -80,7 +80,8 @@ extension AuthenticationClient: DependencyKey {
             let configuration = GIDConfiguration(clientID: clientID)
 
             guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                  let rootViewController = await windowScene.windows.first?.rootViewController else {
+                let rootViewController = await windowScene.windows.first?.rootViewController
+            else {
                 throw AuthenticationClientError.notFoundRootVC
             }
 
@@ -113,20 +114,22 @@ private extension AuthenticationClient {
         )
 
         return try await withCheckedThrowingContinuation { continuation in
-            Auth.auth().signIn(with: credential) { (result, error) in
-                if let error = error {
-                    print(error.localizedDescription)
-                    continuation.resume(with: .failure(AuthenticationClientError.notFoundUser))
-                } else {
-                    guard let user = result?.user,
-                          let appUser = AppUser(from: user) else {
+            Auth.auth()
+                .signIn(with: credential) { (result, error) in
+                    if let error = error {
+                        print(error.localizedDescription)
                         continuation.resume(with: .failure(AuthenticationClientError.notFoundUser))
-                        return
-                    }
+                    } else {
+                        guard let user = result?.user,
+                            let appUser = AppUser(from: user)
+                        else {
+                            continuation.resume(with: .failure(AuthenticationClientError.notFoundUser))
+                            return
+                        }
 
-                    continuation.resume(with: .success(appUser))
+                        continuation.resume(with: .success(appUser))
+                    }
                 }
-            }
         }
     }
 

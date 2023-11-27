@@ -5,11 +5,10 @@
 //  Created by Higashihara Yoki on 2023/08/24.
 //
 
-import Foundation
-
 import ComposableArchitecture
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import Foundation
 
 struct PersonClient: Sendable {
 
@@ -205,7 +204,7 @@ extension PersonClient: TestDependencyKey {
             AsyncThrowingStream { continuation in
                 let persons: [Group] = [
                     .mock(id: "id-1"),
-                    .mock(id: "id-2")
+                    .mock(id: "id-2"),
                 ]
                 continuation.yield(IdentifiedArray(uniqueElements: persons))
                 continuation.finish()
@@ -215,7 +214,7 @@ extension PersonClient: TestDependencyKey {
             AsyncThrowingStream { continuation in
                 let persons: [Person] = [
                     .mock(id: "id-1"),
-                    .mock(id: "id-2")
+                    .mock(id: "id-2"),
                 ]
                 continuation.yield(IdentifiedArray(uniqueElements: persons))
                 continuation.finish()

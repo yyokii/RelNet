@@ -6,6 +6,7 @@
 //
 
 import XCTest
+
 @testable import RelNet
 
 final class PersonTests: XCTestCase {
@@ -64,4 +65,3 @@ final class PersonTests: XCTestCase {
         XCTAssertEqual(person.nameInitial, "その他")
     }
 }
-
