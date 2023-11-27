@@ -420,6 +420,7 @@
 				F5405C1A2A9707C4002FA0C9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				F5418A8B2A9AEE3900511A67 /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
 				F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				F59EF35E2B14D6470064C18D /* XCRemoteSwiftPackageReference "swift-format" */,
 			);
 			productRefGroup = F5405BD72A96F347002FA0C9 /* Products */;
 			projectDirPath = "";
@@ -852,6 +853,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.0.0;
+			};
+		};
+		F59EF35E2B14D6470064C18D /* XCRemoteSwiftPackageReference "swift-format" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-format";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 509.0.0;
 			};
 		};
 		F5DC3BA52AA71894005528F9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
