@@ -11,67 +11,49 @@ import Foundation
 
 /// 人を表す
 ///
-/// 空の初期値を持ち、Dateなどの「空」を表現できないものについてのみオプショナルとしている。
+/// プロパティについては必須項目以外は、基本的にオプショナル。
+/// オプショナルとすることで、新しいプロパティを追加しても既存のデータも正常に読み取りが可能。
 struct Person: Codable, Identifiable, Equatable, Hashable {
     @DocumentID var id: String?
 
     // MARK: Basic info
-    // TODO: 名前は性名で分けると多言語で大変なのでnameにする
-    var firstName: String = ""  // 名
-    var lastName: String = ""  // 姓
-    var firstNameFurigana: String?
-    var lastNameFurigana: String?
-    var nickname: String = ""
+    var name: String = ""
+    var furigana: String?
+    var nickname: String?
     var birthdate: Date?
-    var address: String = ""
-    var hobbies: String = ""
-    var likes: String = ""
-    var dislikes: String = ""
+    var address: String?
+    var hobbies: String?
+    var likes: String?
+    var dislikes: String?
     var lastContacted: Date?
     // TODO: OrderedSet にする
     private(set) var groupIDs: [String] = []
 
     // MARK: Family
-    var parents: String = ""
-    var sibling: String = ""
-    var pets: String = ""
+    var parents: String?
+    var sibling: String?
+    var pets: String?
 
     // MARK: Food
-    var likeFoods: String = ""
-    var likeSweets: String = ""
-    var allergies: String = ""
-    var dislikeFoods: String = ""
+    var likeFoods: String?
+    var likeSweets: String?
+    var allergies: String?
+    var dislikeFoods: String?
 
     // MARK: Music
-    var likeMusicCategories: String = ""
-    var likeArtists: String = ""
-    var likeMusics: String = ""
-    var playableInstruments: String = ""
+    var likeMusicCategories: String?
+    var likeArtists: String?
+    var likeMusics: String?
+    var playableInstruments: String?
 
     // MARK: Travel
-    var travelCountries: String = ""
-    var favoriteLocations: String = ""
+    var travelCountries: String?
+    var favoriteLocations: String?
 
-    var notes: String = ""
+    var notes: String?
 
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
-
-    /*
-     表示優先度: full name → firstName or lastName → nickname
-     */
-    var name: String {
-        if !firstName.isEmpty,
-            !lastName.isEmpty
-        {
-            // TODO: 言語設定で変更する
-            return lastName + " " + firstName
-        } else if nickname.isEmpty {
-            return firstName.isEmpty ? lastName : firstName
-        } else {
-            return nickname
-        }
-    }
 
     /**
      Returns the initial (first character) of the person's name or nickname based on certain prioritized conditions.
@@ -93,16 +75,13 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
         let otherCategory = "その他"
 
         // Check furigana first as it has the highest priority
-        if let lastNameFurigana = lastNameFurigana, !lastNameFurigana.isEmpty {
-            return String(lastNameFurigana.prefix(1))
-        } else if let firstNameFurigana = firstNameFurigana, !firstNameFurigana.isEmpty {
-            return String(firstNameFurigana.prefix(1))
+        if let furigana, !furigana.isEmpty {
+            return String(furigana.prefix(1))
         }
 
         // If furigana is not available, check names
-        let nameToUse = lastName.isEmpty ? firstName : lastName
-        if !nameToUse.isEmpty {
-            let initial = nameToUse.prefix(1)
+        if !name.isEmpty {
+            let initial = name.prefix(1)
 
             // Using regex to check if the initial is a kanji character
             if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil {
@@ -113,7 +92,7 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
         }
 
         // If only nickname is available
-        if !nickname.isEmpty {
+        if let nickname, !nickname.isEmpty {
             let initial = nickname.prefix(1)
             // Check for kanji, number or symbol for nickname initial
             if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil || initial.rangeOfCharacter(from: CharacterSet.decimalDigits.union(CharacterSet.symbols)) != nil {
@@ -143,10 +122,8 @@ extension Person {
     ) -> Self {
         .init(
             id: id,
-            firstName: "first",
-            lastName: "last",
-            firstNameFurigana: "ファースト",
-            lastNameFurigana: "ラスト",
+            name: "name",
+            furigana: "フリガナ",
             nickname: "nick",
             birthdate: Date(),
             address: "東京",

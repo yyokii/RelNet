@@ -15,7 +15,7 @@ import SwiftUINavigation
 struct PersonForm: Reducer {
 
     struct State: Equatable, Sendable {
-        @BindingState var focus: Field? = .lastName
+        @BindingState var focus: Field? = .name
         @BindingState var person: Person
         let groups: IdentifiedArrayOf<Group>
 
@@ -25,8 +25,7 @@ struct PersonForm: Reducer {
         }
 
         enum Field: Hashable {
-            case firstName
-            case lastName
+            case name
         }
     }
 
@@ -38,8 +37,7 @@ struct PersonForm: Reducer {
         case groupButtonTapped(Group)
 
         // Other
-        case firstNameEndEditing
-        case lastNameEndEditing
+        case nameEndEditing
     }
 
     var body: some ReducerOf<Self> {
@@ -60,12 +58,8 @@ struct PersonForm: Reducer {
                 state.person.updateGroupID(id)
                 return .none
 
-            case .firstNameEndEditing:
-                state.person.firstNameFurigana = state.person.firstName.furigana
-                return .none
-
-            case .lastNameEndEditing:
-                state.person.lastNameFurigana = state.person.lastName.furigana
+            case .nameEndEditing:
+                state.person.furigana = state.person.name.furigana
                 return .none
             }
         }
@@ -91,39 +85,64 @@ struct PersonFormView: View {
                 Section {
                     VStack {
                         // TODO: 家族や食べ物、音楽などの person 情報を入力できるようにする
-                        TextField("姓", text: viewStore.$person.lastName)
-                            .focused(self.$focus, equals: .lastName)
+                        TextField("名前", text: viewStore.$person.name)
+                            .focused(self.$focus, equals: .name)
                             .onChange(of: viewStore.state.focus) { focus in
-                                if focus != .lastName {
-                                    viewStore.send(.lastNameEndEditing)
+                                if focus != .name {
+                                    viewStore.send(.nameEndEditing)
                                 }
                             }
-
-                        TextField("姓（フリガナ）", text: viewStore.$person.lastNameFurigana.toUnwrapped(defaultValue: ""))
-
-                        TextField("名", text: viewStore.$person.firstName)
-                            .focused(self.$focus, equals: .firstName)
-
-                        TextField("名（フリガナ）", text: viewStore.$person.firstNameFurigana.toUnwrapped(defaultValue: ""))
-                            .onChange(of: viewStore.state.focus) { focus in
-                                if focus != .firstName {
-                                    viewStore.send(.firstNameEndEditing)
-                                }
-                            }
-
-                        TextField("nickname", text: viewStore.$person.nickname)
-
-                        TextField("hobbies", text: viewStore.$person.hobbies)
-
-                        TextField("likes", text: viewStore.$person.likes)
-
-                        TextField("dislikes", text: viewStore.$person.dislikes)
-
+                        TextField("フリガナ", text: viewStore.$person.furigana.toUnwrapped(defaultValue: ""))
+                        TextField("ニックネーム", text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
+                        TextField("趣味", text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""))
+                        TextField("好きなこと", text: viewStore.$person.likes.toUnwrapped(defaultValue: ""))
+                        TextField("苦手なこと", text: viewStore.$person.dislikes.toUnwrapped(defaultValue: ""))
                         // TODO: 年いる？あまり入れれない気がする、年と月日を分けるとか？
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
                 } header: {
                     Text("Basic Info")
+                }
+
+                Section {
+                    VStack {
+                        TextField("親", text: viewStore.$person.parents.toUnwrapped(defaultValue: ""))
+                        TextField("兄弟/姉妹", text: viewStore.$person.sibling.toUnwrapped(defaultValue: ""))
+                        TextField("ペット", text: viewStore.$person.pets.toUnwrapped(defaultValue: ""))
+                    }
+                } header: {
+                    Text("Family")
+                }
+
+                Section {
+                    VStack {
+                        TextField("好きな食べ物", text: viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""))
+                        TextField("好きなお菓子", text: viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""))
+                        TextField("アレルギー", text: viewStore.$person.allergies.toUnwrapped(defaultValue: ""))
+                        TextField("苦手な食べ物", text: viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""))
+                    }
+                } header: {
+                    Text("Food")
+                }
+
+                Section {
+                    VStack {
+                        TextField("好きなジャンル", text: viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""))
+                        TextField("好きなアーティスト", text: viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""))
+                        TextField("好きな曲", text: viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""))
+                        TextField("演奏できる楽器", text: viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""))
+                    }
+                } header: {
+                    Text("Music")
+                }
+
+                Section {
+                    VStack {
+                        TextField("行った国", text: viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""))
+                        TextField("お気に入りの場所", text: viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""))
+                    }
+                } header: {
+                    Text("Travel")
                 }
 
                 Section {
@@ -134,7 +153,7 @@ struct PersonFormView: View {
                             Text("いつ会った？")
                         }
 
-                        TextEditor(text: viewStore.$person.notes)
+                        TextEditor(text: viewStore.$person.notes.toUnwrapped(defaultValue: ""))
                     }
                 } header: {
                     Text("Additional Info")

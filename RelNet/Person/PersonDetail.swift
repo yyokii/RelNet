@@ -187,46 +187,46 @@ struct PersonDetailView: View {
                     }
 
                     Section {
-                        nicknameRow(viewStore.person.nickname)
+                        nicknameRow(viewStore.person.nickname ?? "")
                         birthdateRow(dateString: "2000/09/24")
-                        addressRow(viewStore.person.address)
-                        hobbiesRow(viewStore.person.hobbies)
-                        likesRow(viewStore.person.likes)
-                        dislikesRow(viewStore.person.dislikes)
+                        addressRow(viewStore.person.address ?? "")
+                        hobbiesRow(viewStore.person.hobbies ?? "")
+                        likesRow(viewStore.person.likes ?? "")
+                        dislikesRow(viewStore.person.dislikes ?? "")
                         lastContactedRow(dateString: "2020/02/02")
                     } header: {
                         Text("Basic Info")
                     }
 
                     Section {
-                        parentsRow(viewStore.person.parents)
-                        siblingRow(viewStore.person.sibling)
-                        petsRow(viewStore.person.pets)
+                        parentsRow(viewStore.person.parents ?? "")
+                        siblingRow(viewStore.person.sibling ?? "")
+                        petsRow(viewStore.person.pets ?? "")
                     } header: {
                         Text("Family")
                     }
 
                     Section {
-                        likeFoodsRow(viewStore.person.likeFoods)
-                        likeSweetsRow(viewStore.person.likeSweets)
-                        allergiesRow(viewStore.person.allergies)
-                        dislikeFoodsRow(viewStore.person.dislikeFoods)
+                        likeFoodsRow(viewStore.person.likeFoods ?? "")
+                        likeSweetsRow(viewStore.person.likeSweets ?? "")
+                        allergiesRow(viewStore.person.allergies ?? "")
+                        dislikeFoodsRow(viewStore.person.dislikeFoods ?? "")
                     } header: {
                         Text("Food")
                     }
 
                     Section {
-                        likeCategoriesRow(viewStore.person.likeMusicCategories)
-                        likeArtistsRow(viewStore.person.likeArtists)
-                        likeMusicsRow(viewStore.person.likeMusics)
-                        playableInstrumentsRow(viewStore.person.playableInstruments)
+                        likeCategoriesRow(viewStore.person.likeMusicCategories ?? "")
+                        likeArtistsRow(viewStore.person.likeArtists ?? "")
+                        likeMusicsRow(viewStore.person.likeMusics ?? "")
+                        playableInstrumentsRow(viewStore.person.playableInstruments ?? "")
                     } header: {
                         Text("Music")
                     }
 
                     Section {
-                        travelCountriesRow(viewStore.person.travelCountries)
-                        favoriteLocationsRow(viewStore.person.favoriteLocations)
+                        travelCountriesRow(viewStore.person.travelCountries ?? "")
+                        favoriteLocationsRow(viewStore.person.favoriteLocations ?? "")
                     } header: {
                         Text("Travel")
                     }
@@ -248,7 +248,7 @@ struct PersonDetailView: View {
             ) { store in
                 NavigationStack {
                     PersonFormView(store: store)
-                        .navigationTitle(viewStore.person.firstName)
+                        .navigationTitle(viewStore.person.name)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Cancel") {
