@@ -116,36 +116,39 @@ struct Person: Codable, Identifiable, Equatable, Hashable {
 }
 
 extension Person {
-    static func mock(
-        id: String = UUID().uuidString,
-        groupIDs: [String] = ["id-1"]
-    ) -> Self {
-        .init(
-            id: id,
-            name: "name",
-            furigana: "フリガナ",
-            nickname: "nick",
-            birthdate: Date(),
-            address: "東京",
-            hobbies: "散歩",
-            likes: "蕎麦",
-            dislikes: "no",
-            lastContacted: Date(),
-            groupIDs: groupIDs,
-            parents: "parents",
-            sibling: "sibling",
-            pets: "猫",
-            likeFoods: "蕎麦",
-            likeSweets: "モンブラン",
-            allergies: "なし",
-            dislikeFoods: "なし",
-            likeMusicCategories: "なんでも",
-            likeArtists: "たくさん",
-            likeMusics: "たくさん",
-            playableInstruments: "ピアノ",
-            travelCountries: "オーストラリア、ニュージーランド",
-            favoriteLocations: "ニュージーランド",
-            notes: "this is note"
-        )
-    }
+
+    #if DEBUG
+        static func mock(
+            id: String = UUID().uuidString,
+            groupIDs: [String] = ["id-1"]
+        ) -> Self {
+            .init(
+                id: id,
+                name: "name",
+                furigana: "フリガナ",
+                nickname: "nick",
+                birthdate: Date(),
+                address: "東京",
+                hobbies: "散歩",
+                likes: "蕎麦",
+                dislikes: "no",
+                lastContacted: Date(),
+                groupIDs: groupIDs,
+                parents: "parents",
+                sibling: "sibling",
+                pets: "猫",
+                likeFoods: "蕎麦",
+                likeSweets: "モンブラン",
+                allergies: "なし",
+                dislikeFoods: "なし",
+                likeMusicCategories: "なんでも",
+                likeArtists: "たくさん",
+                likeMusics: "たくさん",
+                playableInstruments: "ピアノ",
+                travelCountries: "オーストラリア、ニュージーランド",
+                favoriteLocations: "ニュージーランド",
+                notes: "this is note"
+            )
+        }
+    #endif
 }
