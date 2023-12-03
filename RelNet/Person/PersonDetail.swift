@@ -187,46 +187,45 @@ struct PersonDetailView: View {
                     }
 
                     Section {
-                        nicknameRow(viewStore.person.nickname ?? "")
-                        birthdateRow(dateString: "2000/09/24")
-                        addressRow(viewStore.person.address ?? "")
-                        hobbiesRow(viewStore.person.hobbies ?? "")
-                        likesRow(viewStore.person.likes ?? "")
-                        dislikesRow(viewStore.person.dislikes ?? "")
-                        lastContactedRow(dateString: "2020/02/02")
+                        textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: viewStore.person.nickname ?? "")
+                        // TODO
+//                        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: viewStore.person.birthdate ?? "")
+                        textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: viewStore.person.address ?? "")
+                        textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: viewStore.person.hobbies ?? "")
+                        textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
+                        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikes ?? "")
                     } header: {
                         Text("Basic Info")
                     }
 
                     Section {
-                        parentsRow(viewStore.person.parents ?? "")
-                        siblingRow(viewStore.person.sibling ?? "")
-                        petsRow(viewStore.person.pets ?? "")
+                        textRowItem(symbolName: "heart", iconColor: .purple, title: "両親", text: viewStore.person.parents ?? "")
+                        textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: viewStore.person.sibling ?? "")
+                        textRowItem(symbolName: "tortoise", iconColor: .teal, title: "ペット", text: viewStore.person.pets ?? "")
                     } header: {
                         Text("Family")
                     }
 
                     Section {
-                        likeFoodsRow(viewStore.person.likeFoods ?? "")
-                        likeSweetsRow(viewStore.person.likeSweets ?? "")
-                        allergiesRow(viewStore.person.allergies ?? "")
-                        dislikeFoodsRow(viewStore.person.dislikeFoods ?? "")
+                        textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likeFoods ?? "")
+                        textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
+                        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikeFoods ?? "")
                     } header: {
                         Text("Food")
                     }
 
                     Section {
-                        likeCategoriesRow(viewStore.person.likeMusicCategories ?? "")
-                        likeArtistsRow(viewStore.person.likeArtists ?? "")
-                        likeMusicsRow(viewStore.person.likeMusics ?? "")
-                        playableInstrumentsRow(viewStore.person.playableInstruments ?? "")
+                        textRowItem(symbolName: "rectangle.3.group", iconColor: .orange, title: "好きなジャンル", text: viewStore.person.likeMusicCategories ?? "")
+                        textRowItem(symbolName: "music.mic", iconColor: .indigo, title: "好きなアーティスト", text: viewStore.person.likeArtists ?? "")
+                        textRowItem(symbolName: "music.note", iconColor: .pink, title: "好きな曲", text: viewStore.person.likeMusics ?? "")
+                        textRowItem(symbolName: "guitars", iconColor: .purple, title: "できる楽器", text: viewStore.person.playableInstruments ?? "")
                     } header: {
                         Text("Music")
                     }
 
                     Section {
-                        travelCountriesRow(viewStore.person.travelCountries ?? "")
-                        favoriteLocationsRow(viewStore.person.favoriteLocations ?? "")
+                        textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: viewStore.person.travelCountries ?? "")
+                        textRowItem(symbolName: "mappin", iconColor: .green, title: "思い出の場所", text: viewStore.person.favoriteLocations ?? "")
                     } header: {
                         Text("Travel")
                     }
@@ -305,90 +304,6 @@ private extension PersonDetailView {
                 }
             }
         }
-    }
-
-    // MARK: 基本情報
-    func nicknameRow(_ name: String) -> some View {
-        textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: name)
-    }
-
-    func birthdateRow(dateString: String) -> some View {
-        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: dateString)
-    }
-
-    func addressRow(_ address: String) -> some View {
-        textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: address)
-    }
-
-    func hobbiesRow(_ hobbies: String) -> some View {
-        textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: hobbies)
-    }
-
-    func likesRow(_ likes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好き", text: likes)
-    }
-
-    func dislikesRow(_ dislikes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: dislikes)
-    }
-
-    // MARK: 家族
-    func parentsRow(_ parents: String) -> some View {
-        textRowItem(symbolName: "heart", iconColor: .blue, title: "両親", text: parents)
-    }
-
-    func siblingRow(_ sibling: String) -> some View {
-        textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: sibling)
-    }
-
-    func petsRow(_ pets: String) -> some View {
-        textRowItem(symbolName: "tortoise", iconColor: .pink, title: "ペット", text: pets)
-    }
-
-    // MARK: 食べ物
-
-    func likeFoodsRow(_ likes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好き", text: likes)
-    }
-
-    func likeSweetsRow(_ sweets: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなお菓子", text: sweets)
-    }
-
-    func allergiesRow(_ allergies: String) -> some View {
-        textRowItem(symbolName: "eyes", iconColor: .indigo, title: "アレルギー", text: allergies)
-    }
-
-    func dislikeFoodsRow(_ dislikes: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: dislikes)
-    }
-
-    // MARK: 音楽
-
-    func likeCategoriesRow(_ categories: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなジャンル", text: categories)
-    }
-
-    func likeArtistsRow(_ artists: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きなアーティスト", text: artists)
-    }
-
-    func likeMusicsRow(_ musics: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "好きな曲", text: musics)
-    }
-
-    func playableInstrumentsRow(_ instruments: String) -> some View {
-        textRowItem(symbolName: "hand.thumbsup", iconColor: .indigo, title: "できる楽器", text: instruments)
-    }
-
-    // MARK: 旅行
-
-    func travelCountriesRow(_ countries: String) -> some View {
-        textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: countries)
-    }
-
-    func favoriteLocationsRow(_ countries: String) -> some View {
-        textRowItem(symbolName: "airplane", iconColor: .orange, title: "思い出の場所", text: countries)
     }
 
     // TODO: これは別UIでもいいかも
