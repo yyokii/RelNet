@@ -38,27 +38,34 @@ struct Main: Reducer {
         }
     }
 
-    enum Action: Equatable {
-        // TODO: enum作成して分けてもいいかも
-        // User Action
-        case addGroupButtonTapped
-        case addPersonButtonTapped
-        case confirmAddGroupButtonTapped
-        case confirmAddPersonButtonTapped
-        case dismissAddGroupButtonTapped
-        case dismissAddPersonButtonTapped
-        case groupCardTapped(Group)
-        case personItemTapped(Person)
-        case morePersonsButtonTapped
-
-        // Other Action
-        case addGroupResult(TaskResult<Group>)
-        case addPersonResult(TaskResult<Person>)
+    enum Action: TCAFeatureAction, Equatable {
+        case view(ViewAction)
+        case `internal`(InternalAction)
+        case delegate(DelegateAction)
         case destination(PresentationAction<Destination.Action>)
-        case listenGroups  // TODO: task等のライフスタイルの命名にしたいが、複数待受けできるんだっけ
-        case listenPersons
-        case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
-        case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)
+
+        enum ViewAction: Equatable {
+            case addGroupButtonTapped
+            case addPersonButtonTapped
+            case confirmAddGroupButtonTapped
+            case confirmAddPersonButtonTapped
+            case dismissAddGroupButtonTapped
+            case dismissAddPersonButtonTapped
+            case groupCardTapped(Group)
+            case listenGroups
+            case listenPersons
+            case morePersonsButtonTapped
+            case personItemTapped(Person)
+        }
+
+        enum InternalAction: Equatable {
+            case addGroupResult(TaskResult<Group>)
+            case addPersonResult(TaskResult<Person>)
+            case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
+            case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)
+        }
+
+        enum DelegateAction: Equatable {}
     }
 
     struct Destination: Reducer {
@@ -98,129 +105,126 @@ struct Main: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
-
-            case .addGroupButtonTapped:
-                state.destination = .addGroup(GroupForm.State(group: Group()))
-                return .none
-
-            case .addPersonButtonTapped:
-                state.destination = .addPerson(PersonForm.State(person: Person(), groups: state.groups))
-                return .none
-
-            case .confirmAddGroupButtonTapped:
-                guard case let .some(.addGroup(formState)) = state.destination else {
+            case let .view(viewAction):
+                switch viewAction {
+                case .addGroupButtonTapped:
+                    state.destination = .addGroup(GroupForm.State(group: Group()))
                     return .none
-                }
+                case .addPersonButtonTapped:
+                    state.destination = .addPerson(PersonForm.State(person: Person(), groups: state.groups))
+                    return .none
+                case .confirmAddGroupButtonTapped:
+                    guard case let .some(.addGroup(formState)) = state.destination else {
+                        return .none
+                    }
+                    let group = formState.group
 
-                let group = formState.group
-
-                return .run { send in
-                    // TODO: この形式で他も書き換える
-                    await send(
-                        .addGroupResult(
-                            .init {
-                                try personClient.addGroup(group)
-                            }
+                    return .run { send in
+                        // TODO: この形式で他も書き換える
+                        await send(
+                            .internal(
+                                .addGroupResult(
+                                    .init {
+                                        try personClient.addGroup(group)
+                                    }
+                                )
+                            )
                         )
-                    )
-                }
+                    }
+                case .confirmAddPersonButtonTapped:
+                    guard case let .some(.addPerson(formState)) = state.destination else {
+                        return .none
+                    }
+                    let person = formState.person
 
-            case .confirmAddPersonButtonTapped:
-                guard case let .some(.addPerson(formState)) = state.destination else {
-                    return .none
-                }
-
-                let person = formState.person
-
-                return .run { send in
-                    await send(
-                        .addPersonResult(
-                            await TaskResult {
-                                try personClient.addPerson(person)
-                            }
+                    return .run { send in
+                        await send(
+                            .internal(
+                                .addPersonResult(
+                                    await TaskResult {
+                                        try personClient.addPerson(person)
+                                    }
+                                )
+                            )
                         )
-                    )
-                }
-
-            case .dismissAddGroupButtonTapped:
-                state.destination = nil
-                return .none
-
-            case .dismissAddPersonButtonTapped:
-                state.destination = nil
-                return .none
-
-            case let .groupCardTapped(group):
-                guard let groupId = group.id else {
+                    }
+                case .dismissAddGroupButtonTapped:
+                    state.destination = nil
+                    return .none
+                case .dismissAddPersonButtonTapped:
+                    state.destination = nil
+                    return .none
+                case let .groupCardTapped(group):
+                    guard let groupId = group.id else {
+                        return .none
+                    }
+                    let personsInGroup = state.persons.filter { person in
+                        person.groupIDs.contains(groupId)
+                    }
+                    state.destination = .personsList(.init(selectedGroup: group, groups: state.groups, persons: personsInGroup))
+                    return .none
+                case .morePersonsButtonTapped:
+                    return .none
+                case .listenGroups:
+                    return .run { send in
+                        for try await result in try await self.personClient.listenGroups() {
+                            await send(.internal(.listenGroupsResponse(.success(result))))
+                        }
+                    } catch: { error, send in
+                        await send(.internal(.listenGroupsResponse(.failure(error))))
+                    }
+                case .listenPersons:
+                    return .run { send in
+                        for try await result in try await self.personClient.listenPersons() {
+                            await send(.internal(.listenPersonsResponse(.success(result))))
+                        }
+                    } catch: { error, send in
+                        await send(.internal(.listenPersonsResponse(.failure(error))))
+                    }
+                case let .personItemTapped(person):
+                    state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
                     return .none
                 }
 
-                let personsInGroup = state.persons.filter { person in
-                    person.groupIDs.contains(groupId)
+            case let .internal(internalAction):
+                switch internalAction {
+
+                case .addGroupResult(.success(_)):
+                    print("📝 success add Group")
+                    state.destination = nil
+                    return .none
+
+                case .addGroupResult(.failure(_)):
+                    print("📝 failed add person")
+                    return .none
+
+                case .addPersonResult(.success(_)):
+                    print("📝 success add person")
+                    state.destination = nil
+                    return .none
+
+                case .addPersonResult(.failure(_)):
+                    print("📝 failed add person")
+                    return .none
+
+                case let .listenGroupsResponse(.success(groups)):
+                    state.groups = groups
+                    return .none
+
+                case let .listenGroupsResponse(.failure(error)):
+                    print(error.localizedDescription)
+                    return .none
+
+                case let .listenPersonsResponse(.success(persons)):
+                    state.persons = persons
+                    return .none
+
+                case let .listenPersonsResponse(.failure(error)):
+                    print(error.localizedDescription)
+                    return .none
                 }
-                state.destination = .personsList(.init(selectedGroup: group, groups: state.groups, persons: personsInGroup))
-                return .none
-
-            case let .personItemTapped(person):
-                state.destination = .personDetail(PersonDetail.State(person: person, groups: state.groups))
-                return .none
-
-            case .morePersonsButtonTapped:
-                return .none
-
-            case .addGroupResult(.success(_)):
-                print("📝 success add Group")
-                state.destination = nil
-                return .none
-
-            case .addGroupResult(.failure(_)):
-                print("📝 failed add person")
-                return .none
-
-            case .addPersonResult(.success(_)):
-                print("📝 success add person")
-                state.destination = nil
-                return .none
-
-            case .addPersonResult(.failure(_)):
-                print("📝 failed add person")
-                return .none
 
             case .destination:
-                return .none
-
-            case .listenGroups:
-                return .run { send in
-                    for try await result in try await self.personClient.listenGroups() {
-                        await send(.listenGroupsResponse(.success(result)))
-                    }
-                } catch: { error, send in
-                    await send(.listenGroupsResponse(.failure(error)))
-                }
-
-            case .listenPersons:
-                return .run { send in
-                    for try await result in try await self.personClient.listenPersons() {
-                        await send(.listenPersonsResponse(.success(result)))
-                    }
-                } catch: { error, send in
-                    await send(.listenPersonsResponse(.failure(error)))
-                }
-
-            case let .listenGroupsResponse(.success(groups)):
-                state.groups = groups
-                return .none
-
-            case let .listenGroupsResponse(.failure(error)):
-                print(error.localizedDescription)
-                return .none
-
-            case let .listenPersonsResponse(.success(persons)):
-                state.persons = persons
-                return .none
-
-            case let .listenPersonsResponse(.failure(error)):
-                print(error.localizedDescription)
                 return .none
             }
         }
@@ -245,10 +249,10 @@ struct MainView: View {
             }
             .navigationTitle("knot")
             .task {
-                await viewStore.send(.listenGroups).finish()
+                await viewStore.send(.view(.listenGroups)).finish()
             }
             .task {
-                await viewStore.send(.listenPersons).finish()
+                await viewStore.send(.view(.listenPersons)).finish()
             }
             .navigationDestination(
                 store: store.scope(state: \.$destination, action: { .destination($0) }),
@@ -275,12 +279,12 @@ struct MainView: View {
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {
-                                    viewStore.send(.dismissAddGroupButtonTapped)
+                                    viewStore.send(.view(.dismissAddGroupButtonTapped))
                                 }
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Add") {
-                                    viewStore.send(.confirmAddGroupButtonTapped)
+                                    viewStore.send(.view(.confirmAddGroupButtonTapped))
                                 }
                             }
                         }
@@ -297,12 +301,12 @@ struct MainView: View {
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
                                 Button("Dismiss") {
-                                    viewStore.send(.dismissAddPersonButtonTapped)
+                                    viewStore.send(.view(.dismissAddPersonButtonTapped))
                                 }
                             }
                             ToolbarItem(placement: .confirmationAction) {
                                 Button("Add") {
-                                    viewStore.send(.confirmAddPersonButtonTapped)
+                                    viewStore.send(.view(.confirmAddPersonButtonTapped))
                                 }
                             }
                         }
@@ -318,12 +322,12 @@ private extension MainView {
             VStack(alignment: .leading, spacing: 24) {
                 listHeader(
                     title: "グループ",
-                    addAction: { viewStore.send(.addGroupButtonTapped) }
+                    addAction: { viewStore.send(.view(.addGroupButtonTapped)) }
                 )
                 FlowLayout(alignment: .leading, spacing: 8) {
                     ForEach(viewStore.state) { group in
                         Button {
-                            viewStore.send(.groupCardTapped(group))
+                            viewStore.send(.view(.groupCardTapped(group)))
                         } label: {
                             Text(group.name)
                                 .groupItemText()
@@ -339,13 +343,13 @@ private extension MainView {
             VStack(alignment: .leading, spacing: 24) {
                 listHeader(
                     title: "人物",
-                    addAction: { viewStore.send(.addPersonButtonTapped) }
+                    addAction: { viewStore.send(.view(.addPersonButtonTapped)) }
                 )
 
                 SortedPersonsView(
                     sortedItems: viewStore.sortedPersons,
                     onTapPerson: { person in
-                        viewStore.send(.personItemTapped(person))
+                        viewStore.send(.view(.personItemTapped(person)))
                     }
                 )
             }
