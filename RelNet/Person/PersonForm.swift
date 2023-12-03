@@ -97,7 +97,6 @@ struct PersonFormView: View {
                         TextField("趣味", text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""))
                         TextField("好きなこと", text: viewStore.$person.likes.toUnwrapped(defaultValue: ""))
                         TextField("苦手なこと", text: viewStore.$person.dislikes.toUnwrapped(defaultValue: ""))
-                        // TODO: 年いる？あまり入れれない気がする、年と月日を分けるとか？
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
                 } header: {

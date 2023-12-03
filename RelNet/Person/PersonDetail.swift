@@ -161,6 +161,13 @@ struct PersonDetail: Reducer {
 struct PersonDetailView: View {
     let store: StoreOf<PersonDetail>
 
+    var birthdateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter
+    }()
+
     struct ViewState: Equatable {
         let person: Person
         // Personに設定されているgroupのname配列
@@ -188,8 +195,7 @@ struct PersonDetailView: View {
 
                     Section {
                         textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: viewStore.person.nickname ?? "")
-                        // TODO
-//                        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: viewStore.person.birthdate ?? "")
+                        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: makeText(for: viewStore.person.birthdate))
                         textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: viewStore.person.address ?? "")
                         textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: viewStore.person.hobbies ?? "")
                         textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
@@ -267,6 +273,14 @@ struct PersonDetailView: View {
 }
 
 private extension PersonDetailView {
+    func makeText(for birthdate: Date?) -> String {
+        if let birthdate {
+            return birthdateFormatter.string(from: birthdate)
+        } else {
+            return ""
+        }
+    }
+
     var headerMenu: some View {
         Menu {
             HapticButton {
