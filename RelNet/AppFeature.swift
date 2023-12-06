@@ -11,6 +11,7 @@ import SwiftUI
 struct AppFeature: Reducer {
     struct State: Equatable {
         var appUser: AppUser?
+        var isLoading: Bool = true
     }
 
     enum Action: Equatable {
@@ -32,6 +33,7 @@ struct AppFeature: Reducer {
                 return .none
 
             case .signInWithGoogleButtonTapped:
+                state.isLoading = true
                 // TODO: 別のReducerにしたいかも
                 return .run { send in
                     await send(
@@ -44,6 +46,7 @@ struct AppFeature: Reducer {
                 }
 
             case .task:
+                state.isLoading = true
                 return .run { send in
                     for try await result in try await self.authenticationClient.listenAuthState() {
                         await send(.listenAuthStateResponse(.success(result)))
@@ -53,18 +56,22 @@ struct AppFeature: Reducer {
                 }
 
             case let .listenAuthStateResponse(.success(user)):
+                state.isLoading = false
                 state.appUser = user
                 return .none
 
             case let .listenAuthStateResponse(.failure(error)):
+                state.isLoading = false
                 print(error.localizedDescription)
                 return .none
 
             case let .signInWithGoogleResponse(.success(user)):
+                state.isLoading = false
                 state.appUser = user
                 return .none
 
             case let .signInWithGoogleResponse(.failure(error)):
+                state.isLoading = false
                 print(error.localizedDescription)
                 return .none
             }
@@ -84,12 +91,16 @@ struct AppView: View {
                         myProfileTab
                     }
                 } else {
-                    VStack {
-                        Text("need to signin")
-                        Button {
-                            viewStore.send(.signInWithGoogleButtonTapped)
-                        } label: {
-                            Text("sign in with google")
+                    if viewStore.isLoading {
+                        ProgressView()
+                    } else {
+                        VStack {
+                            Text("need to signin")
+                            Button {
+                                viewStore.send(.signInWithGoogleButtonTapped)
+                            } label: {
+                                Text("sign in with google")
+                            }
                         }
                     }
                 }
