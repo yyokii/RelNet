@@ -5,6 +5,8 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
+import AuthenticationServices
+import CryptoKit
 import ComposableArchitecture
 import FirebaseAuth
 import FirebaseCore
@@ -14,12 +16,14 @@ import GoogleSignIn
 struct AuthenticationClient: Sendable {
 
     var currentUser: @Sendable () -> AppUser?
+    var handleSignInWithAppleResponse: @Sendable (_ authorization: ASAuthorization, _ nonce: String) async throws -> AppUser
     var listenAuthState: @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>
     var signInWithGoogle: @Sendable () async throws -> AppUser
     var signOut: @Sendable () async throws -> Void
 
     init(
         currentUser: @escaping @Sendable () -> AppUser?,
+        handleSignInWithAppleResponse: @escaping @Sendable (_ authorization: ASAuthorization, _ nonce: String) async throws -> AppUser,
         listenAuthState: @escaping @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>,
         signInWithGoogle: @escaping @Sendable () async throws -> AppUser,
         signOut: @escaping @Sendable () async throws -> Void
@@ -29,9 +33,10 @@ struct AuthenticationClient: Sendable {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
 
-        self.signInWithGoogle = signInWithGoogle
-        self.listenAuthState = listenAuthState
         self.currentUser = currentUser
+        self.handleSignInWithAppleResponse = handleSignInWithAppleResponse
+        self.listenAuthState = listenAuthState
+        self.signInWithGoogle = signInWithGoogle
         self.signOut = signOut
     }
 }
@@ -50,13 +55,17 @@ extension AuthenticationClient: DependencyKey {
             let user = Auth.auth().currentUser
             return .init(from: user)
         },
+        handleSignInWithAppleResponse: { authorization, currentNonce in
+            guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
+                  let appleIDToken = appleIDCredential.identityToken,
+                  let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                throw AuthenticationClientError.notFoundIdToken
+            }
+            let credential = OAuthProvider.credential(withProviderID: "apple.com",idToken: idTokenString,rawNonce: currentNonce)
+            return try await signIn(with: credential)
+        },
         listenAuthState: {
             AsyncThrowingStream { continuation in
-                guard let user = Auth.auth().currentUser else {
-                    continuation.finish(throwing: PersonClientError.notFoundUser)
-                    return
-                }
-
                 let listenerHandle = Auth.auth()
                     .addStateDidChangeListener { auth, user in
                         if let user {
@@ -105,7 +114,7 @@ extension AuthenticationClient: DependencyKey {
 private extension AuthenticationClient {
     private static func authenticateUser(for user: GIDGoogleUser) async throws -> AppUser {
         guard let idToken = user.idToken?.tokenString else {
-            throw AuthenticationClientError.notFoundUser
+            throw AuthenticationClientError.notFoundIdToken
         }
 
         let credential = GoogleAuthProvider.credential(
@@ -113,7 +122,11 @@ private extension AuthenticationClient {
             accessToken: user.accessToken.tokenString
         )
 
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await signIn(with: credential)
+    }
+
+    private static func signIn(with credential: AuthCredential) async throws -> AppUser {
+        try await withCheckedThrowingContinuation { continuation in
             Auth.auth()
                 .signIn(with: credential) { (result, error) in
                     if let error = error {
@@ -158,9 +171,8 @@ struct AppUser: Equatable {
 
 enum AuthenticationClientError: LocalizedError, Sendable {
     case general(Error?)
-    case invalidUserPassword
-    case invalidIntermediateToken
     case notFoundClientID
+    case notFoundIdToken
     case notFoundRootVC
     case notFoundUser
 
@@ -168,12 +180,10 @@ enum AuthenticationClientError: LocalizedError, Sendable {
         switch self {
         case let .general(error):
             return "failed. \(String(describing: error?.localizedDescription))"
-        case .invalidUserPassword:
-            return "Unknown user or invalid password."
-        case .invalidIntermediateToken:
-            return "404!! What happened to your token there bud?!?!"
         case .notFoundClientID:
             return "Not found clientID"
+        case .notFoundIdToken:
+            return "Not found id token"
         case .notFoundRootVC:
             return "Not found root VC"
         case .notFoundUser:

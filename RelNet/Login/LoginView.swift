@@ -5,28 +5,40 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
+import CryptoKit
 import ComposableArchitecture
 import Dispatch
 import SwiftUI
+import _AuthenticationServices_SwiftUI
 
 struct Login: Reducer, Sendable {
     struct State: Equatable {
         @PresentationState var alert: AlertState<AlertAction>?
-        @BindingState var email = ""
-        var isFormValid = false
-        var isLoginRequestInFlight = false
-        @BindingState var password = ""
+        var isLoading: Bool = false
+        var currentNonce: String?
 
         init() {}
     }
 
-    enum Action: Equatable, Sendable {
-        case alert(PresentationAction<AlertAction>)
+    enum Action: TCAFeatureAction, Equatable, Sendable {
         case view(View)
+        case `internal`(InternalAction)
+        case delegate(DelegateAction)
+        case alert(PresentationAction<AlertAction>)
 
-        enum View: BindableAction, Equatable, Sendable {
-            case binding(BindingAction<State>)
-            case loginButtonTapped
+        enum View: Equatable {
+            case onCompletedSignInWithApple(TaskResult<ASAuthorization>)
+            case signInWithAppleButtonTapped(ASAuthorizationAppleIDRequest)
+            case signInWithGoogleButtonTapped
+        }
+
+        enum InternalAction: Equatable {
+            case signInWithAppleResponse(TaskResult<AppUser>)
+            case signInWithGoogleResponse(TaskResult<AppUser>)
+        }
+
+        enum DelegateAction: Equatable {
+            case userUpdated(AppUser)
         }
     }
 
@@ -37,33 +49,108 @@ struct Login: Reducer, Sendable {
     init() {}
 
     var body: some Reducer<State, Action> {
-        BindingReducer(action: /Action.view)
         Reduce { state, action in
             switch action {
             case .alert:
                 return .none
 
-            case .view(.binding):
-                state.isFormValid = !state.email.isEmpty && !state.password.isEmpty
-                return .none
-
-            case .view(.loginButtonTapped):
-                state.isLoginRequestInFlight = true
-                //                return .run { [email = state.email, password = state.password] send in
-                //                    await send(
-                //                        .loginResponse(
-                //                            await TaskResult {
-                //                                try await self.authenticationClient.login(
-                //                                    .init(email: email, password: password)
-                //                                )
-                //                            }
-                //                        )
-                //                    )
-                //                }
+            case let .view(viewAction):
+                switch viewAction {
+                case let .onCompletedSignInWithApple(result):
+                    switch result {
+                    case let .success(authorization):
+                        return .run { [nonce = state.currentNonce] send in
+                            await send(
+                                .internal(
+                                    .signInWithAppleResponse(
+                                        await TaskResult {
+                                            try await self.authenticationClient.handleSignInWithAppleResponse(
+                                                authorization,
+                                                nonce ?? ""
+                                            )
+                                        }
+                                    )
+                                )
+                            )
+                        }
+                    case let .failure(error):
+                        return .send(.internal(.signInWithAppleResponse(.failure(error))))
+                    }
+                case let .signInWithAppleButtonTapped(request):
+                    state.isLoading = true
+                    if let nonce = randomNonceString() {
+                        state.currentNonce = nonce
+                        request.requestedScopes = [.fullName, .email]
+                        request.nonce = sha256(nonce)
+                    } else {
+                        // TODO: show alert
+                    }
+                    return .none
+                case .signInWithGoogleButtonTapped:
+                    state.isLoading = true
+                    return .run { send in
+                        await send(
+                            .internal(
+                                .signInWithGoogleResponse(
+                                    await TaskResult {
+                                        try await self.authenticationClient.signInWithGoogle()
+                                    }
+                                )
+                            )
+                        )
+                    }
+                }
+            case let .internal(internalAction):
+                switch internalAction {
+                case let .signInWithAppleResponse(.success(user)):
+                    state.isLoading = false
+                    return .send(.delegate(.userUpdated(user)))
+                case let .signInWithAppleResponse(.failure(error)):
+                    state.isLoading = false
+                    return .none
+                case let .signInWithGoogleResponse(.success(user)):
+                    state.isLoading = false
+                    return .send(.delegate(.userUpdated(user)))
+                case let .signInWithGoogleResponse(.failure(error)):
+                    state.isLoading = false
+                    return .none
+                }
+            case .delegate:
                 return .none
             }
         }
         .ifLet(\.$alert, action: /Action.alert)
+    }
+}
+
+private extension Login {
+    private func randomNonceString(length: Int = 32) -> String? {
+        precondition(length > 0)
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        guard errorCode != errSecSuccess else {
+            return nil
+        }
+
+        let charset: [Character] =
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+
+        let nonce = randomBytes.map { byte in
+            // Pick a random character from the set, wrapping around if needed.
+            charset[Int(byte) % charset.count]
+        }
+
+        return String(nonce)
+    }
+
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
+
+        return hashString
     }
 }
 
@@ -83,62 +170,25 @@ struct LoginView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: \.view, send: { .view($0) }) { viewStore in
-            Form {
-                Text(
-                    """
-                    To login use any email and password.
-                    """
-                )
-
-                Section {
-                    TextField("blob@pointfree.co", text: viewStore.$email)
-                        .autocapitalization(.none)
-                        .keyboardType(.emailAddress)
-                        .textContentType(.emailAddress)
-
-                    SecureField("••••••••", text: viewStore.$password)
+        WithViewStore(self.store, observe: { $0 } ) { viewStore in
+            VStack(alignment: .leading, spacing: 12) {
+                SignInWithAppleButton { request in
+                    viewStore.send(.view(.signInWithAppleButtonTapped(request)))
+                } onCompletion: { result in
+                    viewStore.send(.view(.onCompletedSignInWithApple(.init(result))))
                 }
+                .frame(height: 44)
 
                 Button {
-                    // NB: SwiftUI will print errors to the console about "AttributeGraph: cycle detected" if
-                    //     you disable a text field while it is focused. This hack will force all fields to
-                    //     unfocus before we send the action to the view store.
-                    // CF: https://stackoverflow.com/a/69653555
-                    _ = UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil,
-                        from: nil,
-                        for: nil
-                    )
-                    viewStore.send(.loginButtonTapped)
+                    viewStore.send(.view(.signInWithGoogleButtonTapped))
                 } label: {
-                    HStack {
-                        Text("Log in")
-                        if viewStore.isActivityIndicatorVisible {
-                            Spacer()
-                            ProgressView()
-                        }
-                    }
+                    Text("sign in with google")
                 }
-                .disabled(viewStore.isLoginButtonDisabled)
             }
-            .disabled(viewStore.isFormDisabled)
+            .disabled(viewStore.isLoading)
             .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
+            .navigationTitle("Login")
         }
-        .navigationTitle("Login")
-    }
-}
-
-extension BindingViewStore<Login.State> {
-    var view: LoginView.ViewState {
-        LoginView.ViewState(
-            email: self.$email,
-            isActivityIndicatorVisible: self.isLoginRequestInFlight,
-            isFormDisabled: self.isLoginRequestInFlight,
-            isLoginButtonDisabled: !self.isFormValid,
-            password: self.$password
-        )
     }
 }
 

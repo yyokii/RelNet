@@ -95,6 +95,7 @@
 		F55BE3612ABCA24100289320 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
+		F59EF35F2B21E1370064C18D /* RelNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelNet.entitlements; sourceTree = "<group>"; };
 		F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedIconAndTitle.swift; sourceTree = "<group>"; };
 		F5AEDB632AD11967001263C1 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -167,6 +168,7 @@
 		F5405BD82A96F347002FA0C9 /* RelNet */ = {
 			isa = PBXGroup;
 			children = (
+				F59EF35F2B21E1370064C18D /* RelNet.entitlements */,
 				F5418A882A973EAC00511A67 /* App */,
 				F5418A8E2A9B758E00511A67 /* Extensions */,
 				F5405C172A970223002FA0C9 /* Entity */,
@@ -650,6 +652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RelNet/RelNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RelNet/App/Preview Content\"";
@@ -684,6 +687,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RelNet/RelNet.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"RelNet/App/Preview Content\"";

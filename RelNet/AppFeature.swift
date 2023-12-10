@@ -7,26 +7,32 @@
 
 import ComposableArchitecture
 import SwiftUI
+import _AuthenticationServices_SwiftUI
 
 struct AppFeature: Reducer {
     struct State: Equatable {
         var appUser: AppUser?
         var isLoading: Bool = true
+        var login: Login.State = .init()
     }
 
     enum Action: Equatable {
         case onAppear
         case signInWithGoogleButtonTapped
-
-        // Other Action
         case task
+
         case listenAuthStateResponse(TaskResult<AppUser?>)
         case signInWithGoogleResponse(TaskResult<AppUser>)
+
+        case login(Login.Action)
     }
 
     @Dependency(\.authenticationClient) private var authenticationClient
 
     var body: some ReducerOf<Self> {
+        Scope(state: \.login, action: /Action.login) {
+          Login()
+        }
         Reduce<State, Action> { state, action in
             switch action {
             case .onAppear:
@@ -34,7 +40,6 @@ struct AppFeature: Reducer {
 
             case .signInWithGoogleButtonTapped:
                 state.isLoading = true
-                // TODO: 別のReducerにしたいかも
                 return .run { send in
                     await send(
                         .signInWithGoogleResponse(
@@ -74,6 +79,13 @@ struct AppFeature: Reducer {
                 state.isLoading = false
                 print(error.localizedDescription)
                 return .none
+
+            case let .login(.delegate(.userUpdated(user))):
+                state.appUser = user
+                return .none
+
+            case .login:
+                return .none
             }
         }
     }
@@ -94,13 +106,12 @@ struct AppView: View {
                     if viewStore.isLoading {
                         ProgressView()
                     } else {
-                        VStack {
-                            Text("need to signin")
-                            Button {
-                                viewStore.send(.signInWithGoogleButtonTapped)
-                            } label: {
-                                Text("sign in with google")
-                            }
+                        NavigationView {
+                            LoginView(
+                                store: self.store.scope(
+                                    state: \.login,
+                                    action: AppFeature.Action.login)
+                            )
                         }
                     }
                 }
