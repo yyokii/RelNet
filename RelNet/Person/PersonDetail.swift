@@ -35,8 +35,8 @@ struct PersonDetail: Reducer {
         }
 
         enum DelegateAction: Equatable {
-            case deletePerson(String)
-            case updatePerson(Person)
+            case personDeleted(String)
+            case personUpdated(Person)
         }
     }
 
@@ -105,7 +105,7 @@ struct PersonDetail: Reducer {
                     print("📝 success delete person")
                     return .run { send in
                         await dismiss()
-                        await send(.delegate(.deletePerson(id)))
+                        await send(.delegate(.personDeleted(id)))
                     }
 
                 case .deletePersonResult(.failure(_)):
@@ -117,7 +117,7 @@ struct PersonDetail: Reducer {
                     state.person = person
                     state.destination = nil
                     return .run { send in
-                        await send(.delegate(.updatePerson(person)))
+                        await send(.delegate(.personUpdated(person)))
                     }
 
                 case .editPersonResult(.failure(_)):
