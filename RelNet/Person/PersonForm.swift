@@ -83,6 +83,13 @@ struct PersonFormView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             Form {
                 Section {
+                    groupList
+                } header: {
+                    Text("Groups")
+                }
+                .listRowBackground(Color.clear)
+
+                Section {
                     VStack {
                         TextField("名前", text: viewStore.$person.name)
                             .focused(self.$focus, equals: .name)
@@ -156,13 +163,6 @@ struct PersonFormView: View {
                 } header: {
                     Text("Additional Info")
                 }
-
-                Section {
-                    groupList
-                } header: {
-                    Text("Groups")
-                }
-                .listRowBackground(Color.clear)
             }
             .bind(viewStore.$focus, to: self.$focus)
         }
