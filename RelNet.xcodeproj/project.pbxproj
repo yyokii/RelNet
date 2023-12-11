@@ -36,6 +36,7 @@
 		F55BE3622ABCA24100289320 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3612ABCA24100289320 /* Color.swift */; };
 		F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF3592AD455CA0064C18D /* Button+Extensions.swift */; };
 		F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */; };
+		F5AB5E172B27863E00FBBA2A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F5AB5E162B27863E00FBBA2A /* Localizable.xcstrings */; };
 		F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */; };
 		F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5AEDB632AD11967001263C1 /* FlowLayout.swift */; };
 		F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3B8A2A9D6E30005528F9 /* Group.swift */; };
@@ -96,6 +97,7 @@
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
 		F59EF35F2B21E1370064C18D /* RelNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelNet.entitlements; sourceTree = "<group>"; };
+		F5AB5E162B27863E00FBBA2A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedIconAndTitle.swift; sourceTree = "<group>"; };
 		F5AEDB632AD11967001263C1 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		F5DC3B8A2A9D6E30005528F9 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 				F5DC3BAA2AA7191A005528F9 /* Info.plist */,
 				F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */,
 				F5405BDF2A96F348002FA0C9 /* Preview Content */,
+				F5AB5E162B27863E00FBBA2A /* Localizable.xcstrings */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -415,6 +418,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = F5405BCD2A96F347002FA0C9;
 			packageReferences = (
@@ -442,6 +446,7 @@
 			files = (
 				F5405BE12A96F348002FA0C9 /* Preview Assets.xcassets in Resources */,
 				F5405BDE2A96F348002FA0C9 /* Assets.xcassets in Resources */,
+				F5AB5E172B27863E00FBBA2A /* Localizable.xcstrings in Resources */,
 				F5405C112A96FCEA002FA0C9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

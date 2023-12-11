@@ -1,0 +1,229 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ persons" : {
+
+    },
+    "adaptiveBlack" : {
+
+    },
+    "adaptiveWhite" : {
+
+    },
+    "Add" : {
+
+    },
+    "Additional Info" : {
+
+    },
+    "App" : {
+
+    },
+    "appPrimary" : {
+
+    },
+    "appSecondary" : {
+
+    },
+    "Are you sure you want to delete this?" : {
+
+    },
+    "Basic Info" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete?" : {
+
+    },
+    "demo" : {
+
+    },
+    "Dismiss" : {
+
+    },
+    "Done" : {
+
+    },
+    "Edit" : {
+
+    },
+    "empty-groups-message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グループは現在ありません。\n「＋」ボタンから追加すると表示されます。"
+          }
+        }
+      }
+    },
+    "empty-persons-message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "登録されていません。\n「＋」ボタンから追加すると表示されます。"
+          }
+        }
+      }
+    },
+    "Family" : {
+
+    },
+    "Food" : {
+
+    },
+    "group name" : {
+
+    },
+    "groups" : {
+
+    },
+    "Groups" : {
+
+    },
+    "Info" : {
+
+    },
+    "knot" : {
+
+    },
+    "Login" : {
+
+    },
+    "Me" : {
+
+    },
+    "Music" : {
+
+    },
+    "name" : {
+
+    },
+    "New Group" : {
+
+    },
+    "New Person" : {
+
+    },
+    "persons" : {
+
+    },
+    "placeholderGray" : {
+
+    },
+    "Sign in with Google" : {
+
+    },
+    "Sign Out" : {
+
+    },
+    "Sign out now?" : {
+
+    },
+    "top card" : {
+
+    },
+    "Travel" : {
+
+    },
+    "Yes" : {
+
+    },
+    "Yes, sign out" : {
+
+    },
+    "アカウント" : {
+
+    },
+    "アレルギー" : {
+
+    },
+    "いつ会った？" : {
+
+    },
+    "お気に入りの場所" : {
+
+    },
+    "グループを削除します。人の情報は削除されません、ご安心ください。" : {
+
+    },
+    "サインアウト" : {
+
+    },
+    "サポート" : {
+
+    },
+    "ニックネーム" : {
+
+    },
+    "フリガナ" : {
+
+    },
+    "ペット" : {
+
+    },
+    "兄弟/姉妹" : {
+
+    },
+    "削除する" : {
+
+    },
+    "名前" : {
+
+    },
+    "好きなアーティスト" : {
+
+    },
+    "好きなお菓子" : {
+
+    },
+    "好きなこと" : {
+
+    },
+    "好きなジャンル" : {
+
+    },
+    "好きな曲" : {
+
+    },
+    "好きな食べ物" : {
+
+    },
+    "演奏できる楽器" : {
+
+    },
+    "生年月日" : {
+
+    },
+    "編集する" : {
+
+    },
+    "苦手なこと" : {
+
+    },
+    "苦手な食べ物" : {
+
+    },
+    "行った国" : {
+
+    },
+    "親" : {
+
+    },
+    "趣味" : {
+
+    },
+    "追加" : {
+
+    }
+  },
+  "version" : "1.0"
+}

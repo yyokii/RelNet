@@ -12,31 +12,38 @@ struct SortedPersonsView: View {
     let onTapPerson: (Person) -> Void
 
     var body: some View {
-        LazyVStack(alignment: .leading, spacing: 12) {
-            ForEach(sortedItems.keys.sorted(), id: \.self) { key in
-                VStack(alignment: .leading) {
-                    Text(key)
-                        .font(.headline)
-                        .foregroundColor(.adaptiveWhite)
-                        .frame(width: 16, height: 16)
-                        .padding(8)
-                        .background {
-                            Circle()
-                                .fill(Color.adaptiveBlack)
-                        }
-
-                    LazyVStack(alignment: .leading, spacing: 8) {
-                        ForEach(sortedItems[key]!, id: \.self) { person in
-                            Button {
-                                onTapPerson(person)
-                            } label: {
-                                Text(person.name)
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .contentShape(Rectangle())
+        if sortedItems.isEmpty {
+            Text("empty-persons-message")
+                .font(.callout)
+                .multilineTextAlignment(.center)
+                .foregroundStyle(.gray)
+        } else {
+            VStack(alignment: .leading, spacing: 12) {
+                ForEach(sortedItems.keys.sorted(), id: \.self) { key in
+                    VStack(alignment: .leading) {
+                        Text(key)
+                            .font(.headline)
+                            .foregroundColor(.adaptiveWhite)
+                            .frame(width: 16, height: 16)
+                            .padding(8)
+                            .background {
+                                Circle()
+                                    .fill(Color.adaptiveBlack)
                             }
-                            .buttonStyle(.plain)
-                            .padding(.horizontal)
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            ForEach(sortedItems[key]!, id: \.self) { person in
+                                Button {
+                                    onTapPerson(person)
+                                } label: {
+                                    Text(person.name)
+                                        .font(.headline)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .contentShape(Rectangle())
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.horizontal)
+                            }
                         }
                     }
                 }
@@ -52,8 +59,18 @@ struct SortedPersonsView: View {
 
 #if DEBUG
 
-    struct SortedPersonsView_Previews: PreviewProvider {
-        static var previews: some View {
+var SortedPersonsView_Preview: some View {
+    NavigationView {
+        VStack {
+            SortedPersonsView(
+                sortedItems: [:],
+                onTapPerson: { person in
+                    print("\(person.name) is tapped")
+                }
+            )
+
+            Divider()
+
             SortedPersonsView(
                 sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
                 onTapPerson: { person in
@@ -61,6 +78,19 @@ struct SortedPersonsView: View {
                 }
             )
         }
+        .padding()
     }
+}
+
+
+#Preview("light") {
+    SortedPersonsView_Preview
+        .environment(\.colorScheme, .light)
+}
+
+#Preview("dark") {
+    SortedPersonsView_Preview
+        .environment(\.colorScheme, .dark)
+}
 
 #endif
