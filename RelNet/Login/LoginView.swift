@@ -5,8 +5,8 @@
 //  Created by Higashihara Yoki on 2023/09/04.
 //
 
-import CryptoKit
 import ComposableArchitecture
+import CryptoKit
 import Dispatch
 import SwiftUI
 import _AuthenticationServices_SwiftUI
@@ -133,7 +133,7 @@ private extension Login {
         }
 
         let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
 
         let nonce = randomBytes.map { byte in
             // Pick a random character from the set, wrapping around if needed.
@@ -146,9 +146,11 @@ private extension Login {
     private func sha256(_ input: String) -> String {
         let inputData = Data(input.utf8)
         let hashedData = SHA256.hash(data: inputData)
-        let hashString = hashedData.compactMap {
-            String(format: "%02x", $0)
-        }.joined()
+        let hashString =
+            hashedData.compactMap {
+                String(format: "%02x", $0)
+            }
+            .joined()
 
         return hashString
     }
@@ -170,7 +172,7 @@ struct LoginView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 } ) { viewStore in
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 12) {
                 SignInWithAppleButton { request in
                     viewStore.send(.view(.signInWithAppleButtonTapped(request)))

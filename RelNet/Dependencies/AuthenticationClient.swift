@@ -6,8 +6,8 @@
 //
 
 import AuthenticationServices
-import CryptoKit
 import ComposableArchitecture
+import CryptoKit
 import FirebaseAuth
 import FirebaseCore
 import Foundation
@@ -57,11 +57,12 @@ extension AuthenticationClient: DependencyKey {
         },
         handleSignInWithAppleResponse: { authorization, currentNonce in
             guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,
-                  let appleIDToken = appleIDCredential.identityToken,
-                  let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                let appleIDToken = appleIDCredential.identityToken,
+                let idTokenString = String(data: appleIDToken, encoding: .utf8)
+            else {
                 throw AuthenticationClientError.notFoundIdToken
             }
-            let credential = OAuthProvider.credential(withProviderID: "apple.com",idToken: idTokenString,rawNonce: currentNonce)
+            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: currentNonce)
             return try await signIn(with: credential)
         },
         listenAuthState: {

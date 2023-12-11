@@ -31,7 +31,7 @@ struct AppFeature: Reducer {
 
     var body: some ReducerOf<Self> {
         Scope(state: \.login, action: /Action.login) {
-          Login()
+            Login()
         }
         Reduce<State, Action> { state, action in
             switch action {
@@ -110,7 +110,8 @@ struct AppView: View {
                             LoginView(
                                 store: self.store.scope(
                                     state: \.login,
-                                    action: AppFeature.Action.login)
+                                    action: AppFeature.Action.login
+                                )
                             )
                         }
                     }
