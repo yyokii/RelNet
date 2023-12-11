@@ -158,38 +158,53 @@ private extension Login {
 
 struct LoginView: View {
     let store: StoreOf<Login>
+    @ObservedObject var viewStore: ViewStoreOf<Login>
 
-    struct ViewState: Equatable {
-        @BindingViewState var email: String
-        var isActivityIndicatorVisible: Bool
-        var isFormDisabled: Bool
-        var isLoginButtonDisabled: Bool
-        @BindingViewState var password: String
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            signInButtons
+        }
+        .padding(.horizontal, 24)
+        .disabled(viewStore.isLoading)
+        .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
+        .navigationTitle("Login")
     }
 
     init(store: StoreOf<Login>) {
         self.store = store
+        self.viewStore = ViewStore(self.store, observe: { $0 })
     }
+}
 
-    var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading, spacing: 12) {
-                SignInWithAppleButton { request in
-                    viewStore.send(.view(.signInWithAppleButtonTapped(request)))
-                } onCompletion: { result in
-                    viewStore.send(.view(.onCompletedSignInWithApple(.init(result))))
-                }
-                .frame(height: 44)
-
-                Button {
-                    viewStore.send(.view(.signInWithGoogleButtonTapped))
-                } label: {
-                    Text("sign in with google")
-                }
+private extension LoginView {
+    var signInButtons: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SignInWithAppleButton { request in
+                viewStore.send(.view(.signInWithAppleButtonTapped(request)))
+            } onCompletion: { result in
+                viewStore.send(.view(.onCompletedSignInWithApple(.init(result))))
             }
-            .disabled(viewStore.isLoading)
-            .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
-            .navigationTitle("Login")
+            .frame(height: 50)
+
+            Button {
+                viewStore.send(.view(.signInWithGoogleButtonTapped))
+            } label: {
+                HStack(alignment: .center, spacing: 6) {
+                    Image(.googleLogo)
+                        .resizable()
+                        .frame(width: 16, height: 16)
+                    Text("Sign in with Google")
+                        .font(.title3)
+                        .foregroundStyle(Color.adaptiveBlack)
+                }
+                .frame(maxWidth: .infinity)
+
+            }
+            .frame(height: 50)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .strokeBorder(Color.gray, lineWidth: 1)
+            }
         }
     }
 }
