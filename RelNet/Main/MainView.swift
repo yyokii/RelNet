@@ -236,17 +236,16 @@ struct Main: Reducer {
 
 struct MainView: View {
     let store: StoreOf<Main>
+    @ObservedObject var viewStore: ViewStoreOf<Main>
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 32) {
-                    groupList
-                        .padding(.top)
-                    personsList
-                }
-                .padding(.horizontal)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 32) {
+                groupList
+                    .padding(.top)
+                personsList
             }
+            .padding(.horizontal)
             .navigationTitle("knot")
             .task {
                 await viewStore.send(.view(.listenGroups)).finish()
@@ -314,18 +313,30 @@ struct MainView: View {
             }
         }
     }
+
+    init(store: StoreOf<Main>) {
+        self.store = store
+        self.viewStore = ViewStore(self.store, observe: { $0 })
+    }
 }
 
 private extension MainView {
     var groupList: some View {
-        WithViewStore(self.store, observe: \.groups) { viewStore in
-            VStack(alignment: .leading, spacing: 24) {
-                listHeader(
-                    title: "グループ",
-                    addAction: { viewStore.send(.view(.addGroupButtonTapped)) }
-                )
+        VStack(alignment: .leading, spacing: 24) {
+            listHeader(
+                title: "グループ",
+                addAction: { viewStore.send(.view(.addGroupButtonTapped)) }
+            )
+            if viewStore.groups.isEmpty {
+                Text("empty-groups-message")
+                    .font(.callout)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.gray)
+                    .frame(height: 60)
+                    .frame(maxWidth: .infinity)
+            } else {
                 FlowLayout(alignment: .leading, spacing: 8) {
-                    ForEach(viewStore.state) { group in
+                    ForEach(viewStore.groups) { group in
                         Button {
                             viewStore.send(.view(.groupCardTapped(group)))
                         } label: {
@@ -339,20 +350,18 @@ private extension MainView {
     }
 
     var personsList: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading, spacing: 24) {
-                listHeader(
-                    title: "人物",
-                    addAction: { viewStore.send(.view(.addPersonButtonTapped)) }
-                )
+        VStack(alignment: .leading, spacing: 24) {
+            listHeader(
+                title: "人物",
+                addAction: { viewStore.send(.view(.addPersonButtonTapped)) }
+            )
 
-                SortedPersonsView(
-                    sortedItems: viewStore.sortedPersons,
-                    onTapPerson: { person in
-                        viewStore.send(.view(.personItemTapped(person)))
-                    }
-                )
-            }
+            SortedPersonsView(
+                sortedItems: viewStore.sortedPersons,
+                onTapPerson: { person in
+                    viewStore.send(.view(.personItemTapped(person)))
+                }
+            )
         }
     }
 
@@ -370,20 +379,64 @@ private extension MainView {
             Button {
                 addAction()
             } label: {
-                Text("追加")
+                HStack(alignment: .center, spacing: 8) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 20))
+                    Text("追加")
+                }
             }
         }
     }
 }
 
-struct MainView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MainView(
-                store: Store(initialState: Main.State()) {
-                    Main()
+#if DEBUG
+
+#Preview("light") {
+    NavigationView {
+        MainView(
+            store: Store(initialState: Main.State()) {
+                Main()
+            }
+        )
+    }
+    .environment(\.colorScheme, .light)
+}
+
+#Preview("dark") {
+    NavigationView {
+        MainView(
+            store: Store(initialState: Main.State()) {
+                Main()
+            }
+        )
+    }
+    .environment(\.colorScheme, .dark)
+}
+
+#Preview("空") {
+    NavigationView {
+        MainView(
+            store: Store(initialState: Main.State()) {
+                Main()
+            } withDependencies: {
+                $0.personClient.listenGroups = {
+                    AsyncThrowingStream { continuation in
+                        let persons: [Group] = []
+                        continuation.yield(IdentifiedArray(uniqueElements: persons))
+                        continuation.finish()
+                    }
                 }
-            )
-        }
+                $0.personClient.listenPersons = {
+                    AsyncThrowingStream { continuation in
+                        let persons: [Person] = []
+                        continuation.yield(IdentifiedArray(uniqueElements: persons))
+                        continuation.finish()
+                    }
+                }
+            }
+        )
     }
 }
+
+
+#endif

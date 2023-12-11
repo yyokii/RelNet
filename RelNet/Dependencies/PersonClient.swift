@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
+// TODO: AppClient とかにrenameした方がいいかも
 struct PersonClient: Sendable {
 
     @Dependency(\.authenticationClient) private static var authenticationClient
@@ -200,7 +201,6 @@ extension PersonClient: DependencyKey {
 extension PersonClient: TestDependencyKey {
     static let previewValue = Self(
         listenGroups: {
-            // TODO: previewに反映されない
             AsyncThrowingStream { continuation in
                 let persons: [Group] = [
                     .mock(id: "id-1"),

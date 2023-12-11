@@ -17,6 +17,8 @@ struct SortedPersonsView: View {
                 .font(.callout)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.gray)
+                .frame(height: 160)
+                .frame(maxWidth: .infinity)
         } else {
             VStack(alignment: .leading, spacing: 12) {
                 ForEach(sortedItems.keys.sorted(), id: \.self) { key in
