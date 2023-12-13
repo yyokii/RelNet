@@ -11,18 +11,23 @@ import SwiftUI
 
 struct MyPage: Reducer, Sendable {
     struct State: Equatable {
+        let appVersion = AppVersion.current
+
         @PresentationState var alert: AlertState<Action.Alert>?
-        var openInquiry: Bool = false
+
+        @BindingState var isInquiryPresenting: Bool = false
 
         init() {}
     }
 
-    enum Action: Equatable, Sendable {
+    enum Action: BindableAction, Equatable, Sendable {
         case alert(PresentationAction<Alert>)
         case inquiryButtonTapped
         case signOutButtonTapped
         case signOutResponse(TaskResult<VoidSuccess>)
-        case versionButtonTapped(AppVersion)
+        case versionButtonTapped
+
+        case binding(BindingAction<State>)
 
         enum Alert: Equatable {
             case confirmSignOut
@@ -34,9 +39,9 @@ struct MyPage: Reducer, Sendable {
     init() {}
 
     var body: some Reducer<State, Action> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
-
             case .alert(.presented(.confirmSignOut)):
                 return .run { send in
                     await send(
@@ -52,7 +57,7 @@ struct MyPage: Reducer, Sendable {
                 return .none
 
             case .inquiryButtonTapped:
-                state.openInquiry = true
+                state.isInquiryPresenting = true
                 return .none
 
             case .signOutButtonTapped:
@@ -66,8 +71,11 @@ struct MyPage: Reducer, Sendable {
                 print(error.localizedDescription)
                 return .none
 
-            case .versionButtonTapped(let appVersion):
-                UIPasteboard.general.string = appVersion.versionText
+            case .versionButtonTapped:
+                UIPasteboard.general.string = state.appVersion.versionText
+                return .none
+
+            case .binding:
                 return .none
             }
         }
@@ -77,20 +85,7 @@ struct MyPage: Reducer, Sendable {
 
 struct MyPageView: View {
     let store: StoreOf<MyPage>
-
-    struct ViewState: Equatable {
-        @BindingViewState var email: String
-        var isActivityIndicatorVisible: Bool
-        var isFormDisabled: Bool
-        var isLoginButtonDisabled: Bool
-        @BindingViewState var password: String
-    }
-
-    private let appVersion = AppVersion.current
-
-    init(store: StoreOf<MyPage>) {
-        self.store = store
-    }
+    @ObservedObject var viewStore: ViewStoreOf<MyPage>
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
@@ -106,8 +101,8 @@ struct MyPageView: View {
                     }
 
                     Section("サポート") {
-                        inquiry(viewStore: viewStore)
-                        version(viewStore: viewStore)
+                        inquiryRow
+                        versionRow
                     }
 
                     Section("アカウント") {
@@ -124,6 +119,11 @@ struct MyPageView: View {
             .alert(store: self.store.scope(state: \.$alert, action: MyPage.Action.alert))
         }
         .navigationTitle("Login")
+    }
+
+    init(store: StoreOf<MyPage>) {
+        self.store = store
+        self.viewStore = ViewStore(self.store, observe: { $0 })
     }
 }
 
@@ -159,7 +159,7 @@ private extension MyPageView {
         }
     }
 
-    func inquiry(viewStore: ViewStore<MyPage.State, MyPage.Action>) -> some View {
+    var inquiryRow: some View {
         Button(action: {
             viewStore.send(.inquiryButtonTapped)
         }) {
@@ -169,24 +169,20 @@ private extension MyPageView {
         }
         .buttonStyle(.plain)
         .sheet(
-            isPresented:
-                viewStore.binding(
-                    get: \.openInquiry,
-                    send: MyPage.Action.inquiryButtonTapped
-                )
+            isPresented: viewStore.$isInquiryPresenting
         ) {
             SafariView(url: .init(string: "https://www.google.com/?hl=ja")!)
         }
     }
 
-    func version(viewStore: ViewStore<MyPage.State, MyPage.Action>) -> some View {
+    var versionRow: some View {
         Button(action: {
-            viewStore.send(.versionButtonTapped(appVersion))
+            viewStore.send(.versionButtonTapped)
         }) {
             HStack {
                 RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: "バージョン")
                 Spacer()
-                Text(appVersion.versionText)
+                Text(viewStore.appVersion.versionText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
