@@ -5,8 +5,8 @@
 //  Created by Higashihara Yoki on 2023/12/14.
 //
 
-import Foundation
 import FirebaseAuth
+import Foundation
 
 struct AppUser: Equatable {
     let uid: String
@@ -26,16 +26,16 @@ struct AppUser: Equatable {
 
 #if DEBUG
 
-extension AppUser {
-    init(
-        uid: String = UUID().uuidString,
-        name: String = "demo name",
-        photoURL: URL? = URL(string: "https://picsum.photos/200")!
-    ) {
-        self.uid = uid
-        self.name = name
-        self.photoURL = photoURL
+    extension AppUser {
+        init(
+            uid: String = UUID().uuidString,
+            name: String = "demo name",
+            photoURL: URL? = URL(string: "https://picsum.photos/200")!
+        ) {
+            self.uid = uid
+            self.name = name
+            self.photoURL = photoURL
+        }
     }
-}
 
 #endif

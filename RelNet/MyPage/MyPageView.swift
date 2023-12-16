@@ -211,20 +211,20 @@ private extension MyPageView {
 
 #if DEBUG
 
-struct MyPageView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            MyPageView(
-                store: Store(initialState: MyPage.State()) {
-                    MyPage()
-                } withDependencies: {
-                    $0.authenticationClient.currentUser = {
-                        return .init()
+    struct MyPageView_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationStack {
+                MyPageView(
+                    store: Store(initialState: MyPage.State()) {
+                        MyPage()
+                    } withDependencies: {
+                        $0.authenticationClient.currentUser = {
+                            return .init()
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
-}
 
 #endif

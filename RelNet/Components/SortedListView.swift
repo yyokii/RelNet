@@ -61,38 +61,37 @@ struct SortedPersonsView: View {
 
 #if DEBUG
 
-var SortedPersonsView_Preview: some View {
-    NavigationView {
-        VStack {
-            SortedPersonsView(
-                sortedItems: [:],
-                onTapPerson: { person in
-                    print("\(person.name) is tapped")
-                }
-            )
+    var SortedPersonsView_Preview: some View {
+        NavigationView {
+            VStack {
+                SortedPersonsView(
+                    sortedItems: [:],
+                    onTapPerson: { person in
+                        print("\(person.name) is tapped")
+                    }
+                )
 
-            Divider()
+                Divider()
 
-            SortedPersonsView(
-                sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
-                onTapPerson: { person in
-                    print("\(person.name) is tapped")
-                }
-            )
+                SortedPersonsView(
+                    sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
+                    onTapPerson: { person in
+                        print("\(person.name) is tapped")
+                    }
+                )
+            }
+            .padding()
         }
-        .padding()
     }
-}
 
+    #Preview("light") {
+        SortedPersonsView_Preview
+            .environment(\.colorScheme, .light)
+    }
 
-#Preview("light") {
-    SortedPersonsView_Preview
-        .environment(\.colorScheme, .light)
-}
-
-#Preview("dark") {
-    SortedPersonsView_Preview
-        .environment(\.colorScheme, .dark)
-}
+    #Preview("dark") {
+        SortedPersonsView_Preview
+            .environment(\.colorScheme, .dark)
+    }
 
 #endif

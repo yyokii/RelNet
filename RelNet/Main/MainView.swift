@@ -246,7 +246,7 @@ struct MainView: View {
             .padding(.horizontal)
         }
         .navigationTitle("knot")
-        .toolbar{
+        .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 gearButton
             }
@@ -410,52 +410,51 @@ private extension MainView {
 
 #if DEBUG
 
-#Preview("light") {
-    NavigationView {
-        MainView(
-            store: Store(initialState: Main.State()) {
-                Main()
-            }
-        )
+    #Preview("light") {
+        NavigationView {
+            MainView(
+                store: Store(initialState: Main.State()) {
+                    Main()
+                }
+            )
+        }
+        .environment(\.colorScheme, .light)
     }
-    .environment(\.colorScheme, .light)
-}
 
-#Preview("dark") {
-    NavigationView {
-        MainView(
-            store: Store(initialState: Main.State()) {
-                Main()
-            }
-        )
+    #Preview("dark") {
+        NavigationView {
+            MainView(
+                store: Store(initialState: Main.State()) {
+                    Main()
+                }
+            )
+        }
+        .environment(\.colorScheme, .dark)
     }
-    .environment(\.colorScheme, .dark)
-}
 
-#Preview("空") {
-    NavigationView {
-        MainView(
-            store: Store(initialState: Main.State()) {
-                Main()
-            } withDependencies: {
-                $0.personClient.listenGroups = {
-                    AsyncThrowingStream { continuation in
-                        let persons: [Group] = []
-                        continuation.yield(IdentifiedArray(uniqueElements: persons))
-                        continuation.finish()
+    #Preview("空") {
+        NavigationView {
+            MainView(
+                store: Store(initialState: Main.State()) {
+                    Main()
+                } withDependencies: {
+                    $0.personClient.listenGroups = {
+                        AsyncThrowingStream { continuation in
+                            let persons: [Group] = []
+                            continuation.yield(IdentifiedArray(uniqueElements: persons))
+                            continuation.finish()
+                        }
+                    }
+                    $0.personClient.listenPersons = {
+                        AsyncThrowingStream { continuation in
+                            let persons: [Person] = []
+                            continuation.yield(IdentifiedArray(uniqueElements: persons))
+                            continuation.finish()
+                        }
                     }
                 }
-                $0.personClient.listenPersons = {
-                    AsyncThrowingStream { continuation in
-                        let persons: [Person] = []
-                        continuation.yield(IdentifiedArray(uniqueElements: persons))
-                        continuation.finish()
-                    }
-                }
-            }
-        )
+            )
+        }
     }
-}
-
 
 #endif

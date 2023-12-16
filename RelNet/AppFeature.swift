@@ -99,42 +99,42 @@ struct AppView: View {
 
 #if DEBUG
 
-#Preview("light") {
-    NavigationView {
-        AppView(
-            store: Store(initialState: AppFeature.State()) {
-                AppFeature()
-            } withDependencies: {
-                $0.authenticationClient.listenAuthState = {
-                    AsyncThrowingStream { continuation in
-                        let user = AppUser.init()
-                        continuation.yield(user)
-                        continuation.finish()
+    #Preview("light") {
+        NavigationView {
+            AppView(
+                store: Store(initialState: AppFeature.State()) {
+                    AppFeature()
+                } withDependencies: {
+                    $0.authenticationClient.listenAuthState = {
+                        AsyncThrowingStream { continuation in
+                            let user = AppUser.init()
+                            continuation.yield(user)
+                            continuation.finish()
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
+        .environment(\.colorScheme, .light)
     }
-    .environment(\.colorScheme, .light)
-}
 
-#Preview("dark") {
-    NavigationView {
-        AppView(
-            store: Store(initialState: AppFeature.State()) {
-                AppFeature()
-            } withDependencies: {
-                $0.authenticationClient.listenAuthState = {
-                    AsyncThrowingStream { continuation in
-                        let user = AppUser.init()
-                        continuation.yield(user)
-                        continuation.finish()
+    #Preview("dark") {
+        NavigationView {
+            AppView(
+                store: Store(initialState: AppFeature.State()) {
+                    AppFeature()
+                } withDependencies: {
+                    $0.authenticationClient.listenAuthState = {
+                        AsyncThrowingStream { continuation in
+                            let user = AppUser.init()
+                            continuation.yield(user)
+                            continuation.finish()
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
+        .environment(\.colorScheme, .dark)
     }
-    .environment(\.colorScheme, .dark)
-}
 
 #endif
