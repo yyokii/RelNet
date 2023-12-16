@@ -334,6 +334,7 @@ private extension MainView {
                             Text(group.name)
                                 .groupItemText()
                         }
+                        .buttonStyle(.plain)
                     }
                 }
             }
@@ -376,7 +377,7 @@ private extension MainView {
                     Text("追加")
                 }
             }
-        }
+            .foregroundStyle(Color.appAccent)}
     }
 
     func groupForm(store: StoreOf<GroupForm>) -> some View {

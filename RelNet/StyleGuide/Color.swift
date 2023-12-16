@@ -20,15 +20,10 @@ extension Color {
     }
 
     /*
-     primary: 頻繁に仕様される、アプリの基調となる色。
-     secondary: 強調したり他と区別するために仕様する色。多様してこの色が目立ちすぎないように注意。
-     primary/secondary valiant: dark/light 同系統の色にしたいが、UI要素の違いがある場合にvaliantを作成し色の差異をつける。
+     白、黒 + アクセント色で基本的に表現する
      */
-    public static let appPrimary = Self {
-        $0.userInterfaceStyle == .dark ? hex(0xf5f5f5) : .black
-    }
-    public static let appSecondary = Self {
-        $0.userInterfaceStyle == .dark ? hex(0x525252) : hex(0xefefef)
+    public static let appAccent = Self {_ in
+        .red
     }
 
     public static func hex(_ hex: UInt) -> Self {
@@ -86,14 +81,8 @@ extension Color {
                     HStack {
                         VStack {
                             RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.appPrimary)
-                            Text("appPrimary")
-                        }
-
-                        VStack {
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.appSecondary)
-                            Text("appSecondary")
+                                .foregroundColor(.appAccent)
+                            Text("appAccent")
                         }
                     }
 

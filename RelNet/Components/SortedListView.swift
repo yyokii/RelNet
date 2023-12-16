@@ -20,9 +20,9 @@ struct SortedPersonsView: View {
                 .frame(height: 160)
                 .frame(maxWidth: .infinity)
         } else {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 32) {
                 ForEach(sortedItems.keys.sorted(), id: \.self) { key in
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(key)
                             .font(.headline)
                             .foregroundColor(.adaptiveWhite)
@@ -74,7 +74,11 @@ struct SortedPersonsView: View {
                 Divider()
 
                 SortedPersonsView(
-                    sortedItems: ["A": [.mock(id: "id-1")], "T": [.mock(id: "id-2")], "あ": [.mock(id: "id-3")]],
+                    sortedItems: [
+                        "A": [.mock(id: "id-1"), .mock(id: "id-1-2")],
+                        "T": [.mock(id: "id-2")],
+                        "あ": [.mock(id: "id-3")]
+                    ],
                     onTapPerson: { person in
                         print("\(person.name) is tapped")
                     }
