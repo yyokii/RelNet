@@ -195,7 +195,7 @@ struct PersonsListView: View {
                 )
                 .padding()
             }
-            .navigationTitle("\(viewStore.state.selectedGroup.name) persons")
+            .navigationTitle("\(viewStore.state.selectedGroup.name)")
             .toolbar {
                 headerMenu
             }
@@ -226,7 +226,7 @@ struct PersonsListView: View {
                                 }
                             }
                             ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") {
+                                Button("done-button-title") {
                                     viewStore.send(.doneEditingGroupButtonTapped)
                                 }
                             }
@@ -244,7 +244,7 @@ private extension PersonsListView {
                 store.send(.editGroupButtonTapped)
             } label: {
                 HStack {
-                    Text("編集する")
+                    Text("edit-button-title")
                     Image(systemName: "pencil")
                         .font(.system(size: 20))
                         .foregroundColor(.primary)
@@ -254,7 +254,7 @@ private extension PersonsListView {
             HapticButton {
                 store.send(.deleteGroupButtonTapped)
             } label: {
-                Text("削除する")
+                Text("delete-button-title")
                 Image(systemName: "trash")
                     .font(.system(size: 16))
                     .foregroundColor(.primary)

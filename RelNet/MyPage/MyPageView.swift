@@ -122,7 +122,6 @@ struct MyPageView: View {
             }
             .alert(store: self.store.scope(state: \.$alert, action: MyPage.Action.alert))
         }
-        .navigationTitle("Login")
     }
 
     init(store: StoreOf<MyPage>) {
@@ -133,20 +132,16 @@ struct MyPageView: View {
 
 extension AlertState where Action == MyPage.Action.Alert {
     static let signOut = Self {
-        TextState("Sign Out")
+        TextState("sign-out-alert-title")
     } actions: {
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
         ButtonState(role: .destructive, action: .confirmSignOut) {
-            TextState("Yes, sign out")
+            TextState("yes")
         }
     } message: {
-        TextState(
-            """
-            Sign out now?
-            """
-        )
+        TextState("")
     }
 }
 

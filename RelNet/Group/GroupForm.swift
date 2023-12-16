@@ -50,11 +50,11 @@ struct GroupFormView: View {
             Form {
                 Section {
                     VStack {
-                        TextField("name", text: viewStore.$group.name)
+                        TextField("group-name-title", text: viewStore.$group.name)
                             .focused(self.$focus, equals: .name)
                     }
                 } header: {
-                    Text("Info")
+                    Text("group-section-title")
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)

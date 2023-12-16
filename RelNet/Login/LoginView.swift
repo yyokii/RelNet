@@ -167,7 +167,7 @@ struct LoginView: View {
         .padding(.horizontal, 24)
         .disabled(viewStore.isLoading)
         .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
-        .navigationTitle("Login")
+        .navigationTitle("login-title")
     }
 
     init(store: StoreOf<Login>) {
@@ -193,7 +193,7 @@ private extension LoginView {
                     Image(.googleLogo)
                         .resizable()
                         .frame(width: 16, height: 16)
-                    Text("Sign in with Google")
+                    Text("sign-in-with-google-button-title")
                         .font(.title3)
                         .foregroundStyle(Color.adaptiveBlack)
                 }

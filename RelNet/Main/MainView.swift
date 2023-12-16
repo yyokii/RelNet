@@ -49,8 +49,6 @@ struct Main: Reducer {
             case addPersonButtonTapped
             case confirmAddGroupButtonTapped
             case confirmAddPersonButtonTapped
-            case dismissAddGroupButtonTapped
-            case dismissAddPersonButtonTapped
             case gearButtonTapped
             case groupCardTapped(Group)
             case listenGroups
@@ -153,12 +151,6 @@ struct Main: Reducer {
                             )
                         )
                     }
-                case .dismissAddGroupButtonTapped:
-                    state.destination = nil
-                    return .none
-                case .dismissAddPersonButtonTapped:
-                    state.destination = nil
-                    return .none
                 case .gearButtonTapped:
                     state.destination = .myPage(.init())
                     return .none
@@ -351,7 +343,7 @@ private extension MainView {
     var personsList: some View {
         VStack(alignment: .leading, spacing: 24) {
             listHeader(
-                title: "人物",
+                title: String(localized: "person-list-title"),
                 addAction: { viewStore.send(.view(.addPersonButtonTapped)) }
             )
 
@@ -390,15 +382,10 @@ private extension MainView {
     func groupForm(store: StoreOf<GroupForm>) -> some View {
         NavigationView {
             GroupFormView(store: store)
-                .navigationTitle("New Group")
+                .navigationTitle("group-form-title")
                 .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Dismiss") {
-                            viewStore.send(.view(.dismissAddGroupButtonTapped))
-                        }
-                    }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Add") {
+                        Button("add-button-title") {
                             viewStore.send(.view(.confirmAddGroupButtonTapped))
                         }
                     }
@@ -409,15 +396,10 @@ private extension MainView {
     func personForm(store: StoreOf<PersonForm>) -> some View {
         NavigationView {
             PersonFormView(store: store)
-                .navigationTitle("New Person")
+                .navigationTitle("person-form-title")
                 .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Dismiss") {
-                            viewStore.send(.view(.dismissAddPersonButtonTapped))
-                        }
-                    }
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Add") {
+                        Button("add-button-title") {
                             viewStore.send(.view(.confirmAddPersonButtonTapped))
                         }
                     }

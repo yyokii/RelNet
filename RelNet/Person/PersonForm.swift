@@ -85,7 +85,7 @@ struct PersonFormView: View {
                 Section {
                     groupList
                 } header: {
-                    Text("Groups")
+                    Text("group-section-title")
                 }
                 .listRowBackground(Color.clear)
 
@@ -106,7 +106,7 @@ struct PersonFormView: View {
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
                 } header: {
-                    Text("Basic Info")
+                    Text("basic-info-section-title")
                 }
 
                 Section {
@@ -116,7 +116,7 @@ struct PersonFormView: View {
                         TextField("ペット", text: viewStore.$person.pets.toUnwrapped(defaultValue: ""))
                     }
                 } header: {
-                    Text("Family")
+                    Text("family-section-title")
                 }
 
                 Section {
@@ -127,7 +127,7 @@ struct PersonFormView: View {
                         TextField("苦手な食べ物", text: viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""))
                     }
                 } header: {
-                    Text("Food")
+                    Text("food-section-title")
                 }
 
                 Section {
@@ -138,7 +138,7 @@ struct PersonFormView: View {
                         TextField("演奏できる楽器", text: viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""))
                     }
                 } header: {
-                    Text("Music")
+                    Text("music-section-title")
                 }
 
                 Section {
@@ -147,21 +147,7 @@ struct PersonFormView: View {
                         TextField("お気に入りの場所", text: viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""))
                     }
                 } header: {
-                    Text("Travel")
-                }
-
-                Section {
-                    VStack {
-                        Button {
-                            viewStore.send(.contactedTodayButtonTapped)
-                        } label: {
-                            Text("いつ会った？")
-                        }
-
-                        TextEditor(text: viewStore.$person.notes.toUnwrapped(defaultValue: ""))
-                    }
-                } header: {
-                    Text("Additional Info")
+                    Text("travel-section-title")
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)

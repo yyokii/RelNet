@@ -1,7 +1,10 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ persons" : {
+    "" : {
+
+    },
+    "%@" : {
 
     },
     "adaptiveBlack" : {
@@ -10,11 +13,22 @@
     "adaptiveWhite" : {
 
     },
-    "Add" : {
-
-    },
-    "Additional Info" : {
-
+    "add-button-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加"
+          }
+        }
+      }
     },
     "appPrimary" : {
 
@@ -22,29 +36,90 @@
     "appSecondary" : {
 
     },
-    "Are you sure you want to delete this?" : {
-
+    "basic-info-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic info"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "基本情報"
+          }
+        }
+      }
     },
-    "Basic Info" : {
-
+    "cancel" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
     },
     "Cancel" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
     },
-    "Delete" : {
-
+    "delete-alert-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除してもよろしいですか？"
+          }
+        }
+      }
+    },
+    "delete-button-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除する"
+          }
+        }
+      }
     },
     "Delete?" : {
 
     },
-    "Dismiss" : {
-
+    "done-button-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        }
+      }
     },
-    "Done" : {
-
-    },
-    "Edit" : {
-
+    "edit-button-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編集する"
+          }
+        }
+      }
     },
     "empty-groups-message" : {
       "extractionState" : "manual",
@@ -68,67 +143,198 @@
         }
       }
     },
-    "Family" : {
-
+    "family-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Family"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "家族"
+          }
+        }
+      }
     },
-    "Food" : {
-
+    "food-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Food"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "食べ物"
+          }
+        }
+      }
     },
     "group name" : {
 
     },
-    "Groups" : {
-
+    "group-form-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New group"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいグループ"
+          }
+        }
+      }
     },
-    "Info" : {
-
+    "group-name-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グループ名"
+          }
+        }
+      }
+    },
+    "group-section-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Group"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グループ"
+          }
+        }
+      }
     },
     "knot" : {
 
     },
-    "Login" : {
-
+    "login-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログイン"
+          }
+        }
+      }
     },
-    "Music" : {
-
+    "music-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Music"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音楽"
+          }
+        }
+      }
     },
-    "name" : {
-
+    "person-form-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New person"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しい人物"
+          }
+        }
+      }
     },
-    "New Group" : {
-
-    },
-    "New Person" : {
-
+    "person-list-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "人物"
+          }
+        }
+      }
     },
     "placeholderGray" : {
 
     },
-    "Sign in with Google" : {
-
+    "sign-in-with-google-button-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Googleでサインイン"
+          }
+        }
+      }
     },
-    "Sign Out" : {
-
+    "sign-out-alert-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サインアウトしますか？"
+          }
+        }
+      }
     },
-    "Sign out now?" : {
-
+    "travel-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Travel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "旅行"
+          }
+        }
+      }
     },
-    "Travel" : {
-
+    "yes" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はい"
+          }
+        }
+      }
     },
     "Yes" : {
-
-    },
-    "Yes, sign out" : {
 
     },
     "アカウント" : {
 
     },
     "アレルギー" : {
-
-    },
-    "いつ会った？" : {
 
     },
     "お気に入りの場所" : {
@@ -153,9 +359,6 @@
 
     },
     "兄弟/姉妹" : {
-
-    },
-    "削除する" : {
 
     },
     "名前" : {
@@ -183,9 +386,6 @@
 
     },
     "生年月日" : {
-
-    },
-    "編集する" : {
 
     },
     "苦手なこと" : {

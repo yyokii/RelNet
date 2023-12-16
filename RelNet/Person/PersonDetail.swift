@@ -201,7 +201,7 @@ struct PersonDetailView: View {
                         textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
                         textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikes ?? "")
                     } header: {
-                        Text("Basic Info")
+                        Text("basic-info-section-title")
                     }
 
                     Section {
@@ -209,15 +209,16 @@ struct PersonDetailView: View {
                         textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: viewStore.person.sibling ?? "")
                         textRowItem(symbolName: "tortoise", iconColor: .teal, title: "ペット", text: viewStore.person.pets ?? "")
                     } header: {
-                        Text("Family")
+                        Text("family-section-title")
                     }
 
                     Section {
                         textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likeFoods ?? "")
-                        textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
                         textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikeFoods ?? "")
+                        textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
+
                     } header: {
-                        Text("Food")
+                        Text("food-section-title")
                     }
 
                     Section {
@@ -226,14 +227,14 @@ struct PersonDetailView: View {
                         textRowItem(symbolName: "music.note", iconColor: .pink, title: "好きな曲", text: viewStore.person.likeMusics ?? "")
                         textRowItem(symbolName: "guitars", iconColor: .purple, title: "できる楽器", text: viewStore.person.playableInstruments ?? "")
                     } header: {
-                        Text("Music")
+                        Text("music-section-title")
                     }
 
                     Section {
                         textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: viewStore.person.travelCountries ?? "")
                         textRowItem(symbolName: "mappin", iconColor: .green, title: "思い出の場所", text: viewStore.person.favoriteLocations ?? "")
                     } header: {
-                        Text("Travel")
+                        Text("travel-section-title")
                     }
                 }
             }
@@ -255,13 +256,8 @@ struct PersonDetailView: View {
                     PersonFormView(store: store)
                         .navigationTitle(viewStore.person.name)
                         .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel") {
-                                    viewStore.send(.view(.cancelEditButtonTapped))
-                                }
-                            }
                             ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") {
+                                Button("done-button-title") {
                                     viewStore.send(.view(.doneEditingButtonTapped))
                                 }
                             }
@@ -287,7 +283,7 @@ private extension PersonDetailView {
                 store.send(.view(.editButtonTapped))
             } label: {
                 HStack {
-                    Text("編集する")
+                    Text("edit-button-title")
                     Image(systemName: "pencil")
                         .font(.system(size: 20))
                         .foregroundColor(.primary)
@@ -297,7 +293,7 @@ private extension PersonDetailView {
             HapticButton {
                 store.send(.view(.deleteButtonTapped))
             } label: {
-                Text("削除する")
+                Text("delete-button-title")
                 Image(systemName: "trash")
                     .font(.system(size: 16))
                     .foregroundColor(.primary)
@@ -320,11 +316,6 @@ private extension PersonDetailView {
         }
     }
 
-    // TODO: これは別UIでもいいかも
-    func lastContactedRow(dateString: String) -> some View {
-        textRowItem(symbolName: "figure.wave", iconColor: .brown, title: "最後に会った日", text: dateString)
-    }
-
     func textRowItem(symbolName: String, iconColor: Color, title: String, text: String) -> some View {
         HStack(alignment: .center, spacing: 24) {
             RoundedIconAndTitle(symbolName: symbolName, iconColor: iconColor, title: title)
@@ -336,16 +327,16 @@ private extension PersonDetailView {
 
 private extension AlertState where Action == PersonDetail.Destination.Action.Alert {
     static let deletePerson = Self {
-        TextState("Delete?")
+        TextState("delete-alert-title")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
-            TextState("Yes")
+            TextState("yes")
         }
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
     } message: {
-        TextState("Are you sure you want to delete this?")
+        TextState("")
     }
 }
 
