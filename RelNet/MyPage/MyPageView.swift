@@ -12,9 +12,9 @@ import SwiftUI
 struct MyPage: Reducer, Sendable {
     struct State: Equatable {
         let appVersion = AppVersion.current
+        var user: AppUser?
 
         @PresentationState var alert: AlertState<Action.Alert>?
-
         @BindingState var isInquiryPresenting: Bool = false
 
         init() {}
@@ -23,6 +23,7 @@ struct MyPage: Reducer, Sendable {
     enum Action: BindableAction, Equatable, Sendable {
         case alert(PresentationAction<Alert>)
         case inquiryButtonTapped
+        case onAppear
         case signOutButtonTapped
         case signOutResponse(TaskResult<VoidSuccess>)
         case versionButtonTapped
@@ -60,6 +61,10 @@ struct MyPage: Reducer, Sendable {
                 state.isInquiryPresenting = true
                 return .none
 
+            case .onAppear:
+                let user = authenticationClient.currentUser()
+                state.user = user
+                return .none
             case .signOutButtonTapped:
                 state.alert = .signOut
                 return .none
@@ -95,11 +100,6 @@ struct MyPageView: View {
                     .padding(.vertical)
 
                 Form {
-                    Section("App") {
-                        demo
-                        demo
-                    }
-
                     Section("サポート") {
                         inquiryRow
                         versionRow
@@ -114,7 +114,11 @@ struct MyPageView: View {
                         .buttonStyle(BorderlessButtonStyle())
                     }
                 }
-                .navigationTitle("Me")
+                .navigationTitle("設定")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
             .alert(store: self.store.scope(state: \.$alert, action: MyPage.Action.alert))
         }
@@ -147,15 +151,34 @@ extension AlertState where Action == MyPage.Action.Alert {
 }
 
 private extension MyPageView {
-    var topCard: some View {
-        Text("top card")
-    }
 
-    var demo: some View {
-        HStack {
-            RoundedIconAndTitle(symbolName: "square.stack", iconColor: .blue, title: "demo")
-            Spacer()
-            Text("demo")
+    @ViewBuilder
+    var topCard: some View {
+        if let user = viewStore.user, let name = user.name, !name.isEmpty {
+            VStack(alignment: .center, spacing: 8) {
+                if let photoURL = user.photoURL {
+                    AsyncImage(url: photoURL) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: 52, height: 52)
+                    .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.crop.circle")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .foregroundColor(.gray)
+                }
+
+                Text(name)
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+            }
         }
     }
 
@@ -191,15 +214,22 @@ private extension MyPageView {
     }
 }
 
+#if DEBUG
+
 struct MyPageView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             MyPageView(
                 store: Store(initialState: MyPage.State()) {
                     MyPage()
-                } withDependencies: { _ in
+                } withDependencies: {
+                    $0.authenticationClient.currentUser = {
+                        return .init()
+                    }
                 }
             )
         }
     }
 }
+
+#endif

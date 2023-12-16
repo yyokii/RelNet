@@ -154,22 +154,6 @@ private extension AuthenticationClient {
     }
 }
 
-struct AppUser: Equatable {
-    let uid: String
-    let name: String?
-    let photoURL: URL?
-
-    init?(from firebaseUser: User?) {
-        if let firebaseUser {
-            self.uid = firebaseUser.uid
-            self.name = firebaseUser.displayName
-            self.photoURL = firebaseUser.photoURL
-        } else {
-            return nil
-        }
-    }
-}
-
 enum AuthenticationClientError: LocalizedError, Sendable {
     case general(Error?)
     case notFoundClientID

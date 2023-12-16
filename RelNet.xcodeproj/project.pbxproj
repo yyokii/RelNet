@@ -51,6 +51,7 @@
 		F5DC3BA92AA71894005528F9 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5DC3BA82AA71894005528F9 /* GoogleSignInSwift */; };
 		F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */; };
 		F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAE2AB1BE09005528F9 /* MainView.swift */; };
+		F5E618242B2B2B8E0069D0C9 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E618232B2B2B8E0069D0C9 /* AppUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -111,6 +112,7 @@
 		F5DC3BAA2AA7191A005528F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePath.swift; sourceTree = "<group>"; };
 		F5DC3BAE2AB1BE09005528F9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		F5E618232B2B2B8E0069D0C9 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +230,7 @@
 				F5405C182A970233002FA0C9 /* Person.swift */,
 				F5DC3B8A2A9D6E30005528F9 /* Group.swift */,
 				F5DC3BA32AA69401005528F9 /* AppVersion.swift */,
+				F5E618232B2B2B8E0069D0C9 /* AppUser.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F55BE3502AB6ED1700289320 /* TaskResult+Extension.swift in Sources */,
 				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,
+				F5E618242B2B2B8E0069D0C9 /* AppUser.swift in Sources */,
 				F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
 				F5418A902A9B759B00511A67 /* Binding+Extension.swift in Sources */,
