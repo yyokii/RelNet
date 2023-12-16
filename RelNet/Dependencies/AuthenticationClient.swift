@@ -42,7 +42,6 @@ struct AuthenticationClient: Sendable {
 }
 
 extension DependencyValues {
-    // TODO: add preview value
     var authenticationClient: AuthenticationClient {
         get { self[AuthenticationClient.self] }
         set { self[AuthenticationClient.self] = newValue }

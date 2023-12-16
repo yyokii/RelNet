@@ -18,11 +18,9 @@ struct AppFeature: Reducer {
 
     enum Action: Equatable {
         case onAppear
-        case signInWithGoogleButtonTapped
         case task
 
         case listenAuthStateResponse(TaskResult<AppUser?>)
-        case signInWithGoogleResponse(TaskResult<AppUser>)
 
         case login(Login.Action)
     }
@@ -37,18 +35,6 @@ struct AppFeature: Reducer {
             switch action {
             case .onAppear:
                 return .none
-
-            case .signInWithGoogleButtonTapped:
-                state.isLoading = true
-                return .run { send in
-                    await send(
-                        .signInWithGoogleResponse(
-                            await TaskResult {
-                                try await self.authenticationClient.signInWithGoogle()
-                            }
-                        )
-                    )
-                }
 
             case .task:
                 state.isLoading = true
@@ -66,16 +52,6 @@ struct AppFeature: Reducer {
                 return .none
 
             case let .listenAuthStateResponse(.failure(error)):
-                state.isLoading = false
-                print(error.localizedDescription)
-                return .none
-
-            case let .signInWithGoogleResponse(.success(user)):
-                state.isLoading = false
-                state.appUser = user
-                return .none
-
-            case let .signInWithGoogleResponse(.failure(error)):
                 state.isLoading = false
                 print(error.localizedDescription)
                 return .none
@@ -98,9 +74,8 @@ struct AppView: View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
             VStack {
                 if viewStore.appUser != nil {
-                    TabView {
-                        mainTab
-                        myProfileTab
+                    NavigationStack {
+                        MainView(store: Store(initialState: Main.State()) { Main() })
                     }
                 } else {
                     if viewStore.isLoading {
@@ -122,22 +97,44 @@ struct AppView: View {
     }
 }
 
-private extension AppView {
-    var mainTab: some View {
-        NavigationStack {
-            MainView(store: Store(initialState: Main.State()) { Main() })
-        }
-        .tabItem {
-            Label("groups", systemImage: "rectangle.3.group.fill")
-        }
-    }
+#if DEBUG
 
-    var myProfileTab: some View {
-        NavigationStack {
-            MyPageView(store: Store(initialState: MyPage.State()) { MyPage() })
-        }
-        .tabItem {
-            Label("persons", systemImage: "person.crop.circle.fill")
-        }
+#Preview("light") {
+    NavigationView {
+        AppView(
+            store: Store(initialState: AppFeature.State()) {
+                AppFeature()
+            } withDependencies: {
+                $0.authenticationClient.listenAuthState = {
+                    AsyncThrowingStream { continuation in
+                        let user = AppUser.init()
+                        continuation.yield(user)
+                        continuation.finish()
+                    }
+                }
+            }
+        )
     }
+    .environment(\.colorScheme, .light)
 }
+
+#Preview("dark") {
+    NavigationView {
+        AppView(
+            store: Store(initialState: AppFeature.State()) {
+                AppFeature()
+            } withDependencies: {
+                $0.authenticationClient.listenAuthState = {
+                    AsyncThrowingStream { continuation in
+                        let user = AppUser.init()
+                        continuation.yield(user)
+                        continuation.finish()
+                    }
+                }
+            }
+        )
+    }
+    .environment(\.colorScheme, .dark)
+}
+
+#endif

@@ -51,10 +51,10 @@ struct Main: Reducer {
             case confirmAddPersonButtonTapped
             case dismissAddGroupButtonTapped
             case dismissAddPersonButtonTapped
+            case gearButtonTapped
             case groupCardTapped(Group)
             case listenGroups
             case listenPersons
-            case morePersonsButtonTapped
             case personItemTapped(Person)
         }
 
@@ -69,8 +69,10 @@ struct Main: Reducer {
     }
 
     struct Destination: Reducer {
+        // TODO: state名とcase名が一致してない
         enum State: Equatable {
             case addGroup(GroupForm.State)
+            case myPage(MyPage.State)
             case addPerson(PersonForm.State)
             case personDetail(PersonDetail.State)
             case personsList(PersonsList.State)
@@ -78,6 +80,7 @@ struct Main: Reducer {
 
         enum Action: Equatable {
             case addGroup(GroupForm.Action)
+            case myPage(MyPage.Action)
             case addPerson(PersonForm.Action)
             case personDetail(PersonDetail.Action)
             case personsList(PersonsList.Action)
@@ -86,6 +89,9 @@ struct Main: Reducer {
         var body: some ReducerOf<Self> {
             Scope(state: /State.addGroup, action: /Action.addGroup) {
                 GroupForm()
+            }
+            Scope(state: /State.myPage, action: /Action.myPage) {
+                MyPage()
             }
             Scope(state: /State.addPerson, action: /Action.addPerson) {
                 PersonForm()
@@ -120,7 +126,6 @@ struct Main: Reducer {
                     let group = formState.group
 
                     return .run { send in
-                        // TODO: この形式で他も書き換える
                         await send(
                             .internal(
                                 .addGroupResult(
@@ -154,6 +159,9 @@ struct Main: Reducer {
                 case .dismissAddPersonButtonTapped:
                     state.destination = nil
                     return .none
+                case .gearButtonTapped:
+                    state.destination = .myPage(.init())
+                    return .none
                 case let .groupCardTapped(group):
                     guard let groupId = group.id else {
                         return .none
@@ -162,8 +170,6 @@ struct Main: Reducer {
                         person.groupIDs.contains(groupId)
                     }
                     state.destination = .personsList(.init(selectedGroup: group, groups: state.groups, persons: personsInGroup))
-                    return .none
-                case .morePersonsButtonTapped:
                     return .none
                 case .listenGroups:
                     return .run { send in
@@ -246,71 +252,46 @@ struct MainView: View {
                 personsList
             }
             .padding(.horizontal)
-            .navigationTitle("knot")
-            .task {
-                await viewStore.send(.view(.listenGroups)).finish()
+        }
+        .navigationTitle("knot")
+        .toolbar{
+            ToolbarItem(placement: .topBarTrailing) {
+                gearButton
             }
-            .task {
-                await viewStore.send(.view(.listenPersons)).finish()
-            }
-            .navigationDestination(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.personDetail,
-                action: Main.Destination.Action.personDetail
-            ) {
-                PersonDetailView(store: $0)
-            }
-            .navigationDestination(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.personsList,
-                action: Main.Destination.Action.personsList
-            ) {
-                PersonsListView(store: $0)
-            }
-            .sheet(
-                store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.addGroup,
-                action: Main.Destination.Action.addGroup
-            ) { store in
-                NavigationStack {
-                    GroupFormView(store: store)
-                        .navigationTitle("New Group")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    viewStore.send(.view(.dismissAddGroupButtonTapped))
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    viewStore.send(.view(.confirmAddGroupButtonTapped))
-                                }
-                            }
-                        }
-                }
-            }
-            .sheet(
-                store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /Main.Destination.State.addPerson,
-                action: Main.Destination.Action.addPerson
-            ) { store in
-                NavigationStack {
-                    PersonFormView(store: store)
-                        .navigationTitle("New Person")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    viewStore.send(.view(.dismissAddPersonButtonTapped))
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Add") {
-                                    viewStore.send(.view(.confirmAddPersonButtonTapped))
-                                }
-                            }
-                        }
-                }
-            }
+        }
+        .task {
+            await viewStore.send(.view(.listenGroups)).finish()
+        }
+        .task {
+            await viewStore.send(.view(.listenPersons)).finish()
+        }
+        .navigationDestination(
+            store: store.scope(state: \.$destination, action: Main.Action.destination),
+            state: /Main.Destination.State.personDetail,
+            action: Main.Destination.Action.personDetail
+        ) {
+            PersonDetailView(store: $0)
+        }
+        .navigationDestination(
+            store: store.scope(state: \.$destination, action: Main.Action.destination),
+            state: /Main.Destination.State.personsList,
+            action: Main.Destination.Action.personsList
+        ) {
+            PersonsListView(store: $0)
+        }
+        .sheet(
+            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
+            state: /Main.Destination.State.addGroup,
+            action: Main.Destination.Action.addGroup
+        ) { store in
+            groupForm(store: store)
+        }
+        .sheet(
+            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
+            state: /Main.Destination.State.addPerson,
+            action: Main.Destination.Action.addPerson
+        ) { store in
+            personForm(store: store)
         }
     }
 
@@ -321,6 +302,24 @@ struct MainView: View {
 }
 
 private extension MainView {
+    var gearButton: some View {
+        Button {
+            viewStore.send(.view(.gearButtonTapped))
+        } label: {
+            Image(systemName: "gearshape")
+                .foregroundColor(.primary)
+        }
+        .sheet(
+            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
+            state: /Main.Destination.State.myPage,
+            action: Main.Destination.Action.myPage
+        ) { store in
+            NavigationView {
+                MyPageView(store: store)
+            }
+        }
+    }
+
     var groupList: some View {
         VStack(alignment: .leading, spacing: 24) {
             listHeader(
@@ -385,6 +384,44 @@ private extension MainView {
                     Text("追加")
                 }
             }
+        }
+    }
+
+    func groupForm(store: StoreOf<GroupForm>) -> some View {
+        NavigationView {
+            GroupFormView(store: store)
+                .navigationTitle("New Group")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Dismiss") {
+                            viewStore.send(.view(.dismissAddGroupButtonTapped))
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add") {
+                            viewStore.send(.view(.confirmAddGroupButtonTapped))
+                        }
+                    }
+                }
+        }
+    }
+
+    func personForm(store: StoreOf<PersonForm>) -> some View {
+        NavigationView {
+            PersonFormView(store: store)
+                .navigationTitle("New Person")
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Dismiss") {
+                            viewStore.send(.view(.dismissAddPersonButtonTapped))
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Add") {
+                            viewStore.send(.view(.confirmAddPersonButtonTapped))
+                        }
+                    }
+                }
         }
     }
 }

@@ -16,9 +16,6 @@
     "Additional Info" : {
 
     },
-    "App" : {
-
-    },
     "appPrimary" : {
 
     },
@@ -38,9 +35,6 @@
 
     },
     "Delete?" : {
-
-    },
-    "demo" : {
 
     },
     "Dismiss" : {
@@ -83,9 +77,6 @@
     "group name" : {
 
     },
-    "groups" : {
-
-    },
     "Groups" : {
 
     },
@@ -96,9 +87,6 @@
 
     },
     "Login" : {
-
-    },
-    "Me" : {
 
     },
     "Music" : {
@@ -113,9 +101,6 @@
     "New Person" : {
 
     },
-    "persons" : {
-
-    },
     "placeholderGray" : {
 
     },
@@ -126,9 +111,6 @@
 
     },
     "Sign out now?" : {
-
-    },
-    "top card" : {
 
     },
     "Travel" : {
@@ -216,6 +198,9 @@
 
     },
     "親" : {
+
+    },
+    "設定" : {
 
     },
     "趣味" : {
