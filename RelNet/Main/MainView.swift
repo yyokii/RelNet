@@ -71,29 +71,29 @@ struct Main: Reducer {
     struct Destination: Reducer {
         // TODO: state名とcase名が一致してない
         enum State: Equatable {
-            case addGroup(GroupForm.State)
+            case groupForm(GroupForm.State)
             case myPage(MyPage.State)
-            case addPerson(PersonForm.State)
+            case personForm(PersonForm.State)
             case personDetail(PersonDetail.State)
             case personsList(PersonsList.State)
         }
 
         enum Action: Equatable {
-            case addGroup(GroupForm.Action)
+            case groupForm(GroupForm.Action)
             case myPage(MyPage.Action)
-            case addPerson(PersonForm.Action)
+            case personForm(PersonForm.Action)
             case personDetail(PersonDetail.Action)
             case personsList(PersonsList.Action)
         }
 
         var body: some ReducerOf<Self> {
-            Scope(state: /State.addGroup, action: /Action.addGroup) {
+            Scope(state: /State.groupForm, action: /Action.groupForm) {
                 GroupForm()
             }
             Scope(state: /State.myPage, action: /Action.myPage) {
                 MyPage()
             }
-            Scope(state: /State.addPerson, action: /Action.addPerson) {
+            Scope(state: /State.personForm, action: /Action.personForm) {
                 PersonForm()
             }
             Scope(state: /State.personDetail, action: /Action.personDetail) {
@@ -114,13 +114,13 @@ struct Main: Reducer {
             case let .view(viewAction):
                 switch viewAction {
                 case .addGroupButtonTapped:
-                    state.destination = .addGroup(GroupForm.State(group: Group()))
+                    state.destination = .groupForm(GroupForm.State(group: Group()))
                     return .none
                 case .addPersonButtonTapped:
-                    state.destination = .addPerson(PersonForm.State(person: Person(), groups: state.groups))
+                    state.destination = .personForm(PersonForm.State(person: Person(), groups: state.groups))
                     return .none
                 case .confirmAddGroupButtonTapped:
-                    guard case let .some(.addGroup(formState)) = state.destination else {
+                    guard case let .some(.groupForm(formState)) = state.destination else {
                         return .none
                     }
                     let group = formState.group
@@ -137,7 +137,7 @@ struct Main: Reducer {
                         )
                     }
                 case .confirmAddPersonButtonTapped:
-                    guard case let .some(.addPerson(formState)) = state.destination else {
+                    guard case let .some(.personForm(formState)) = state.destination else {
                         return .none
                     }
                     let person = formState.person
@@ -281,15 +281,15 @@ struct MainView: View {
         }
         .sheet(
             store: self.store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.addGroup,
-            action: Main.Destination.Action.addGroup
+            state: /Main.Destination.State.groupForm,
+            action: Main.Destination.Action.groupForm
         ) { store in
             groupForm(store: store)
         }
         .sheet(
             store: self.store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.addPerson,
-            action: Main.Destination.Action.addPerson
+            state: /Main.Destination.State.personForm,
+            action: Main.Destination.Action.personForm
         ) { store in
             personForm(store: store)
         }
