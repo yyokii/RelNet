@@ -50,8 +50,11 @@ struct GroupFormView: View {
             Form {
                 Section {
                     VStack {
-                        TextField("group-name-title", text: viewStore.$group.name)
-                            .focused(self.$focus, equals: .name)
+                        ValidatableTextField(
+                            placeholder: "group-name-title",
+                            validatable: PersonInputType.name(viewStore.$group.name)
+                        )
+                    .focused(self.$focus, equals: .name)
                     }
                 } header: {
                     Text("group-section-title")

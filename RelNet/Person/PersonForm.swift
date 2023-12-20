@@ -91,18 +91,36 @@ struct PersonFormView: View {
 
                 Section {
                     VStack {
-                        TextField("名前", text: viewStore.$person.name)
-                            .focused(self.$focus, equals: .name)
-                            .onChange(of: viewStore.state.focus) { focus in
-                                if focus != .name {
-                                    viewStore.send(.nameEndEditing)
-                                }
+                        ValidatableTextField(
+                            placeholder: "名前",
+                            validatable: PersonInputType.name(viewStore.$person.name)
+                        )
+                        .focused(self.$focus, equals: .name)
+                        .onChange(of: viewStore.state.focus) { focus in
+                            if focus != .name {
+                                viewStore.send(.nameEndEditing)
                             }
-                        TextField("フリガナ", text: viewStore.$person.furigana.toUnwrapped(defaultValue: ""))
-                        TextField("ニックネーム", text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
-                        TextField("趣味", text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""))
-                        TextField("好きなこと", text: viewStore.$person.likes.toUnwrapped(defaultValue: ""))
-                        TextField("苦手なこと", text: viewStore.$person.dislikes.toUnwrapped(defaultValue: ""))
+                        }
+                        ValidatableTextField(
+                            placeholder: "フリガナ",
+                            validatable: PersonInputType.other(viewStore.$person.furigana.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "ニックネーム",
+                            validatable: PersonInputType.other(viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "趣味",
+                            validatable: PersonInputType.other(viewStore.$person.hobbies.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "好きなこと",
+                            validatable: PersonInputType.other(viewStore.$person.likes.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "苦手なこと",
+                            validatable: PersonInputType.other(viewStore.$person.dislikes.toUnwrapped(defaultValue: ""))
+                        )
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
                 } header: {
@@ -111,9 +129,18 @@ struct PersonFormView: View {
 
                 Section {
                     VStack {
-                        TextField("親", text: viewStore.$person.parents.toUnwrapped(defaultValue: ""))
-                        TextField("兄弟/姉妹", text: viewStore.$person.sibling.toUnwrapped(defaultValue: ""))
-                        TextField("ペット", text: viewStore.$person.pets.toUnwrapped(defaultValue: ""))
+                        ValidatableTextField(
+                            placeholder: "親",
+                            validatable: PersonInputType.other(viewStore.$person.parents.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "兄弟/姉妹",
+                            validatable: PersonInputType.other(viewStore.$person.sibling.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "ペット",
+                            validatable: PersonInputType.other(viewStore.$person.pets.toUnwrapped(defaultValue: ""))
+                        )
                     }
                 } header: {
                     Text("family-section-title")
@@ -121,10 +148,22 @@ struct PersonFormView: View {
 
                 Section {
                     VStack {
-                        TextField("好きな食べ物", text: viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""))
-                        TextField("好きなお菓子", text: viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""))
-                        TextField("アレルギー", text: viewStore.$person.allergies.toUnwrapped(defaultValue: ""))
-                        TextField("苦手な食べ物", text: viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""))
+                        ValidatableTextField(
+                            placeholder: "好きな食べ物",
+                            validatable: PersonInputType.other(viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "好きなお菓子",
+                            validatable: PersonInputType.other(viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "アレルギー",
+                            validatable: PersonInputType.other(viewStore.$person.allergies.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "苦手な食べ物",
+                            validatable: PersonInputType.other(viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""))
+                        )
                     }
                 } header: {
                     Text("food-section-title")
@@ -132,10 +171,22 @@ struct PersonFormView: View {
 
                 Section {
                     VStack {
-                        TextField("好きなジャンル", text: viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""))
-                        TextField("好きなアーティスト", text: viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""))
-                        TextField("好きな曲", text: viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""))
-                        TextField("演奏できる楽器", text: viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""))
+                        ValidatableTextField(
+                            placeholder: "好きなジャンル",
+                            validatable: PersonInputType.other(viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "好きなアーティスト",
+                            validatable: PersonInputType.other(viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "好きな曲",
+                            validatable: PersonInputType.other(viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "演奏できる楽器",
+                            validatable: PersonInputType.other(viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""))
+                        )
                     }
                 } header: {
                     Text("music-section-title")
@@ -143,8 +194,14 @@ struct PersonFormView: View {
 
                 Section {
                     VStack {
-                        TextField("行った国", text: viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""))
-                        TextField("お気に入りの場所", text: viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""))
+                        ValidatableTextField(
+                            placeholder: "行った国",
+                            validatable: PersonInputType.other(viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""))
+                        )
+                        ValidatableTextField(
+                            placeholder: "お気に入りの場所",
+                            validatable: PersonInputType.other(viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""))
+                        )
                     }
                 } header: {
                     Text("travel-section-title")

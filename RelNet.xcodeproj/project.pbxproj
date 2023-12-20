@@ -27,6 +27,7 @@
 		F5418A902A9B759B00511A67 /* Binding+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A8F2A9B759B00511A67 /* Binding+Extension.swift */; };
 		F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A912A9B93D500511A67 /* AppFeature.swift */; };
 		F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A932A9B98C300511A67 /* PersonDetail.swift */; };
+		F558DF212B3320EA0091011F /* GroupInputType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F558DF202B3320EA0091011F /* GroupInputType.swift */; };
 		F55BE3502AB6ED1700289320 /* TaskResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE34F2AB6ED1700289320 /* TaskResult+Extension.swift */; };
 		F55BE3552AB9E30B00289320 /* GroupItemModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3542AB9E30B00289320 /* GroupItemModifier.swift */; };
 		F55BE3572AB9E62B00289320 /* PersonsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3562AB9E62B00289320 /* PersonsList.swift */; };
@@ -34,6 +35,8 @@
 		F55BE35B2ABC266000289320 /* SortedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35A2ABC266000289320 /* SortedListView.swift */; };
 		F55BE35D2ABC931F00289320 /* PersonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE35C2ABC931F00289320 /* PersonTests.swift */; };
 		F55BE3622ABCA24100289320 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3612ABCA24100289320 /* Color.swift */; };
+		F59412122B2F2E0F009516FA /* PersonInputType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59412112B2F2E0F009516FA /* PersonInputType.swift */; };
+		F5972F132B31FC16008F9605 /* ValidatableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5972F122B31FC16008F9605 /* ValidatableTextField.swift */; };
 		F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF3592AD455CA0064C18D /* Button+Extensions.swift */; };
 		F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */; };
 		F5AB5E172B27863E00FBBA2A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F5AB5E162B27863E00FBBA2A /* Localizable.xcstrings */; };
@@ -87,6 +90,7 @@
 		F5418A8F2A9B759B00511A67 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
 		F5418A912A9B93D500511A67 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
 		F5418A932A9B98C300511A67 /* PersonDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDetail.swift; sourceTree = "<group>"; };
+		F558DF202B3320EA0091011F /* GroupInputType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupInputType.swift; sourceTree = "<group>"; };
 		F55BE34F2AB6ED1700289320 /* TaskResult+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TaskResult+Extension.swift"; sourceTree = "<group>"; };
 		F55BE3542AB9E30B00289320 /* GroupItemModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupItemModifier.swift; sourceTree = "<group>"; };
 		F55BE3562AB9E62B00289320 /* PersonsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonsList.swift; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 		F55BE35A2ABC266000289320 /* SortedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortedListView.swift; sourceTree = "<group>"; };
 		F55BE35C2ABC931F00289320 /* PersonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonTests.swift; sourceTree = "<group>"; };
 		F55BE3612ABCA24100289320 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		F59412112B2F2E0F009516FA /* PersonInputType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonInputType.swift; sourceTree = "<group>"; };
+		F5972F122B31FC16008F9605 /* ValidatableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatableTextField.swift; sourceTree = "<group>"; };
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
 		F59EF35F2B21E1370064C18D /* RelNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelNet.entitlements; sourceTree = "<group>"; };
@@ -266,6 +272,7 @@
 				F55BE35A2ABC266000289320 /* SortedListView.swift */,
 				F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */,
 				F5AEDB632AD11967001263C1 /* FlowLayout.swift */,
+				F5972F122B31FC16008F9605 /* ValidatableTextField.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -284,6 +291,7 @@
 				F5418A932A9B98C300511A67 /* PersonDetail.swift */,
 				F5418A892A9AED2E00511A67 /* PersonForm.swift */,
 				F55BE3562AB9E62B00289320 /* PersonsList.swift */,
+				F59412112B2F2E0F009516FA /* PersonInputType.swift */,
 			);
 			path = Person;
 			sourceTree = "<group>";
@@ -292,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				F5DC3B8C2A9D7094005528F9 /* GroupForm.swift */,
+				F558DF202B3320EA0091011F /* GroupInputType.swift */,
 			);
 			path = Group;
 			sourceTree = "<group>";
@@ -472,6 +481,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F5972F132B31FC16008F9605 /* ValidatableTextField.swift in Sources */,
 				F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */,
 				F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */,
 				F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */,
@@ -484,6 +494,7 @@
 				F5E618242B2B2B8E0069D0C9 /* AppUser.swift in Sources */,
 				F5AEDB622ACEE843001263C1 /* RoundedIconAndTitle.swift in Sources */,
 				F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */,
+				F59412122B2F2E0F009516FA /* PersonInputType.swift in Sources */,
 				F5418A902A9B759B00511A67 /* Binding+Extension.swift in Sources */,
 				F5DC3B992AA57F39005528F9 /* LoginView.swift in Sources */,
 				F55BE3572AB9E62B00289320 /* PersonsList.swift in Sources */,
@@ -497,6 +508,7 @@
 				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
 				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
 				F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */,
+				F558DF212B3320EA0091011F /* GroupInputType.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,
 				F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */,
 				F55BE3552AB9E30B00289320 /* GroupItemModifier.swift in Sources */,
@@ -586,7 +598,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -641,7 +653,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
