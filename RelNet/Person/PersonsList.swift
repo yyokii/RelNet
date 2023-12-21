@@ -269,7 +269,7 @@ private extension PersonsListView {
 
 extension AlertState where Action == PersonsList.Destination.Action.Alert {
     static let deleteGroup = Self {
-        TextState("Delete?")
+        TextState("delete-alert-title")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
             TextState("Yes")
@@ -278,7 +278,7 @@ extension AlertState where Action == PersonsList.Destination.Action.Alert {
             TextState("Cancel")
         }
     } message: {
-        TextState("グループを削除します。人の情報は削除されません、ご安心ください。")
+        TextState("グループを削除します。このグループ内の人物の情報は削除されません。")
     }
 }
 

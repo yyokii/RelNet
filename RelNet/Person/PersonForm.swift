@@ -215,7 +215,7 @@ struct PersonFormView: View {
 private extension PersonFormView {
     var groupList: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            FlowLayout(alignment: .center, spacing: 8) {
+            FlowLayout(alignment: .leading, spacing: 8) {
                 ForEach(viewStore.groups) { group in
                     Button {
                         viewStore.send(.groupButtonTapped(group))
