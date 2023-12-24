@@ -150,7 +150,8 @@ private extension MyPageView {
     @ViewBuilder
     var topCard: some View {
         if let user = viewStore.user,
-           let name = user.name, !name.isEmpty {
+            let name = user.name, !name.isEmpty
+        {
             VStack(alignment: .center, spacing: 8) {
                 if let photoURL = user.photoURL {
                     AsyncImage(url: photoURL) { image in

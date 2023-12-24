@@ -8,7 +8,7 @@
 import SwiftUI
 
 protocol Validatable {
-    var binding: Binding<String> { get } 
+    var binding: Binding<String> { get }
     func validate() throws
 }
 

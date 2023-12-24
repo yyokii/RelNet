@@ -227,28 +227,28 @@ extension SignInWithAppleButton.Style {
 
 #if DEBUG
 
-#Preview("light") {
-    NavigationStack {
-        LoginView(
-            store: Store(initialState: Login.State()) {
-                Login()
-            } withDependencies: { _ in
-            }
-        )
+    #Preview("light") {
+        NavigationStack {
+            LoginView(
+                store: Store(initialState: Login.State()) {
+                    Login()
+                } withDependencies: { _ in
+                }
+            )
+        }
+        .environment(\.colorScheme, .light)
     }
-    .environment(\.colorScheme, .light)
-}
 
-#Preview("dark") {
-    NavigationStack {
-        LoginView(
-            store: Store(initialState: Login.State()) {
-                Login()
-            } withDependencies: { _ in
-            }
-        )
+    #Preview("dark") {
+        NavigationStack {
+            LoginView(
+                store: Store(initialState: Login.State()) {
+                    Login()
+                } withDependencies: { _ in
+                }
+            )
+        }
+        .environment(\.colorScheme, .dark)
     }
-    .environment(\.colorScheme, .dark)
-}
 
 #endif

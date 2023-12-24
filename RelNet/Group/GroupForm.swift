@@ -54,7 +54,7 @@ struct GroupFormView: View {
                             placeholder: "group-name-title",
                             validatable: PersonInputType.name(viewStore.$group.name)
                         )
-                    .focused(self.$focus, equals: .name)
+                        .focused(self.$focus, equals: .name)
                     }
                 } header: {
                     Text("group-section-title")

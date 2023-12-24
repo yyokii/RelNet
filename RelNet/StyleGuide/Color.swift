@@ -22,7 +22,7 @@ extension Color {
     /*
      白、黒 + アクセント色で基本的に表現する
      */
-    public static let appAccent = Self {_ in
+    public static let appAccent = Self { _ in
         .red
     }
 

@@ -44,21 +44,21 @@ private extension ValidatableTextField {
 
 #if DEBUG
 
-struct DemoValidatedTextField: View {
-    @State var text = "this is demo"
- 
-    var body: some View {
-        NavigationView {
-            ValidatableTextField(
-                placeholder: "placeholder",
-                validatable: PersonInputType.name($text)
-            )
+    struct DemoValidatedTextField: View {
+        @State var text = "this is demo"
+
+        var body: some View {
+            NavigationView {
+                ValidatableTextField(
+                    placeholder: "placeholder",
+                    validatable: PersonInputType.name($text)
+                )
+            }
         }
     }
-}
 
-#Preview {
-    DemoValidatedTextField()
-}
+    #Preview {
+        DemoValidatedTextField()
+    }
 
 #endif

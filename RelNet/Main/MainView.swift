@@ -377,7 +377,8 @@ private extension MainView {
                     Text("追加")
                 }
             }
-            .foregroundStyle(Color.appAccent)}
+            .foregroundStyle(Color.appAccent)
+        }
     }
 
     func groupForm(store: StoreOf<GroupForm>) -> some View {

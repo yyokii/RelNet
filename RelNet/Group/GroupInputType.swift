@@ -64,4 +64,3 @@ enum GroupInputValidationError: LocalizedError, Error {
         }
     }
 }
-

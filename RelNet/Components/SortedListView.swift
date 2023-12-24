@@ -77,7 +77,7 @@ struct SortedPersonsView: View {
                     sortedItems: [
                         "A": [.mock(id: "id-1"), .mock(id: "id-1-2")],
                         "T": [.mock(id: "id-2")],
-                        "あ": [.mock(id: "id-3")]
+                        "あ": [.mock(id: "id-3")],
                     ],
                     onTapPerson: { person in
                         print("\(person.name) is tapped")
