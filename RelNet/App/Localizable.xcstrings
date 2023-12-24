@@ -132,7 +132,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "登録されていません。\n「＋」ボタンから追加すると表示されます。"
+            "value" : "登録されていません。\n"
           }
         }
       }

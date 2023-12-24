@@ -160,6 +160,8 @@ struct LoginView: View {
     let store: StoreOf<Login>
     @ObservedObject var viewStore: ViewStoreOf<Login>
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             signInButtons
@@ -177,6 +179,15 @@ struct LoginView: View {
 }
 
 private extension LoginView {
+
+    var adaptiveAppleButtonStyle: SignInWithAppleButton.Style {
+        switch colorScheme {
+        case .light: return .black
+        case .dark: return .white
+        @unknown default: return .black
+        }
+    }
+
     var signInButtons: some View {
         VStack(alignment: .leading, spacing: 12) {
             SignInWithAppleButton { request in
@@ -184,6 +195,7 @@ private extension LoginView {
             } onCompletion: { result in
                 viewStore.send(.view(.onCompletedSignInWithApple(.init(result))))
             }
+            .signInWithAppleButtonStyle(adaptiveAppleButtonStyle)
             .frame(height: 50)
 
             Button {
@@ -195,7 +207,7 @@ private extension LoginView {
                         .frame(width: 16, height: 16)
                     Text("sign-in-with-google-button-title")
                         .font(.title3)
-                        .foregroundStyle(Color.adaptiveBlack)
+                        .foregroundStyle(Color.adaptiveWhite)
                 }
                 .frame(maxWidth: .infinity)
 
@@ -203,21 +215,40 @@ private extension LoginView {
             .frame(height: 50)
             .background {
                 RoundedRectangle(cornerRadius: 8)
-                    .strokeBorder(Color.gray, lineWidth: 1)
+                    .fill(Color.adaptiveBlack)
             }
         }
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            LoginView(
-                store: Store(initialState: Login.State()) {
-                    Login()
-                } withDependencies: { _ in
-                }
-            )
-        }
-    }
+extension SignInWithAppleButton.Style {
+
 }
+
+#if DEBUG
+
+#Preview("light") {
+    NavigationStack {
+        LoginView(
+            store: Store(initialState: Login.State()) {
+                Login()
+            } withDependencies: { _ in
+            }
+        )
+    }
+    .environment(\.colorScheme, .light)
+}
+
+#Preview("dark") {
+    NavigationStack {
+        LoginView(
+            store: Store(initialState: Login.State()) {
+                Login()
+            } withDependencies: { _ in
+            }
+        )
+    }
+    .environment(\.colorScheme, .dark)
+}
+
+#endif

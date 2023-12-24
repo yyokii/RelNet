@@ -10,12 +10,14 @@ import Foundation
 
 struct AppUser: Equatable {
     let uid: String
+    let email: String?
     let name: String?
     let photoURL: URL?
 
     init?(from firebaseUser: User?) {
         if let firebaseUser {
             self.uid = firebaseUser.uid
+            self.email = firebaseUser.email
             self.name = firebaseUser.displayName
             self.photoURL = firebaseUser.photoURL
         } else {
@@ -29,10 +31,12 @@ struct AppUser: Equatable {
     extension AppUser {
         init(
             uid: String = UUID().uuidString,
+            email: String = "emial@email",
             name: String = "demo name",
             photoURL: URL? = URL(string: "https://picsum.photos/200")!
         ) {
             self.uid = uid
+            self.email = email
             self.name = name
             self.photoURL = photoURL
         }
