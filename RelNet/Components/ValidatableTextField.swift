@@ -28,8 +28,9 @@ private extension ValidatableTextField {
             EmptyView()
         case let .failure(error):
             if let error = error as? LocalizedError,
-               let errorText = error.recoverySuggestion,
-               !errorText.isEmpty {
+                let errorText = error.recoverySuggestion,
+                !errorText.isEmpty
+            {
                 Text(errorText)
                     .foregroundColor(.red)
                     .font(.caption)
@@ -46,7 +47,7 @@ private extension ValidatableTextField {
 
         var body: some View {
             NavigationView {
-                ValidatableTextField (
+                ValidatableTextField(
                     placeholder: "placeholder",
                     text: $text,
                     validationResult: validator.validate(value: text, type: .name)
