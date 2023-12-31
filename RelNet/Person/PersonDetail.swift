@@ -14,6 +14,7 @@ struct PersonDetail: Reducer {
         @PresentationState var destination: Destination.State?
         var person: Person
         let groups: IdentifiedArrayOf<Group>
+        let personValidator: PersonInputValidator = .init()
     }
 
     enum Action: TCAFeatureAction, Equatable, Sendable {
@@ -25,13 +26,11 @@ struct PersonDetail: Reducer {
         enum ViewAction: Equatable {
             case cancelEditButtonTapped
             case deleteButtonTapped
-            case doneEditingButtonTapped
             case editButtonTapped
         }
 
         enum InternalAction: Equatable {
             case deletePersonResult(TaskResult<String>)
-            case editPersonResult(TaskResult<Person>)
         }
 
         enum DelegateAction: Equatable {
@@ -46,18 +45,18 @@ struct PersonDetail: Reducer {
     struct Destination: Reducer {
         enum State: Equatable {
             case alert(AlertState<Action.Alert>)
-            case edit(PersonForm.State)
+            case personForm(PersonForm.State)
         }
         enum Action: Equatable, Sendable {
             case alert(Alert)
-            case edit(PersonForm.Action)
+            case personForm(PersonForm.Action)
 
             enum Alert {
                 case confirmDeletion
             }
         }
         var body: some ReducerOf<Self> {
-            Scope(state: /State.edit, action: /Action.edit) {
+            Scope(state: /State.personForm, action: /Action.personForm) {
                 PersonForm()
             }
         }
@@ -76,26 +75,8 @@ struct PersonDetail: Reducer {
                     state.destination = .alert(.deletePerson)
                     return .none
 
-                case .doneEditingButtonTapped:
-                    guard case let .some(.edit(editState)) = state.destination
-                    else { return .none }
-
-                    let person = editState.person
-
-                    return .run { send in
-                        await send(
-                            .internal(
-                                .editPersonResult(
-                                    await TaskResult {
-                                        try self.personClient.updatePerson(person)
-                                    }
-                                )
-                            )
-                        )
-                    }
-
                 case .editButtonTapped:
-                    state.destination = .edit(PersonForm.State(person: state.person, groups: state.groups))
+                    state.destination = .personForm(PersonForm.State(person: state.person, groups: state.groups, mode: .edit))
                     return .none
                 }
 
@@ -110,18 +91,6 @@ struct PersonDetail: Reducer {
 
                 case .deletePersonResult(.failure(_)):
                     print("📝 failed delete person")
-                    return .none
-
-                case let .editPersonResult(.success(person)):
-                    print("📝 success edit person")
-                    state.person = person
-                    state.destination = nil
-                    return .run { send in
-                        await send(.delegate(.personUpdated(person)))
-                    }
-
-                case .editPersonResult(.failure(_)):
-                    print("📝 failed edit person")
                     return .none
                 }
 
@@ -145,10 +114,12 @@ struct PersonDetail: Reducer {
                     }
                 }
 
-            case .destination:
+            case let .destination(.presented(.personForm(.delegate(.personUpdated(person))))):
+                state.destination = nil
+                state.person = person
                 return .none
 
-            case .delegate:
+            case .delegate, .destination:
                 return .none
             }
         }
@@ -249,19 +220,11 @@ struct PersonDetailView: View {
             )
             .sheet(
                 store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonDetail.Destination.State.edit,
-                action: PersonDetail.Destination.Action.edit
+                state: /PersonDetail.Destination.State.personForm,
+                action: PersonDetail.Destination.Action.personForm
             ) { store in
-                NavigationStack {
+                NavigationView {
                     PersonFormView(store: store)
-                        .navigationTitle(viewStore.person.name)
-                        .toolbar {
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("done-button-title") {
-                                    viewStore.send(.view(.doneEditingButtonTapped))
-                                }
-                            }
-                        }
                 }
             }
         }

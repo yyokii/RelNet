@@ -13,7 +13,7 @@ import Foundation
 ///
 /// プロパティについては必須項目以外は、基本的にオプショナル。
 /// オプショナルとすることで、新しいプロパティを追加しても既存のデータも正常に読み取りが可能。
-struct Person: Codable, Identifiable, Equatable, Hashable {
+struct Person: Codable, Identifiable, Hashable {
     @DocumentID var id: String?
 
     // MARK: Basic info

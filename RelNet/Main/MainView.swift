@@ -48,7 +48,6 @@ struct Main: Reducer {
             case addGroupButtonTapped
             case addPersonButtonTapped
             case confirmAddGroupButtonTapped
-            case confirmAddPersonButtonTapped
             case gearButtonTapped
             case groupCardTapped(Group)
             case listenGroups
@@ -58,7 +57,6 @@ struct Main: Reducer {
 
         enum InternalAction: Equatable {
             case addGroupResult(TaskResult<Group>)
-            case addPersonResult(TaskResult<Person>)
             case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
             case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)
         }
@@ -115,7 +113,7 @@ struct Main: Reducer {
                     state.destination = .groupForm(GroupForm.State(group: Group()))
                     return .none
                 case .addPersonButtonTapped:
-                    state.destination = .personForm(PersonForm.State(person: Person(), groups: state.groups))
+                    state.destination = .personForm(PersonForm.State(person: Person(), groups: state.groups, mode: .create))
                     return .none
                 case .confirmAddGroupButtonTapped:
                     guard case let .some(.groupForm(formState)) = state.destination else {
@@ -129,23 +127,6 @@ struct Main: Reducer {
                                 .addGroupResult(
                                     .init {
                                         try personClient.addGroup(group)
-                                    }
-                                )
-                            )
-                        )
-                    }
-                case .confirmAddPersonButtonTapped:
-                    guard case let .some(.personForm(formState)) = state.destination else {
-                        return .none
-                    }
-                    let person = formState.person
-
-                    return .run { send in
-                        await send(
-                            .internal(
-                                .addPersonResult(
-                                    await TaskResult {
-                                        try personClient.addPerson(person)
                                     }
                                 )
                             )
@@ -193,15 +174,6 @@ struct Main: Reducer {
                     return .none
 
                 case .addGroupResult(.failure(_)):
-                    print("📝 failed add person")
-                    return .none
-
-                case .addPersonResult(.success(_)):
-                    print("📝 success add person")
-                    state.destination = nil
-                    return .none
-
-                case .addPersonResult(.failure(_)):
                     print("📝 failed add person")
                     return .none
 
@@ -283,7 +255,9 @@ struct MainView: View {
             state: /Main.Destination.State.personForm,
             action: Main.Destination.Action.personForm
         ) { store in
-            personForm(store: store)
+            NavigationView {
+                PersonFormView(store: store)
+            }
         }
     }
 
@@ -389,20 +363,6 @@ private extension MainView {
                     ToolbarItem(placement: .confirmationAction) {
                         Button("add-button-title") {
                             viewStore.send(.view(.confirmAddGroupButtonTapped))
-                        }
-                    }
-                }
-        }
-    }
-
-    func personForm(store: StoreOf<PersonForm>) -> some View {
-        NavigationView {
-            PersonFormView(store: store)
-                .navigationTitle("person-form-title")
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("add-button-title") {
-                            viewStore.send(.view(.confirmAddPersonButtonTapped))
                         }
                     }
                 }

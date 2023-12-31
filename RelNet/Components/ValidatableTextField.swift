@@ -9,35 +9,31 @@ import SwiftUI
 
 struct ValidatableTextField: View {
     let placeholder: String
-    let validatable: Validatable
+    let text: Binding<String>
+    let validationResult: Result<Void, Error>
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            TextField(placeholder, text: validatable.binding)
+            TextField(placeholder, text: text)
             errorText
         }
     }
 }
 
 private extension ValidatableTextField {
-    var errorString: String {
-        var errorString = ""
-        do {
-            try validatable.validate()
-        } catch {
-            if let error = error as? LocalizedError {
-                errorString = error.recoverySuggestion ?? ""
-            }
-        }
-        return errorString
-    }
-
     @ViewBuilder
     var errorText: some View {
-        if !errorString.isEmpty {
-            Text(errorString)
-                .foregroundColor(.red)
-                .font(.caption)
+        switch validationResult {
+        case .success:
+            EmptyView()
+        case let .failure(error):
+            if let error = error as? LocalizedError,
+               let errorText = error.recoverySuggestion,
+               !errorText.isEmpty {
+                Text(errorText)
+                    .foregroundColor(.red)
+                    .font(.caption)
+            }
         }
     }
 }
@@ -46,12 +42,14 @@ private extension ValidatableTextField {
 
     struct DemoValidatedTextField: View {
         @State var text = "this is demo"
+        let validator = PersonInputValidator()
 
         var body: some View {
             NavigationView {
-                ValidatableTextField(
+                ValidatableTextField (
                     placeholder: "placeholder",
-                    validatable: PersonInputType.name($text)
+                    text: $text,
+                    validationResult: validator.validate(value: text, type: .name)
                 )
             }
         }

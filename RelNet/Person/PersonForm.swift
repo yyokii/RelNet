@@ -18,38 +18,83 @@ struct PersonForm: Reducer {
         @BindingState var focus: Field? = .name
         @BindingState var person: Person
         let groups: IdentifiedArrayOf<Group>
+        let mode: Mode
+        let validator: PersonInputValidator = .init()
 
-        init(person: Person, groups: IdentifiedArrayOf<Group>) {
+        var enableDoneButton: Bool {
+            validator.isValidPerson(person)
+        }
+
+        init(person: Person, groups: IdentifiedArrayOf<Group>, mode: Mode) {
             self.person = person
             self.groups = groups
+            self.mode = mode
         }
 
         enum Field: Hashable {
             case name
+        }
+
+        enum Mode: Hashable {
+            case create
+            case edit
         }
     }
 
     enum Action: BindableAction, Equatable, Sendable {
 
         // User Action
-        case binding(BindingAction<State>)
+        case doneButtonTapped
         case contactedTodayButtonTapped
         case groupButtonTapped(Group)
-
-        // Other
         case nameEndEditing
+
+        case delegate(DelegateAction)
+
+        case binding(BindingAction<State>)
+        case addPersonResult(TaskResult<Person>)
+        case editPersonResult(TaskResult<Person>)
+
+        enum DelegateAction: Equatable {
+            case personUpdated(Person)
+        }
     }
+
+    @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce<State, Action> { state, action in
             switch action {
-            case .binding:
-                return .none
-
             case .contactedTodayButtonTapped:
                 state.person.lastContacted = Date()
                 return .none
+
+            case .doneButtonTapped:
+                let person = state.person
+
+                switch state.mode {
+                case .create:
+                    return .run { send in
+                        await send(
+                            .addPersonResult(
+                                await TaskResult {
+                                    try personClient.addPerson(person)
+                                }
+                            )
+                        )
+                    }
+                case .edit:
+                    return .run { send in
+                        await send(
+                            .editPersonResult(
+                                await TaskResult {
+                                    try self.personClient.updatePerson(person)
+                                }
+                            )
+                        )
+                    }
+                }
 
             case let .groupButtonTapped(group):
                 guard let id = group.id else {
@@ -61,6 +106,25 @@ struct PersonForm: Reducer {
             case .nameEndEditing:
                 state.person.furigana = state.person.name.furigana
                 return .none
+
+            case let .addPersonResult(.success(person)):
+                print("📝 success add Group")
+                return .send(.delegate(.personUpdated(person)))
+
+            case .addPersonResult(.failure(_)):
+                print("📝 failed add person")
+                return .none
+
+            case let .editPersonResult(.success(person)):
+                print("📝 success edit person")
+                return .send(.delegate(.personUpdated(person)))
+
+            case .editPersonResult(.failure(_)):
+                print("📝 failed edit person")
+                return .none
+
+            case .delegate, .binding:
+                return .none
             }
         }
     }
@@ -69,8 +133,8 @@ struct PersonForm: Reducer {
 /**
  Person情報の入力ができる画面
 
- どの画面から本画面を表示するかでtoolbarに表示するボタンが変更するので、利用するViewにおいて
- toolbarの設定とその処理を担うようにしている。
+ どの画面から本画面を表示するかでtoolbarに表示するボタンが変更するので、
+ 利用するViewにおいてtoolbarの設定とその処理（作成、更新）を担うようにしている。
  */
 struct PersonFormView: View {
     let store: StoreOf<PersonForm>
@@ -93,7 +157,11 @@ struct PersonFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "名前",
-                            validatable: PersonInputType.name(viewStore.$person.name)
+                            text: viewStore.$person.name,
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.name,
+                                type: .name
+                            )
                         )
                         .focused(self.$focus, equals: .name)
                         .onChange(of: viewStore.state.focus) { focus in
@@ -103,23 +171,43 @@ struct PersonFormView: View {
                         }
                         ValidatableTextField(
                             placeholder: "フリガナ",
-                            validatable: PersonInputType.other(viewStore.$person.furigana.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.furigana.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.furigana,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "ニックネーム",
-                            validatable: PersonInputType.other(viewStore.$person.nickname.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.nickname,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "趣味",
-                            validatable: PersonInputType.other(viewStore.$person.hobbies.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.hobbies,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "好きなこと",
-                            validatable: PersonInputType.other(viewStore.$person.likes.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likes.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likes,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "苦手なこと",
-                            validatable: PersonInputType.other(viewStore.$person.dislikes.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.dislikes.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.dislikes,
+                                type: .other
+                            )
                         )
                         DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
@@ -131,15 +219,27 @@ struct PersonFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "親",
-                            validatable: PersonInputType.other(viewStore.$person.parents.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.parents.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.parents,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "兄弟/姉妹",
-                            validatable: PersonInputType.other(viewStore.$person.sibling.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.sibling.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.sibling,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "ペット",
-                            validatable: PersonInputType.other(viewStore.$person.pets.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.pets.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.pets,
+                                type: .other
+                            )
                         )
                     }
                 } header: {
@@ -150,19 +250,35 @@ struct PersonFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "好きな食べ物",
-                            validatable: PersonInputType.other(viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likeFoods,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "好きなお菓子",
-                            validatable: PersonInputType.other(viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likeSweets,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "アレルギー",
-                            validatable: PersonInputType.other(viewStore.$person.allergies.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.allergies.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.allergies,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "苦手な食べ物",
-                            validatable: PersonInputType.other(viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.dislikeFoods,
+                                type: .other
+                            )
                         )
                     }
                 } header: {
@@ -173,19 +289,35 @@ struct PersonFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "好きなジャンル",
-                            validatable: PersonInputType.other(viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likeMusicCategories,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "好きなアーティスト",
-                            validatable: PersonInputType.other(viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likeArtists,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "好きな曲",
-                            validatable: PersonInputType.other(viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.likeMusics,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "演奏できる楽器",
-                            validatable: PersonInputType.other(viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.playableInstruments,
+                                type: .other
+                            )
                         )
                     }
                 } header: {
@@ -196,11 +328,19 @@ struct PersonFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "行った国",
-                            validatable: PersonInputType.other(viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.travelCountries,
+                                type: .other
+                            )
                         )
                         ValidatableTextField(
                             placeholder: "お気に入りの場所",
-                            validatable: PersonInputType.other(viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""))
+                            text: viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.favoriteLocations,
+                                type: .other
+                            )
                         )
                     }
                 } header: {
@@ -208,6 +348,15 @@ struct PersonFormView: View {
                 }
             }
             .bind(viewStore.$focus, to: self.$focus)
+            .navigationTitle(viewStore.person.name)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("done-button-title") {
+                        viewStore.send(.doneButtonTapped)
+                    }
+                    .disabled(!viewStore.enableDoneButton)
+                }
+            }
         }
     }
 }
@@ -242,7 +391,7 @@ struct PersonForm_Previews: PreviewProvider {
                 store: Store(
                     initialState: PersonForm.State(
                         person: .mock(),
-                        groups: .init(uniqueElements: [.mock()])
+                        groups: .init(uniqueElements: [.mock()]), mode: .create
                     )
                 ) {
                     PersonForm()

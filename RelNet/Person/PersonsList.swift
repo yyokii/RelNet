@@ -143,6 +143,7 @@ struct PersonsList: Reducer {
                     return .none
                 }
 
+                // TODO: この更新必要？
                 if updatedPerson.groupIDs.contains(state.selectedGroup.id!) {
                     state.persons[index] = updatedPerson
                 } else {

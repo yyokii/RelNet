@@ -246,22 +246,6 @@
         }
       }
     },
-    "person-form-title" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New person"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新しい人物"
-          }
-        }
-      }
-    },
     "person-list-title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -308,6 +292,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "旅行"
+          }
+        }
+      }
+    },
+    "validation-error-alert-message" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "👀"
+          }
+        }
+      }
+    },
+    "validation-error-alert-title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "入力内容をご確認ください"
           }
         }
       }

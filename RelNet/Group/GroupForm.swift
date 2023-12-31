@@ -15,6 +15,8 @@ struct GroupForm: Reducer {
         @BindingState var focus: Field? = .name
         @BindingState var group: Group
 
+        let validator: GroupInputValidator = .init()
+
         init(focus: Field? = .name, group: Group) {
             self.focus = focus
             self.group = group
@@ -52,7 +54,11 @@ struct GroupFormView: View {
                     VStack {
                         ValidatableTextField(
                             placeholder: "group-name-title",
-                            validatable: PersonInputType.name(viewStore.$group.name)
+                            text: viewStore.$group.name,
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.group.name,
+                                type: .name
+                            )
                         )
                         .focused(self.$focus, equals: .name)
                     }
