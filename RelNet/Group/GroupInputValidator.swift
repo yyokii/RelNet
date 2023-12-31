@@ -17,7 +17,7 @@ struct GroupInputValidator: Equatable {
         }
     }
 
-    func isValidPerson(_ group: Person) -> Bool {
+    func isValidGroup(_ group: Group) -> Bool {
         let nameValidationResult = validate(value: group.name, type: .name)
         switch nameValidationResult {
         case .success:

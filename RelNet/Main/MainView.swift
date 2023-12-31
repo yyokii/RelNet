@@ -47,7 +47,6 @@ struct Main: Reducer {
         enum ViewAction: Equatable {
             case addGroupButtonTapped
             case addPersonButtonTapped
-            case confirmAddGroupButtonTapped
             case gearButtonTapped
             case groupCardTapped(Group)
             case listenGroups
@@ -56,7 +55,6 @@ struct Main: Reducer {
         }
 
         enum InternalAction: Equatable {
-            case addGroupResult(TaskResult<Group>)
             case listenGroupsResponse(TaskResult<IdentifiedArrayOf<Group>>)
             case listenPersonsResponse(TaskResult<IdentifiedArrayOf<Person>>)
         }
@@ -110,28 +108,11 @@ struct Main: Reducer {
             case let .view(viewAction):
                 switch viewAction {
                 case .addGroupButtonTapped:
-                    state.destination = .groupForm(GroupForm.State(group: Group()))
+                    state.destination = .groupForm(GroupForm.State(group: Group(), mode: .create))
                     return .none
                 case .addPersonButtonTapped:
                     state.destination = .personForm(PersonForm.State(person: Person(), groups: state.groups, mode: .create))
                     return .none
-                case .confirmAddGroupButtonTapped:
-                    guard case let .some(.groupForm(formState)) = state.destination else {
-                        return .none
-                    }
-                    let group = formState.group
-
-                    return .run { send in
-                        await send(
-                            .internal(
-                                .addGroupResult(
-                                    .init {
-                                        try personClient.addGroup(group)
-                                    }
-                                )
-                            )
-                        )
-                    }
                 case .gearButtonTapped:
                     state.destination = .myPage(.init())
                     return .none
@@ -167,16 +148,6 @@ struct Main: Reducer {
 
             case let .internal(internalAction):
                 switch internalAction {
-
-                case .addGroupResult(.success(_)):
-                    print("📝 success add Group")
-                    state.destination = nil
-                    return .none
-
-                case .addGroupResult(.failure(_)):
-                    print("📝 failed add person")
-                    return .none
-
                 case let .listenGroupsResponse(.success(groups)):
                     state.groups = groups
                     return .none
@@ -356,16 +327,8 @@ private extension MainView {
     }
 
     func groupForm(store: StoreOf<GroupForm>) -> some View {
-        NavigationView {
+        NavigationStack {
             GroupFormView(store: store)
-                .navigationTitle("group-form-title")
-                .toolbar {
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("add-button-title") {
-                            viewStore.send(.view(.confirmAddGroupButtonTapped))
-                        }
-                    }
-                }
         }
     }
 }

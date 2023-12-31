@@ -37,7 +37,6 @@ struct PersonsList: Reducer {
     enum Action: Equatable {
         // User Action
         case cancelEditGroupButtonTapped
-        case doneEditingGroupButtonTapped
         case deleteGroupButtonTapped
         case editGroupButtonTapped
         case personItemTapped(Person)
@@ -45,7 +44,6 @@ struct PersonsList: Reducer {
         // Other Action
         case destination(PresentationAction<Destination.Action>)
         case deleteGroupResult(TaskResult<String>)
-        case editGroupResult(TaskResult<Group>)
     }
 
     struct Destination: Reducer {
@@ -85,27 +83,12 @@ struct PersonsList: Reducer {
                 state.destination = nil
                 return .none
 
-            case .doneEditingGroupButtonTapped:
-                guard case let .some(.editGroup(editState)) = state.destination
-                else { return .none }
-
-                let group = editState.group
-                return .run { send in
-                    await send(
-                        .editGroupResult(
-                            await TaskResult {
-                                try personClient.updateGroup(group)
-                            }
-                        )
-                    )
-                }
-
             case .deleteGroupButtonTapped:
                 state.destination = .alert(.deleteGroup)
                 return .none
 
             case .editGroupButtonTapped:
-                state.destination = .editGroup(.init(group: state.selectedGroup))
+                state.destination = .editGroup(.init(group: state.selectedGroup, mode: .edit))
                 return .none
 
             case let .personItemTapped(person):
@@ -164,16 +147,6 @@ struct PersonsList: Reducer {
             case .deleteGroupResult(.failure(_)):
                 print("📝 failed delete group")
                 return .none
-
-            case let .editGroupResult(.success(group)):
-                print("📝 success edit group")
-                state.selectedGroup = group
-                state.destination = nil
-                return .none
-
-            case .editGroupResult(.failure(_)):
-                print("📝 failed edit group")
-                return .none
             }
         }
         .ifLet(\.$destination, action: /Action.destination) {
@@ -219,19 +192,6 @@ struct PersonsListView: View {
             ) { store in
                 NavigationStack {
                     GroupFormView(store: store)
-                        .navigationTitle(viewStore.selectedGroup.name)
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Cancel") {
-                                    viewStore.send(.cancelEditGroupButtonTapped)
-                                }
-                            }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("done-button-title") {
-                                    viewStore.send(.doneEditingGroupButtonTapped)
-                                }
-                            }
-                        }
                 }
             }
         }

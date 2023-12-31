@@ -135,6 +135,7 @@ struct PersonForm: Reducer {
 
  どの画面から本画面を表示するかでtoolbarに表示するボタンが変更するので、
  利用するViewにおいてtoolbarの設定とその処理（作成、更新）を担うようにしている。
+ → の方針だったが、toolbarのボタンの状態を本画面で操作したかったので、modeを持って処理を振り分けるようにした
  */
 struct PersonFormView: View {
     let store: StoreOf<PersonForm>
