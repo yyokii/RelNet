@@ -84,10 +84,7 @@ struct PersonDetail: Reducer {
                 switch internalAction {
                 case let .deletePersonResult(.success(id)):
                     print("📝 success delete person")
-                    return .run { send in
-                        await dismiss()
-                        await send(.delegate(.personDeleted(id)))
-                    }
+                    return .send(.delegate(.personDeleted(id)))
 
                 case .deletePersonResult(.failure(_)):
                     print("📝 failed delete person")
@@ -117,7 +114,7 @@ struct PersonDetail: Reducer {
             case let .destination(.presented(.personForm(.delegate(.personUpdated(person))))):
                 state.destination = nil
                 state.person = person
-                return .none
+                return .send(.delegate(.personUpdated(person)))
 
             case .delegate, .destination:
                 return .none

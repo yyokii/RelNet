@@ -112,8 +112,14 @@ struct PersonsList: Reducer {
                         )
                     }
                 }
+            case let .destination(.presented(.editGroup(.delegate(.groupUpdated(updatedGroup))))):
+                state.destination = nil
+                state.selectedGroup = updatedGroup
+                return .none
 
             case let .destination(.presented(.personDetail(.delegate(.personDeleted(deletedPersonId))))):
+                state.destination = nil
+
                 guard let index = state.persons.firstIndex(where: { $0.id == deletedPersonId }) else {
                     return .none
                 }
@@ -126,16 +132,12 @@ struct PersonsList: Reducer {
                     return .none
                 }
 
-                // TODO: この更新必要？
                 if updatedPerson.groupIDs.contains(state.selectedGroup.id!) {
                     state.persons[index] = updatedPerson
                 } else {
                     state.persons.remove(at: index)
                 }
 
-                return .none
-
-            case .destination:
                 return .none
 
             case .deleteGroupResult(.success(_)):
@@ -146,6 +148,9 @@ struct PersonsList: Reducer {
 
             case .deleteGroupResult(.failure(_)):
                 print("📝 failed delete group")
+                return .none
+
+            case .destination:
                 return .none
             }
         }

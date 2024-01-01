@@ -108,7 +108,6 @@ struct PersonForm: Reducer {
                 return .none
 
             case let .addPersonResult(.success(person)):
-                print("📝 success add Group")
                 return .send(.delegate(.personUpdated(person)))
 
             case .addPersonResult(.failure(_)):

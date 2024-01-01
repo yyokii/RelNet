@@ -63,7 +63,6 @@ struct Main: Reducer {
     }
 
     struct Destination: Reducer {
-        // TODO: state名とcase名が一致してない
         enum State: Equatable {
             case groupForm(GroupForm.State)
             case myPage(MyPage.State)
@@ -165,6 +164,14 @@ struct Main: Reducer {
                     return .none
                 }
 
+            case .destination(.presented(.personForm(.delegate(.personUpdated(_))))):
+                state.destination = nil
+                return .none
+
+            case .destination(.presented(.personDetail(.delegate(.personDeleted(_))))):
+                state.destination = nil
+                return .none
+
             case .destination:
                 return .none
             }
@@ -219,7 +226,9 @@ struct MainView: View {
             state: /Main.Destination.State.groupForm,
             action: Main.Destination.Action.groupForm
         ) { store in
-            groupForm(store: store)
+            NavigationStack {
+                GroupFormView(store: store)
+            }
         }
         .sheet(
             store: self.store.scope(state: \.$destination, action: Main.Action.destination),
@@ -323,12 +332,6 @@ private extension MainView {
                 }
             }
             .foregroundStyle(Color.appAccent)
-        }
-    }
-
-    func groupForm(store: StoreOf<GroupForm>) -> some View {
-        NavigationStack {
-            GroupFormView(store: store)
         }
     }
 }

@@ -33,6 +33,8 @@ extension DependencyValues {
 }
 
 extension PersonClient: DependencyKey {
+    private static let db: Firestore = Firestore.firestore()
+
     public static let liveValue = Self(
         listenGroups: {
             AsyncThrowingStream { continuation in
@@ -194,8 +196,6 @@ extension PersonClient: DependencyKey {
             return person
         }
     )
-
-    private static let db: Firestore = Firestore.firestore()
 }
 
 extension PersonClient: TestDependencyKey {

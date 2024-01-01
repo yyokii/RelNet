@@ -56,6 +56,7 @@ struct GroupForm: Reducer {
         }
     }
 
+    @Dependency(\.dismiss) var dismiss
     @Dependency(\.personClient) private var personClient
 
     var body: some ReducerOf<Self> {
@@ -88,7 +89,6 @@ struct GroupForm: Reducer {
                     }
                 }
             case let .addGroupResult(.success(group)):
-                print("📝 success add Group")
                 return .send(.delegate(.groupUpdated(group)))
 
             case .addGroupResult(.failure(_)):
