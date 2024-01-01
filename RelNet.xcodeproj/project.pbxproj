@@ -100,6 +100,7 @@
 		F55BE3612ABCA24100289320 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		F59412112B2F2E0F009516FA /* PersonInputValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonInputValidator.swift; sourceTree = "<group>"; };
 		F5972F122B31FC16008F9605 /* ValidatableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatableTextField.swift; sourceTree = "<group>"; };
+		F59A99D12B42EB060058057F /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
 		F59EF35F2B21E1370064C18D /* RelNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelNet.entitlements; sourceTree = "<group>"; };
@@ -156,6 +157,7 @@
 		F5405BCD2A96F347002FA0C9 = {
 			isa = PBXGroup;
 			children = (
+				F59A99D02B42EAD10058057F /* ci_scripts */,
 				F5405BD82A96F347002FA0C9 /* RelNet */,
 				F5405BE92A96F349002FA0C9 /* RelNetTests */,
 				F5405BF32A96F349002FA0C9 /* RelNetUITests */,
@@ -283,6 +285,14 @@
 				F55BE3612ABCA24100289320 /* Color.swift */,
 			);
 			path = StyleGuide;
+			sourceTree = "<group>";
+		};
+		F59A99D02B42EAD10058057F /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				F59A99D12B42EB060058057F /* ci_pre_xcodebuild.sh */,
+			);
+			path = ci_scripts;
 			sourceTree = "<group>";
 		};
 		F5DC3B952AA57EBA005528F9 /* Person */ = {
