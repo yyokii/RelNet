@@ -204,37 +204,6 @@ extension PersonClient: DependencyKey {
     )
 }
 
-extension PersonClient: TestDependencyKey {
-    static let previewValue = Self(
-        listenGroups: {
-            AsyncThrowingStream { continuation in
-                let persons: [Group] = [
-                    .mock(id: "id-1"),
-                    .mock(id: "id-2"),
-                ]
-                continuation.yield(IdentifiedArray(uniqueElements: persons))
-                continuation.finish()
-            }
-        },
-        listenPersons: {
-            AsyncThrowingStream { continuation in
-                let persons: [Person] = [
-                    .mock(id: "id-1"),
-                    .mock(id: "id-2"),
-                ]
-                continuation.yield(IdentifiedArray(uniqueElements: persons))
-                continuation.finish()
-            }
-        },
-        addGroup: { _ in .mock() },
-        addPerson: { _ in .mock() },
-        deleteGroup: { _ in "deletedID" },
-        deletePerson: { _ in "deletedID" },
-        updateGroup: { _ in .mock() },
-        updatePerson: { _ in .mock() }
-    )
-}
-
 enum PersonClientError: LocalizedError, Sendable {
     case general(Error?)
 
@@ -255,3 +224,36 @@ enum PersonClientError: LocalizedError, Sendable {
         }
     }
 }
+
+#if DEBUG
+    extension PersonClient: TestDependencyKey {
+        static let previewValue = Self(
+            listenGroups: {
+                AsyncThrowingStream { continuation in
+                    let persons: [Group] = [
+                        .mock(id: "id-1"),
+                        .mock(id: "id-2"),
+                    ]
+                    continuation.yield(IdentifiedArray(uniqueElements: persons))
+                    continuation.finish()
+                }
+            },
+            listenPersons: {
+                AsyncThrowingStream { continuation in
+                    let persons: [Person] = [
+                        .mock(id: "id-1"),
+                        .mock(id: "id-2"),
+                    ]
+                    continuation.yield(IdentifiedArray(uniqueElements: persons))
+                    continuation.finish()
+                }
+            },
+            addGroup: { _ in .mock() },
+            addPerson: { _ in .mock() },
+            deleteGroup: { _ in "deletedID" },
+            deletePerson: { _ in "deletedID" },
+            updateGroup: { _ in .mock() },
+            updatePerson: { _ in .mock() }
+        )
+    }
+#endif
