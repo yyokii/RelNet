@@ -384,20 +384,24 @@ private extension PersonFormView {
     }
 }
 
-struct PersonForm_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            PersonFormView(
-                store: Store(
-                    initialState: PersonForm.State(
-                        person: .mock(),
-                        groups: .init(uniqueElements: [.mock()]),
-                        mode: .create
-                    )
-                ) {
-                    PersonForm()
-                }
-            )
+#if DEBUG
+
+    struct PersonForm_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationStack {
+                PersonFormView(
+                    store: Store(
+                        initialState: PersonForm.State(
+                            person: .mock(),
+                            groups: .init(uniqueElements: [.mock()]),
+                            mode: .create
+                        )
+                    ) {
+                        PersonForm()
+                    }
+                )
+            }
         }
     }
-}
+
+#endif

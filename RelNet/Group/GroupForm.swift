@@ -146,14 +146,18 @@ struct GroupFormView: View {
     }
 }
 
-struct GroupForm_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            GroupFormView(
-                store: Store(initialState: GroupForm.State(group: .mock(), mode: .create)) {
-                    GroupForm()
-                }
-            )
+#if DEBUG
+
+    struct GroupForm_Previews: PreviewProvider {
+        static var previews: some View {
+            NavigationStack {
+                GroupFormView(
+                    store: Store(initialState: GroupForm.State(group: .mock(), mode: .create)) {
+                        GroupForm()
+                    }
+                )
+            }
         }
     }
-}
+
+#endif

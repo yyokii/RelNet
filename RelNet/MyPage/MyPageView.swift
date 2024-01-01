@@ -161,7 +161,7 @@ private extension MyPageView {
         .sheet(
             isPresented: viewStore.$isInquiryPresenting
         ) {
-            SafariView(url: .init(string: "https://www.google.com/?hl=ja")!)
+            SafariView(url: .init(string: "https://forms.gle/M82F4pnAVKRnm6bk8")!)
         }
     }
 
