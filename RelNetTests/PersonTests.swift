@@ -16,27 +16,27 @@ final class PersonTests: XCTestCase {
     override func tearDownWithError() throws {}
 
     func testLastNameFuriganaInitial() {
-        let person = Person(lastName: "田中", lastNameFurigana: "たなか")
+        let person = Person(name: "田中", furigana: "たなか")
         XCTAssertEqual(person.nameInitial, "た")
     }
 
     func testFirstNameFuriganaInitial() {
-        let person = Person(firstName: "太郎", firstNameFurigana: "たろう")
+        let person = Person(name: "太郎", furigana: "たろう")
         XCTAssertEqual(person.nameInitial, "た")
     }
 
     func testKanjiLastNameInitialReturnsOther() {
-        let person = Person(lastName: "田中")
+        let person = Person(name: "田中")
         XCTAssertEqual(person.nameInitial, "その他")
     }
 
     func testLastNameInitial() {
-        let person = Person(lastName: "Tanaka")
+        let person = Person(name: "Tanaka")
         XCTAssertEqual(person.nameInitial, "T")
     }
 
     func testFirstNameInitial() {
-        let person = Person(firstName: "Taro")
+        let person = Person(name: "Taro")
         XCTAssertEqual(person.nameInitial, "T")
     }
 
@@ -47,21 +47,6 @@ final class PersonTests: XCTestCase {
 
     func testNumericNicknameInitialReturnsOther() {
         let person = Person(nickname: "123Taro")
-        XCTAssertEqual(person.nameInitial, "その他")
-    }
-
-    func testSymbolicNicknameInitialReturnsOther() {
-        let person = Person(nickname: "!Taro")
-        XCTAssertEqual(person.nameInitial, "!")
-    }
-
-    func testNicknameInitial() {
-        let person = Person(nickname: "Taro")
-        XCTAssertEqual(person.nameInitial, "T")
-    }
-
-    func testEmptyNameReturnsOther() {
-        let person = Person()
         XCTAssertEqual(person.nameInitial, "その他")
     }
 }

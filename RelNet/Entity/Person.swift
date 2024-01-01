@@ -72,38 +72,25 @@ struct Person: Codable, Identifiable, Hashable {
         - Kanji check is based on the Unicode Han script property.
      */
     var nameInitial: String {
-        let otherCategory = "その他"
+        let otherCategory = String(localized: "other-category-title")
+        var initial: String?
 
-        // Check furigana first as it has the highest priority
         if let furigana, !furigana.isEmpty {
-            return String(furigana.prefix(1))
-        }
-
-        // If furigana is not available, check names
-        if !name.isEmpty {
-            let initial = name.prefix(1)
+            // Check furigana first as it has the highest priority
+            initial = String(furigana.prefix(1))
+        } else if !name.isEmpty {
+            // If furigana is not available, check names
+            let firstChar = name.prefix(1)
 
             // Using regex to check if the initial is a kanji character
-            if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil {
-                return otherCategory
+            if firstChar.range(of: "\\p{Script=Han}", options: .regularExpression) == nil {
+                initial = String(firstChar)
             }
-
-            return String(initial)
         }
 
-        // If only nickname is available
-        if let nickname, !nickname.isEmpty {
-            let initial = nickname.prefix(1)
-            // Check for kanji, number or symbol for nickname initial
-            if initial.range(of: "\\p{Script=Han}", options: .regularExpression) != nil || initial.rangeOfCharacter(from: CharacterSet.decimalDigits.union(CharacterSet.symbols)) != nil {
-                return otherCategory
-            }
+        // If an initial has been set, return it in uppercase, otherwise return "その他"
+        return initial?.uppercased() ?? otherCategory
 
-            return String(initial)
-        }
-
-        // If no suitable name or nickname is found
-        return otherCategory
     }
 
     mutating func updateGroupID(_ id: String) {

@@ -246,6 +246,23 @@
         }
       }
     },
+    "other-category-title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Other"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "その他"
+          }
+        }
+      }
+    },
     "person-list-title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -292,28 +309,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "旅行"
-          }
-        }
-      }
-    },
-    "validation-error-alert-message" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "👀"
-          }
-        }
-      }
-    },
-    "validation-error-alert-title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "入力内容をご確認ください"
           }
         }
       }
