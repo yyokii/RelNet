@@ -95,10 +95,6 @@ struct MyPageView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
             VStack {
-                topCard
-                    .padding(.horizontal)
-                    .padding(.vertical)
-
                 Form {
                     Section("サポート") {
                         inquiryRow
@@ -106,6 +102,12 @@ struct MyPageView: View {
                     }
 
                     Section("アカウント") {
+                        HStack {
+                            RoundedIconAndTitle(symbolName: "person", iconColor: .teal, title: "email")
+                            Spacer()
+                            Text(viewStore.user?.email ?? "")
+                        }
+
                         Button {
                             viewStore.send(.signOutButtonTapped)
                         } label: {
@@ -146,38 +148,6 @@ extension AlertState where Action == MyPage.Action.Alert {
 }
 
 private extension MyPageView {
-
-    @ViewBuilder
-    var topCard: some View {
-        if let user = viewStore.user,
-            let name = user.name, !name.isEmpty
-        {
-            VStack(alignment: .center, spacing: 8) {
-                if let photoURL = user.photoURL {
-                    AsyncImage(url: photoURL) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        ProgressView()
-                    }
-                    .frame(width: 52, height: 52)
-                    .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.crop.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 60, height: 60)
-                        .clipShape(Circle())
-                        .foregroundColor(.gray)
-                }
-
-                Text(name)
-                    .font(.subheadline)
-                    .foregroundColor(.primary)
-            }
-        }
-    }
 
     var inquiryRow: some View {
         Button(action: {

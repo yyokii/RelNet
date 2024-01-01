@@ -54,6 +54,9 @@ extension PersonClient: DependencyKey {
                                 .compactMap { document -> Group? in
                                     try? document.data(as: Group.self)
                                 }
+                                .sorted { (group1, group2) -> Bool in
+                                    group1.name < group2.name
+                                }
                             continuation.yield(IdentifiedArray(uniqueElements: groups))
                         }
                     }
@@ -79,6 +82,9 @@ extension PersonClient: DependencyKey {
                             let persons = querySnapshot.documents
                                 .compactMap { document -> Person? in
                                     try? document.data(as: Person.self)
+                                }
+                                .sorted { (person1, person2) -> Bool in
+                                    person1.name < person2.name
                                 }
                             continuation.yield(IdentifiedArray(uniqueElements: persons))
                         }
