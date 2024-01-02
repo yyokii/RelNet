@@ -190,6 +190,15 @@ struct PersonFormView: View {
                                 type: .other
                             )
                         )
+                        DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+                        ValidatableTextField(
+                            placeholder: "住所",
+                            text: viewStore.$person.address.toUnwrapped(defaultValue: ""),
+                            validationResult: viewStore.validator.validate(
+                                value: viewStore.person.address,
+                                type: .other
+                            )
+                        )
                         ValidatableTextField(
                             placeholder: "趣味",
                             text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""),
@@ -214,7 +223,6 @@ struct PersonFormView: View {
                                 type: .other
                             )
                         )
-                        DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     }
                 } header: {
                     Text("basic-info-section-title")

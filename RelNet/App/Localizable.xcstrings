@@ -192,9 +192,15 @@
     "group-name-title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "group name"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "グループ名"
           }
         }

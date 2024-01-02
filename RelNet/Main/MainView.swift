@@ -151,6 +151,10 @@ struct Main: Reducer {
                     return .none
                 }
 
+            case .destination(.presented(.groupForm(.delegate(.groupUpdated(_))))):
+                state.destination = nil
+                return .none
+
             case .destination(.presented(.personForm(.delegate(.personUpdated(_))))):
                 state.destination = nil
                 return .none
