@@ -15,38 +15,28 @@ final class PersonTests: XCTestCase {
 
     override func tearDownWithError() throws {}
 
-    func testLastNameFuriganaInitial() {
+    func testHiraganaNameInitial() {
+        let person = Person(name: "あああ")
+        XCTAssertEqual(person.nameInitial, "あ")
+    }
+
+    func testKatakanaNameInitial() {
+        let person = Person(name: "アイウエオ")
+        XCTAssertEqual(person.nameInitial, "あ")
+    }
+
+    func testFuriganaInitial() {
         let person = Person(name: "田中", furigana: "たなか")
         XCTAssertEqual(person.nameInitial, "た")
     }
 
-    func testFirstNameFuriganaInitial() {
-        let person = Person(name: "太郎", furigana: "たろう")
-        XCTAssertEqual(person.nameInitial, "た")
-    }
-
-    func testKanjiLastNameInitialReturnsOther() {
+    func testKanjiNameInitial() {
         let person = Person(name: "田中")
         XCTAssertEqual(person.nameInitial, "その他")
     }
 
-    func testLastNameInitial() {
+    func testEnglishNameInitial() {
         let person = Person(name: "Tanaka")
         XCTAssertEqual(person.nameInitial, "T")
-    }
-
-    func testFirstNameInitial() {
-        let person = Person(name: "Taro")
-        XCTAssertEqual(person.nameInitial, "T")
-    }
-
-    func testKanjiNicknameInitialReturnsOther() {
-        let person = Person(nickname: "田中太郎")
-        XCTAssertEqual(person.nameInitial, "その他")
-    }
-
-    func testNumericNicknameInitialReturnsOther() {
-        let person = Person(nickname: "123Taro")
-        XCTAssertEqual(person.nameInitial, "その他")
     }
 }

@@ -5,6 +5,7 @@
 //  Created by Higashihara Yoki on 2023/09/13.
 //
 
+import OrderedCollections
 import ComposableArchitecture
 import Foundation
 import SwiftUI
@@ -16,20 +17,6 @@ struct Main: Reducer {
 
         var groups: IdentifiedArrayOf<Group> = []
         var persons: IdentifiedArrayOf<Person> = []
-
-        var sortedPersons: [String: [Person]] {
-            var dict: [String: [Person]] = [:]
-            for person in persons {
-                let initial = person.nameInitial
-                if dict[initial] != nil {
-                    dict[initial]?.append(person)
-                } else {
-                    dict[initial] = [person]
-                }
-            }
-
-            return dict
-        }
 
         init(
             destination: Destination.State? = nil
@@ -303,7 +290,7 @@ private extension MainView {
             )
 
             SortedPersonsView(
-                sortedItems: viewStore.sortedPersons,
+                persons: viewStore.persons,
                 onTapPerson: { person in
                     viewStore.send(.view(.personItemTapped(person)))
                 }

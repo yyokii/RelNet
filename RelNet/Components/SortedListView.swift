@@ -5,14 +5,52 @@
 //  Created by Higashihara Yoki on 2023/09/21.
 //
 
+import IdentifiedCollections
+import OrderedCollections
 import SwiftUI
 
 struct SortedPersonsView: View {
-    let sortedItems: [String: [Person]]
+    let persons: IdentifiedArrayOf<Person>
     let onTapPerson: (Person) -> Void
 
+    private var sortedPersons: OrderedDictionary<String, [Person]> {
+        var dict: OrderedDictionary<String, [Person]> = [:]
+        let otherCategory = String(localized: "other-category-title")
+
+        // 初期値の設定
+        for person in persons {
+            let initial = person.nameInitial
+            dict[initial, default: []].append(person)
+        }
+
+        // 辞書をソートして再構築
+        let sortedDict = dict.sorted { customSortCriteria(key1: $0.key, key2: $1.key) }
+        return OrderedDictionary(uniqueKeysWithValues: sortedDict)
+
+        func customSortCriteria(key1: String, key2: String) -> Bool {
+            if key1 == otherCategory { return false }
+            if key2 == otherCategory { return true }
+
+            let isKey1Hiragana = isHiragana(key1)
+            let isKey2Hiragana = isHiragana(key2)
+
+            if isKey1Hiragana && !isKey2Hiragana {
+                return true
+            } else if !isKey1Hiragana && isKey2Hiragana {
+                return false
+            }
+
+            return key1 < key2
+        }
+
+        func isHiragana(_ s: String) -> Bool {
+            return s.range(of: "^[ぁ-ん]+$", options: .regularExpression) != nil
+        }
+    }
+
+
     var body: some View {
-        if sortedItems.isEmpty {
+        if persons.isEmpty {
             Text("empty-persons-message")
                 .font(.callout)
                 .multilineTextAlignment(.center)
@@ -21,7 +59,7 @@ struct SortedPersonsView: View {
                 .frame(maxWidth: .infinity)
         } else {
             VStack(alignment: .leading, spacing: 32) {
-                ForEach(sortedItems.keys.sorted(), id: \.self) { key in
+                ForEach(sortedPersons.keys, id: \.self) { key in
                     VStack(alignment: .leading, spacing: 12) {
                         Text(key)
                             .font(.headline)
@@ -34,7 +72,7 @@ struct SortedPersonsView: View {
                             }
 
                         VStack(alignment: .leading, spacing: 8) {
-                            ForEach(sortedItems[key]!, id: \.self) { person in
+                            ForEach(sortedPersons[key]!, id: \.self) { person in
                                 Button {
                                     onTapPerson(person)
                                 } label: {
@@ -65,7 +103,7 @@ struct SortedPersonsView: View {
         NavigationView {
             VStack {
                 SortedPersonsView(
-                    sortedItems: [:],
+                    persons: [],
                     onTapPerson: { person in
                         print("\(person.name) is tapped")
                     }
@@ -74,11 +112,7 @@ struct SortedPersonsView: View {
                 Divider()
 
                 SortedPersonsView(
-                    sortedItems: [
-                        "A": [.mock(id: "id-1"), .mock(id: "id-1-2")],
-                        "T": [.mock(id: "id-2")],
-                        "あ": [.mock(id: "id-3")],
-                    ],
+                    persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
                     onTapPerson: { person in
                         print("\(person.name) is tapped")
                     }

@@ -167,7 +167,7 @@ struct PersonsListView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 SortedPersonsView(
-                    sortedItems: viewStore.state.sortedPersons,
+                    persons: viewStore.state.persons,
                     onTapPerson: { person in
                         viewStore.send(.personItemTapped(person))
                     }

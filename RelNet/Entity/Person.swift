@@ -55,42 +55,32 @@ struct Person: Codable, Identifiable, Hashable {
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
-    /**
-     Returns the initial (first character) of the person's name or nickname based on certain prioritized conditions.
 
-      - Returns:
-        - The initial of `lastNameFurigana` if it exists.
-        - If not, it returns the initial of `firstNameFurigana` if it exists.
-        - If neither furigana is available, it checks `lastName` and `firstName`.
-          - If either name contains a Kanji character as the initial, it returns "その他" (Other).
-        - If only `nickname` is available:
-          - If the initial of the nickname is a Kanji, number, or symbol, it returns "その他" (Other).
-        - If none of the above criteria are met, it defaults to "その他" (Other).
-
-      - Note:
-        - This property gives priority to furigana over the regular name and to the last name over the first name.
-        - Kanji check is based on the Unicode Han script property.
-     */
+    /// The initial character of `furigana` or `name` in uppercase.
+    /// If the initial character is a Katakana, it returns the corresponding Hiragana character in uppercase.
+    /// Returns a localized "other category" string if no suitable initial character is found, or if the initial character is a Kanji.
     var nameInitial: String {
         let otherCategory = String(localized: "other-category-title")
-        var initial: String?
+        var nameOrFurigana: String?
 
+        // Determine the initial character based on priority
         if let furigana, !furigana.isEmpty {
-            // Check furigana first as it has the highest priority
-            initial = String(furigana.prefix(1))
-        } else if !name.isEmpty {
-            // If furigana is not available, check names
-            let firstChar = name.prefix(1)
-
-            // Using regex to check if the initial is a kanji character
-            if firstChar.range(of: "\\p{Script=Han}", options: .regularExpression) == nil {
-                initial = String(firstChar)
-            }
+            nameOrFurigana = furigana
+        } else if !name.isEmpty, name.range(of: "\\p{Script=Han}", options: .regularExpression) == nil {
+            nameOrFurigana = name
         }
 
-        // If an initial has been set, return it in uppercase, otherwise return "その他"
-        return initial?.uppercased() ?? otherCategory
+        // If a name or furigana is available
+        if let firstChar = nameOrFurigana?.prefix(1) {
+            // Convert Katakana to Hiragana if necessary
+            if let hiraganaChar = String(firstChar).applyingTransform(.hiraganaToKatakana, reverse: true) {
+                return hiraganaChar.uppercased()
+            }
+            return String(firstChar).uppercased()
+        }
 
+        // If no suitable name or furigana is found, return the default category
+        return otherCategory
     }
 
     mutating func updateGroupID(_ id: String) {
