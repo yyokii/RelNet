@@ -48,7 +48,6 @@ struct SortedPersonsView: View {
         }
     }
 
-
     var body: some View {
         if persons.isEmpty {
             Text("empty-persons-message")

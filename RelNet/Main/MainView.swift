@@ -5,9 +5,9 @@
 //  Created by Higashihara Yoki on 2023/09/13.
 //
 
-import OrderedCollections
 import ComposableArchitecture
 import Foundation
+import OrderedCollections
 import SwiftUI
 
 struct Main: Reducer {

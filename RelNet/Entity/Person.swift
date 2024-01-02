@@ -55,7 +55,6 @@ struct Person: Codable, Identifiable, Hashable {
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
-
     /// The initial character of `furigana` or `name` in uppercase.
     /// If the initial character is a Katakana, it returns the corresponding Hiragana character in uppercase.
     /// Returns a localized "other category" string if no suitable initial character is found, or if the initial character is a Kanji.
