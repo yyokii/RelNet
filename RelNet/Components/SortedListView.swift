@@ -58,19 +58,9 @@ struct SortedPersonsView: View {
                 .frame(height: 160)
                 .frame(maxWidth: .infinity)
         } else {
-            VStack(alignment: .leading, spacing: 32) {
+            LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders]) {
                 ForEach(sortedPersons.keys, id: \.self) { key in
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(key)
-                            .font(.headline)
-                            .foregroundColor(.adaptiveWhite)
-                            .frame(width: 16, height: 16)
-                            .padding(8)
-                            .background {
-                                Circle()
-                                    .fill(Color.adaptiveBlack)
-                            }
-
+                    Section {
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(sortedPersons[key]!, id: \.self) { person in
                                 Button {
@@ -84,6 +74,24 @@ struct SortedPersonsView: View {
                                 .buttonStyle(.plain)
                                 .padding(.horizontal)
                             }
+                        }
+                    } header: {
+                        HStack(alignment: .center, spacing: 0) {
+                            Text(key)
+                                .font(.headline)
+                                .foregroundColor(.adaptiveWhite)
+                                .frame(width: 16, height: 16)
+                                .padding(8)
+                                .background {
+                                    Circle()
+                                        .fill(Color.adaptiveBlack)
+                                }
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                        .background {
+                            Color.adaptiveWhite
                         }
                     }
                 }

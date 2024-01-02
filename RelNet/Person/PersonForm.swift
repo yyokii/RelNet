@@ -104,6 +104,10 @@ struct PersonForm: Reducer {
                 return .none
 
             case .nameEndEditing:
+                guard let furigana = state.person.furigana,
+                      furigana.isEmpty else {
+                    return .none
+                }
                 state.person.furigana = state.person.name.furigana
                 return .none
 
