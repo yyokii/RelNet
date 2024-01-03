@@ -13,6 +13,7 @@ import _AuthenticationServices_SwiftUI
 
 struct Login: Reducer, Sendable {
     struct State: Equatable {
+        // TODO:
         @PresentationState var alert: AlertState<AlertAction>?
         var isLoading: Bool = false
         var currentNonce: String?
@@ -219,10 +220,6 @@ private extension LoginView {
             }
         }
     }
-}
-
-extension SignInWithAppleButton.Style {
-
 }
 
 #if DEBUG
