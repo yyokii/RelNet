@@ -37,6 +37,7 @@
 		F55BE3622ABCA24100289320 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55BE3612ABCA24100289320 /* Color.swift */; };
 		F59412122B2F2E0F009516FA /* PersonInputValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59412112B2F2E0F009516FA /* PersonInputValidator.swift */; };
 		F5972F132B31FC16008F9605 /* ValidatableTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5972F122B31FC16008F9605 /* ValidatableTextField.swift */; };
+		F59A99D32B457D6D0058057F /* ContentTypeSegmentedPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59A99D22B457D6D0058057F /* ContentTypeSegmentedPicker.swift */; };
 		F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF3592AD455CA0064C18D /* Button+Extensions.swift */; };
 		F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */; };
 		F5AB5E172B27863E00FBBA2A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F5AB5E162B27863E00FBBA2A /* Localizable.xcstrings */; };
@@ -101,6 +102,7 @@
 		F59412112B2F2E0F009516FA /* PersonInputValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonInputValidator.swift; sourceTree = "<group>"; };
 		F5972F122B31FC16008F9605 /* ValidatableTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatableTextField.swift; sourceTree = "<group>"; };
 		F59A99D12B42EB060058057F /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
+		F59A99D22B457D6D0058057F /* ContentTypeSegmentedPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentTypeSegmentedPicker.swift; sourceTree = "<group>"; };
 		F59EF3592AD455CA0064C18D /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCAFeatureAction.swift; sourceTree = "<group>"; };
 		F59EF35F2B21E1370064C18D /* RelNet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RelNet.entitlements; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				F5AEDB612ACEE842001263C1 /* RoundedIconAndTitle.swift */,
 				F5AEDB632AD11967001263C1 /* FlowLayout.swift */,
 				F5972F122B31FC16008F9605 /* ValidatableTextField.swift */,
+				F59A99D22B457D6D0058057F /* ContentTypeSegmentedPicker.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 				F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */,
 				F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */,
 				F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */,
+				F59A99D32B457D6D0058057F /* ContentTypeSegmentedPicker.swift in Sources */,
 				F5405C192A970233002FA0C9 /* Person.swift in Sources */,
 				F55BE3502AB6ED1700289320 /* TaskResult+Extension.swift in Sources */,
 				F5418A942A9B98C300511A67 /* PersonDetail.swift in Sources */,

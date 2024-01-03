@@ -30,21 +30,4 @@ extension Group {
             description: description
         )
     }
-
-    func toDictionary() -> [String: Any] {
-        var dictionary: [String: Any] = [
-            "name": name,
-            "description": description,
-        ]
-
-        if let createdAt {
-            dictionary["createdAt"] = createdAt
-        }
-
-        if let updatedAt {
-            dictionary["updatedAt"] = updatedAt
-        }
-
-        return dictionary
-    }
 }

@@ -200,7 +200,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "グループ名"
           }
         }
@@ -236,6 +236,9 @@
         }
       }
     },
+    "memo" : {
+
+    },
     "music-section-title" : {
       "localizations" : {
         "en" : {
@@ -252,6 +255,22 @@
         }
       }
     },
+    "note-section-title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "note"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メモ"
+          }
+        }
+      }
+    },
     "other-category-title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -263,7 +282,7 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "その他"
           }
         }

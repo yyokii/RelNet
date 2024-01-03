@@ -174,8 +174,8 @@ struct Main: Reducer {
 }
 
 struct MainView: View {
-    let store: StoreOf<Main>
-    @ObservedObject var viewStore: ViewStoreOf<Main>
+    private let store: StoreOf<Main>
+    @ObservedObject private var viewStore: ViewStoreOf<Main>
 
     var body: some View {
         ScrollView {

@@ -12,15 +12,28 @@ struct PersonDetail: Reducer {
 
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
+        @BindingState var selectedContentType: ContentTypeSegmentedPicker.ContentType = .list
+
         var person: Person
         let groups: IdentifiedArrayOf<Group>
         let personValidator: PersonInputValidator = .init()
+        let groupNames: [String]
+
+        init(person: Person, groups: IdentifiedArrayOf<Group>) {
+            self.person = person
+            self.groups = groups
+            self.groupNames = person.groupIDs.compactMap { groupID in
+                groups.first(where: { $0.id == groupID })?.name
+            }
+        }
     }
 
-    enum Action: TCAFeatureAction, Equatable, Sendable {
+    enum Action: TCAFeatureAction, BindableAction, Equatable, Sendable {
         case view(ViewAction)
         case `internal`(InternalAction)
         case delegate(DelegateAction)
+
+        case binding(BindingAction<State>)
         case destination(PresentationAction<Destination.Action>)
 
         enum ViewAction: Equatable {
@@ -63,6 +76,7 @@ struct PersonDetail: Reducer {
     }
 
     var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce<State, Action> { state, action in
             switch action {
             case let .view(viewAction):
@@ -116,7 +130,7 @@ struct PersonDetail: Reducer {
                 state.person = person
                 return .send(.delegate(.personUpdated(person)))
 
-            case .delegate, .destination:
+            case .delegate, .binding, .destination:
                 return .none
             }
         }
@@ -127,7 +141,8 @@ struct PersonDetail: Reducer {
 }
 
 struct PersonDetailView: View {
-    let store: StoreOf<PersonDetail>
+    private let store: StoreOf<PersonDetail>
+    @ObservedObject private var viewStore: ViewStoreOf<PersonDetail>
 
     var birthdateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -136,99 +151,106 @@ struct PersonDetailView: View {
         return formatter
     }()
 
-    struct ViewState: Equatable {
-        let person: Person
-        // Personに設定されているgroupのname配列
-        let groupNames: [String]
+    var body: some View {
+        List {
+            if !viewStore.groupNames.isEmpty {
+                Section {
+                    groupList
+                } header: {
+                    Text("group-section-title")
+                }
+                .listRowBackground(Color.clear)
+            }
 
-        init(state: PersonDetail.State) {
-            self.person = state.person
-            self.groupNames = state.person.groupIDs.compactMap { groupID in
-                state.groups.first(where: { $0.id == groupID })?.name
+            ContentTypeSegmentedPicker(selectedContentType: viewStore.$selectedContentType)
+                .listRowBackground(Color.clear)
+
+            personContent
+        }
+        .navigationTitle(viewStore.person.name)
+        .toolbar {
+            headerMenu
+        }
+        .alert(
+            store: self.store.scope(state: \.$destination, action: { .destination($0) }),
+            state: /PersonDetail.Destination.State.alert,
+            action: PersonDetail.Destination.Action.alert
+        )
+        .sheet(
+            store: self.store.scope(state: \.$destination, action: { .destination($0) }),
+            state: /PersonDetail.Destination.State.personForm,
+            action: PersonDetail.Destination.Action.personForm
+        ) { store in
+            NavigationView {
+                PersonFormView(store: store)
             }
         }
     }
 
-    var body: some View {
-        WithViewStore(self.store, observe: ViewState.init) { viewStore in
-            VStack(alignment: .leading, spacing: 12) {
-                List {
-                    if !viewStore.groupNames.isEmpty {
-                        VStack {
-                            groupList
-                        }
-                        .listRowBackground(Color.clear)
-                        .offset(x: -18)
-                    }
-
-                    Section {
-                        textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: viewStore.person.nickname ?? "")
-                        textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: makeText(for: viewStore.person.birthdate))
-                        textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: viewStore.person.address ?? "")
-                        textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: viewStore.person.hobbies ?? "")
-                        textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
-                        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikes ?? "")
-                    } header: {
-                        Text("basic-info-section-title")
-                    }
-
-                    Section {
-                        textRowItem(symbolName: "heart", iconColor: .purple, title: "両親", text: viewStore.person.parents ?? "")
-                        textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: viewStore.person.sibling ?? "")
-                        textRowItem(symbolName: "tortoise", iconColor: .teal, title: "ペット", text: viewStore.person.pets ?? "")
-                    } header: {
-                        Text("family-section-title")
-                    }
-
-                    Section {
-                        textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likeFoods ?? "")
-                        textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikeFoods ?? "")
-                        textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
-
-                    } header: {
-                        Text("food-section-title")
-                    }
-
-                    Section {
-                        textRowItem(symbolName: "rectangle.3.group", iconColor: .orange, title: "好きなジャンル", text: viewStore.person.likeMusicCategories ?? "")
-                        textRowItem(symbolName: "music.mic", iconColor: .indigo, title: "好きなアーティスト", text: viewStore.person.likeArtists ?? "")
-                        textRowItem(symbolName: "music.note", iconColor: .pink, title: "好きな曲", text: viewStore.person.likeMusics ?? "")
-                        textRowItem(symbolName: "guitars", iconColor: .purple, title: "できる楽器", text: viewStore.person.playableInstruments ?? "")
-                    } header: {
-                        Text("music-section-title")
-                    }
-
-                    Section {
-                        textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: viewStore.person.travelCountries ?? "")
-                        textRowItem(symbolName: "mappin", iconColor: .green, title: "思い出の場所", text: viewStore.person.favoriteLocations ?? "")
-                    } header: {
-                        Text("travel-section-title")
-                    }
-                }
-            }
-            .navigationTitle(viewStore.person.name)
-            .toolbar {
-                headerMenu
-            }
-            .alert(
-                store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonDetail.Destination.State.alert,
-                action: PersonDetail.Destination.Action.alert
-            )
-            .sheet(
-                store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonDetail.Destination.State.personForm,
-                action: PersonDetail.Destination.Action.personForm
-            ) { store in
-                NavigationView {
-                    PersonFormView(store: store)
-                }
-            }
-        }
+    init(store: StoreOf<PersonDetail>) {
+        self.store = store
+        self.viewStore = ViewStore(self.store, observe: { $0 })
     }
 }
 
 private extension PersonDetailView {
+
+    @ViewBuilder
+    var personContent: some View {
+        switch viewStore.selectedContentType {
+        case .list:
+            Section {
+                textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: viewStore.person.nickname ?? "")
+                textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: makeText(for: viewStore.person.birthdate))
+                textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: viewStore.person.address ?? "")
+                textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: viewStore.person.hobbies ?? "")
+                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
+                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikes ?? "")
+            } header: {
+                Text("basic-info-section-title")
+            }
+
+            Section {
+                textRowItem(symbolName: "heart", iconColor: .purple, title: "両親", text: viewStore.person.parents ?? "")
+                textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: viewStore.person.sibling ?? "")
+                textRowItem(symbolName: "tortoise", iconColor: .teal, title: "ペット", text: viewStore.person.pets ?? "")
+            } header: {
+                Text("family-section-title")
+            }
+
+            Section {
+                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likeFoods ?? "")
+                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikeFoods ?? "")
+                textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
+
+            } header: {
+                Text("food-section-title")
+            }
+
+            Section {
+                textRowItem(symbolName: "rectangle.3.group", iconColor: .orange, title: "好きなジャンル", text: viewStore.person.likeMusicCategories ?? "")
+                textRowItem(symbolName: "music.mic", iconColor: .indigo, title: "好きなアーティスト", text: viewStore.person.likeArtists ?? "")
+                textRowItem(symbolName: "music.note", iconColor: .pink, title: "好きな曲", text: viewStore.person.likeMusics ?? "")
+                textRowItem(symbolName: "guitars", iconColor: .purple, title: "できる楽器", text: viewStore.person.playableInstruments ?? "")
+            } header: {
+                Text("music-section-title")
+            }
+
+            Section {
+                textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: viewStore.person.travelCountries ?? "")
+                textRowItem(symbolName: "mappin", iconColor: .green, title: "思い出の場所", text: viewStore.person.favoriteLocations ?? "")
+            } header: {
+                Text("travel-section-title")
+            }
+        case .note:
+            Section {
+                Text(viewStore.person.notes ?? "")
+            } header: {
+                Text("note-section-title")
+            }
+        }
+    }
+
     func makeText(for birthdate: Date?) -> String {
         if let birthdate {
             return birthdateFormatter.string(from: birthdate)
@@ -266,12 +288,10 @@ private extension PersonDetailView {
     }
 
     var groupList: some View {
-        WithViewStore(self.store, observe: ViewState.init) { viewStore in
-            FlowLayout(alignment: .leading, spacing: 8) {
-                ForEach(viewStore.groupNames.indices, id: \.self) { index in
-                    Text(viewStore.groupNames[index])
-                        .groupItemText()
-                }
+        FlowLayout(alignment: .leading, spacing: 8) {
+            ForEach(viewStore.groupNames.indices, id: \.self) { index in
+                Text(viewStore.groupNames[index])
+                    .groupItemText()
             }
         }
     }
@@ -304,7 +324,13 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
 
     let PreviewPersonDetailView: some View = NavigationStack {
         PersonDetailView(
-            store: Store(initialState: PersonDetail.State(person: .mock(), groups: .init(uniqueElements: [.mock()]))) {
+            store: Store(
+                initialState:
+                    PersonDetail.State(
+                        person: .mock(),
+                        groups: .init(uniqueElements: [.mock(id: "id-1")])
+                    )
+            ) {
                 PersonDetail()
             }
         )

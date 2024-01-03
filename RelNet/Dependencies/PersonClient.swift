@@ -168,13 +168,16 @@ extension PersonClient: DependencyKey {
             var updateGroup = group
             updateGroup.updatedAt = Timestamp(date: Date())
 
-            db
-                .collection(FirestorePath.users.rawValue)
-                .document(user.uid)
-                .collection(FirestorePath.groups.rawValue)
-                .document(id)
-                .setData(updateGroup.toDictionary())
-
+            do {
+                try db
+                    .collection(FirestorePath.users.rawValue)
+                    .document(user.uid)
+                    .collection(FirestorePath.groups.rawValue)
+                    .document(id)
+                    .setData(from: updateGroup)
+            } catch {
+                throw PersonClientError.failedToUpdate(error)
+            }
             return group
         },
         updatePerson: { person in
