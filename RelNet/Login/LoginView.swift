@@ -164,11 +164,38 @@ struct LoginView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            signInButtons
+        ScrollView {
+            VStack(alignment: .center, spacing: 40) {
+                VStack(alignment: .center, spacing: 20) {
+                    appIntro(
+                        icon: "hand.thumbsup.fill",
+                        title: "シンプルで直感的",
+                        description: "簡単操作で友達のリストを作成・管理。\nシームレスなインターフェースで快適なユーザー体験。"
+                    )
+
+                    appIntro(
+                        icon: "person.3.fill",
+                        title: "あの人との繋がりを大切に",
+                        description: "重要な日付やイベントを記録し、大切な瞬間を逃さない。\n個別の友達にメモやグループを設定。"
+                    )
+
+                    appIntro(
+                        icon: "key.fill",
+                        title: "プライバシーを重視",
+                        description: "あなたのデータは完全にプライベート。第三者に共有されることはありません。"
+                    )
+                }
+                .padding(.top, 40)
+                .padding(.horizontal, 24)
+
+                Text("さあ、はじめましょう")
+                    .font(.system(.title3))
+                    .bold()
+                signInButtons
+                    .padding(.horizontal, 24)
+                    .disabled(viewStore.isLoading)
+            }
         }
-        .padding(.horizontal, 24)
-        .disabled(viewStore.isLoading)
         .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
         .navigationTitle("login-title")
     }
@@ -180,6 +207,24 @@ struct LoginView: View {
 }
 
 private extension LoginView {
+
+    func appIntro(icon: String, title: String, description: String) -> some View {
+        HStack(alignment: .center, spacing: 24) {
+            Image(systemName: icon)
+                .imageScale(.large)
+                .frame(width: 40)
+                .foregroundStyle(.cyan)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.system(.title3))
+                    .bold()
+                Text(description)
+                    .font(.system(.subheadline))
+                    .foregroundStyle(Color.adaptiveBlack.opacity(0.8))
+            }
+        }
+    }
 
     var adaptiveAppleButtonStyle: SignInWithAppleButton.Style {
         switch colorScheme {

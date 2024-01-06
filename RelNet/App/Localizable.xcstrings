@@ -69,6 +69,16 @@
         }
       }
     },
+    "delete-account-alert-title" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アカウントを削除しますか？"
+          }
+        }
+      }
+    },
     "delete-alert-title" : {
       "localizations" : {
         "ja" : {
@@ -354,7 +364,13 @@
     "アカウント" : {
 
     },
+    "アカウントを削除" : {
+
+    },
     "グループを削除します。このグループ内の人物の情報は削除されません。" : {
+
+    },
+    "さあ、はじめましょう" : {
 
     },
     "サインアウト" : {

@@ -11,26 +11,30 @@ import SwiftUI
 
 struct MyPage: Reducer, Sendable {
     struct State: Equatable {
-        let appVersion = AppVersion.current
-        var user: AppUser?
-
         @PresentationState var alert: AlertState<Action.Alert>?
         @BindingState var isInquiryPresenting: Bool = false
+
+        let appVersion = AppVersion.current
+        var user: AppUser?
 
         init() {}
     }
 
     enum Action: BindableAction, Equatable, Sendable {
-        case alert(PresentationAction<Alert>)
+        case deleteAccountButtonTapped
         case inquiryButtonTapped
         case onAppear
         case signOutButtonTapped
-        case signOutResponse(TaskResult<VoidSuccess>)
         case versionButtonTapped
 
+        case requestDeleteAccountResponse(TaskResult<VoidSuccess>)
+        case signOutResponse(TaskResult<VoidSuccess>)
+
+        case alert(PresentationAction<Alert>)
         case binding(BindingAction<State>)
 
         enum Alert: Equatable {
+            case confirmDeleteAccount
             case confirmSignOut
         }
     }
@@ -43,18 +47,8 @@ struct MyPage: Reducer, Sendable {
         BindingReducer()
         Reduce { state, action in
             switch action {
-            case .alert(.presented(.confirmSignOut)):
-                return .run { send in
-                    await send(
-                        .signOutResponse(
-                            await TaskResult {
-                                try await authenticationClient.signOut()
-                            }
-                        )
-                    )
-                }
-
-            case .alert:
+            case .deleteAccountButtonTapped:
+                state.alert = .deleteAccount
                 return .none
 
             case .inquiryButtonTapped:
@@ -69,6 +63,13 @@ struct MyPage: Reducer, Sendable {
                 state.alert = .signOut
                 return .none
 
+            case .requestDeleteAccountResponse(.success):
+                return .none
+
+            case let .requestDeleteAccountResponse(.failure(error)):
+                print(error.localizedDescription)
+                return .none
+
             case .signOutResponse(.success):
                 return .none
 
@@ -80,7 +81,29 @@ struct MyPage: Reducer, Sendable {
                 UIPasteboard.general.string = state.appVersion.versionText
                 return .none
 
-            case .binding:
+            case .alert(.presented(.confirmDeleteAccount)):
+                return .run { send in
+                    await send(
+                        .requestDeleteAccountResponse(
+                            await TaskResult {
+                                try await authenticationClient.requestDeleteAccount()
+                            }
+                        )
+                    )
+                }
+
+            case .alert(.presented(.confirmSignOut)):
+                return .run { send in
+                    await send(
+                        .signOutResponse(
+                            await TaskResult {
+                                try await authenticationClient.signOut()
+                            }
+                        )
+                    )
+                }
+
+            case .alert, .binding:
                 return .none
             }
         }
@@ -115,6 +138,14 @@ struct MyPageView: View {
                         }
                         .buttonStyle(BorderlessButtonStyle())
                     }
+
+                    Button {
+                        viewStore.send(.deleteAccountButtonTapped)
+                    } label: {
+                        Text("アカウントを削除")
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+
                 }
                 .navigationTitle("設定")
                 .navigationBarTitleDisplayMode(.inline)
@@ -133,6 +164,19 @@ struct MyPageView: View {
 }
 
 extension AlertState where Action == MyPage.Action.Alert {
+    static let deleteAccount = Self {
+        TextState("delete-account-alert-title")
+    } actions: {
+        ButtonState(role: .cancel) {
+            TextState("cancel")
+        }
+        ButtonState(role: .destructive, action: .confirmDeleteAccount) {
+            TextState("yes")
+        }
+    } message: {
+        TextState("")
+    }
+
     static let signOut = Self {
         TextState("sign-out-alert-title")
     } actions: {

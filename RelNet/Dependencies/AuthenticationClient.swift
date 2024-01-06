@@ -10,12 +10,15 @@ import ComposableArchitecture
 import CryptoKit
 import FirebaseAuth
 import FirebaseCore
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 import Foundation
 import GoogleSignIn
 
 struct AuthenticationClient: Sendable {
 
     var currentUser: @Sendable () -> AppUser?
+    var requestDeleteAccount: @Sendable () async throws -> Void
     var handleSignInWithAppleResponse: @Sendable (_ authorization: ASAuthorization, _ nonce: String) async throws -> AppUser
     var listenAuthState: @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>
     var signInWithGoogle: @Sendable () async throws -> AppUser
@@ -23,6 +26,7 @@ struct AuthenticationClient: Sendable {
 
     init(
         currentUser: @escaping @Sendable () -> AppUser?,
+        requestDeleteAccount: @escaping @Sendable () async throws -> Void,
         handleSignInWithAppleResponse: @escaping @Sendable (_ authorization: ASAuthorization, _ nonce: String) async throws -> AppUser,
         listenAuthState: @escaping @Sendable () async throws -> AsyncThrowingStream<AppUser?, Error>,
         signInWithGoogle: @escaping @Sendable () async throws -> AppUser,
@@ -34,6 +38,7 @@ struct AuthenticationClient: Sendable {
         GIDSignIn.sharedInstance.configuration = config
 
         self.currentUser = currentUser
+        self.requestDeleteAccount = requestDeleteAccount
         self.handleSignInWithAppleResponse = handleSignInWithAppleResponse
         self.listenAuthState = listenAuthState
         self.signInWithGoogle = signInWithGoogle
@@ -49,10 +54,28 @@ extension DependencyValues {
 }
 
 extension AuthenticationClient: DependencyKey {
+    private static let db: Firestore = Firestore.firestore()
+
     public static let liveValue = Self(
         currentUser: {
             let user = Auth.auth().currentUser
             return .init(from: user)
+        },
+        requestDeleteAccount: {
+            guard let user = Auth.auth().currentUser else {
+                throw AuthenticationClientError.notFoundUser
+            }
+
+            db
+                .collection(FirestorePath.deleteRequests.rawValue)
+                .document(user.uid)
+                .setData(["createdAt": FieldValue.serverTimestamp()])
+
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                throw AuthenticationClientError.general(error)
+            }
         },
         handleSignInWithAppleResponse: { authorization, currentNonce in
             guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential,

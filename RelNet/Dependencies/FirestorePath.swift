@@ -6,6 +6,7 @@
 //
 
 enum FirestorePath: String {
+    case deleteRequests = "deleteRequests"
     case groups = "groups"
     case persons = "persons"
     case users = "users"

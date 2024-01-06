@@ -39,9 +39,11 @@ extension PersonClient: DependencyKey {
         listenGroups: {
             AsyncThrowingStream { continuation in
                 guard let user = authenticationClient.currentUser() else {
+                    print("📝 not found user")
                     continuation.finish(throwing: PersonClientError.notFoundUser)
                     return
                 }
+                print("📝 new listener call")
                 let listener = Firestore.firestore()
                     .collection(FirestorePath.users.rawValue)
                     .document(user.uid)
