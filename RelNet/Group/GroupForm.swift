@@ -57,7 +57,7 @@ struct GroupForm: Reducer {
     }
 
     @Dependency(\.dismiss) var dismiss
-    @Dependency(\.personClient) private var personClient
+    @Dependency(\.appClient) private var appClient
 
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -72,7 +72,7 @@ struct GroupForm: Reducer {
                         await send(
                             .addGroupResult(
                                 .init {
-                                    try personClient.addGroup(group)
+                                    try appClient.addGroup(group)
                                 }
                             )
                         )
@@ -82,7 +82,7 @@ struct GroupForm: Reducer {
                         await send(
                             .editGroupResult(
                                 await TaskResult {
-                                    try personClient.updateGroup(group)
+                                    try appClient.updateGroup(group)
                                 }
                             )
                         )

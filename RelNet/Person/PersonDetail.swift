@@ -53,7 +53,7 @@ struct PersonDetail: Reducer {
     }
 
     @Dependency(\.dismiss) var dismiss
-    @Dependency(\.personClient) private var personClient
+    @Dependency(\.appClient) private var appClient
 
     struct Destination: Reducer {
         enum State: Equatable {
@@ -117,7 +117,7 @@ struct PersonDetail: Reducer {
                             .internal(
                                 .deletePersonResult(
                                     await TaskResult {
-                                        try personClient.deletePerson(id)
+                                        try appClient.deletePerson(id)
                                     }
                                 )
                             )

@@ -1,5 +1,5 @@
 //
-//  PersonClient.swift
+//  AppClient.swift
 //  RelNet
 //
 //  Created by Higashihara Yoki on 2023/08/24.
@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 import Foundation
 
 // TODO: AppClient とかにrenameした方がいいかも
-struct PersonClient: Sendable {
+struct AppClient: Sendable {
 
     @Dependency(\.authenticationClient) private static var authenticationClient
 
@@ -26,13 +26,13 @@ struct PersonClient: Sendable {
 }
 
 extension DependencyValues {
-    var personClient: PersonClient {
-        get { self[PersonClient.self] }
-        set { self[PersonClient.self] = newValue }
+    var appClient: AppClient {
+        get { self[AppClient.self] }
+        set { self[AppClient.self] = newValue }
     }
 }
 
-extension PersonClient: DependencyKey {
+extension AppClient: DependencyKey {
     private static let db: Firestore = Firestore.firestore()
 
     public static let liveValue = Self(
@@ -40,7 +40,7 @@ extension PersonClient: DependencyKey {
             AsyncThrowingStream { continuation in
                 guard let user = authenticationClient.currentUser() else {
                     print("📝 not found user")
-                    continuation.finish(throwing: PersonClientError.notFoundUser)
+                    continuation.finish(throwing: AppClientError.notFoundUser)
                     return
                 }
                 print("📝 new listener call")
@@ -50,7 +50,7 @@ extension PersonClient: DependencyKey {
                     .collection(FirestorePath.groups.rawValue)
                     .addSnapshotListener { querySnapshot, error in
                         if let error {
-                            continuation.finish(throwing: PersonClientError.general(error))
+                            continuation.finish(throwing: AppClientError.general(error))
                         } else if let querySnapshot {
                             let groups = querySnapshot.documents
                                 .compactMap { document -> Group? in
@@ -70,7 +70,7 @@ extension PersonClient: DependencyKey {
         listenPersons: {
             AsyncThrowingStream { continuation in
                 guard let user = authenticationClient.currentUser() else {
-                    continuation.finish(throwing: PersonClientError.notFoundUser)
+                    continuation.finish(throwing: AppClientError.notFoundUser)
                     return
                 }
                 let listener = Firestore.firestore()
@@ -79,7 +79,7 @@ extension PersonClient: DependencyKey {
                     .collection(FirestorePath.persons.rawValue)
                     .addSnapshotListener { querySnapshot, error in
                         if let error {
-                            continuation.finish(throwing: PersonClientError.general(error))
+                            continuation.finish(throwing: AppClientError.general(error))
                         } else if let querySnapshot {
                             let persons = querySnapshot.documents
                                 .compactMap { document -> Person? in
@@ -98,7 +98,7 @@ extension PersonClient: DependencyKey {
         },
         addGroup: { group in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             do {
@@ -110,12 +110,12 @@ extension PersonClient: DependencyKey {
 
                 return group
             } catch {
-                throw PersonClientError.general(error)
+                throw AppClientError.general(error)
             }
         },
         addPerson: { person in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             do {
@@ -127,12 +127,12 @@ extension PersonClient: DependencyKey {
 
                 return person
             } catch {
-                throw PersonClientError.general(error)
+                throw AppClientError.general(error)
             }
         },
         deleteGroup: { id in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             db
@@ -146,7 +146,7 @@ extension PersonClient: DependencyKey {
         },
         deletePerson: { id in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             db
@@ -160,11 +160,11 @@ extension PersonClient: DependencyKey {
         },
         updateGroup: { group in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             guard let id = group.id else {
-                throw PersonClientError.notFoundID
+                throw AppClientError.notFoundID
             }
 
             var updateGroup = group
@@ -178,17 +178,17 @@ extension PersonClient: DependencyKey {
                     .document(id)
                     .setData(from: updateGroup)
             } catch {
-                throw PersonClientError.failedToUpdate(error)
+                throw AppClientError.failedToUpdate(error)
             }
             return group
         },
         updatePerson: { person in
             guard let user = authenticationClient.currentUser() else {
-                throw PersonClientError.notFoundUser
+                throw AppClientError.notFoundUser
             }
 
             guard let id = person.id else {
-                throw PersonClientError.notFoundID
+                throw AppClientError.notFoundID
             }
 
             var updatePerson = person
@@ -202,14 +202,14 @@ extension PersonClient: DependencyKey {
                     .document(id)
                     .setData(from: updatePerson)
             } catch {
-                throw PersonClientError.failedToUpdate(error)
+                throw AppClientError.failedToUpdate(error)
             }
             return person
         }
     )
 }
 
-enum PersonClientError: LocalizedError, Sendable {
+enum AppClientError: LocalizedError, Sendable {
     case general(Error?)
 
     case failedToUpdate(Error?)
@@ -231,7 +231,7 @@ enum PersonClientError: LocalizedError, Sendable {
 }
 
 #if DEBUG
-    extension PersonClient: TestDependencyKey {
+    extension AppClient: TestDependencyKey {
         static let previewValue = Self(
             listenGroups: {
                 AsyncThrowingStream { continuation in

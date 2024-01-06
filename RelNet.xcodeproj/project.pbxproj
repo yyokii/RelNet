@@ -19,7 +19,7 @@
 		F5405C0F2A96FC38002FA0C9 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C0E2A96FC38002FA0C9 /* FirebaseFirestoreSwift */; };
 		F5405C112A96FCEA002FA0C9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */; };
 		F5405C142A96FD2C002FA0C9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */; };
-		F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C152A9701F6002FA0C9 /* PersonClient.swift */; };
+		F5405C162A9701F6002FA0C9 /* AppClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C152A9701F6002FA0C9 /* AppClient.swift */; };
 		F5405C192A970233002FA0C9 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5405C182A970233002FA0C9 /* Person.swift */; };
 		F5405C1C2A9707C4002FA0C9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F5405C1B2A9707C4002FA0C9 /* ComposableArchitecture */; };
 		F5418A8A2A9AED2E00511A67 /* PersonForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5418A892A9AED2E00511A67 /* PersonForm.swift */; };
@@ -85,7 +85,7 @@
 		F5405BF62A96F349002FA0C9 /* RelNetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelNetUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F5405C102A96FCEA002FA0C9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F5405C132A96FD2C002FA0C9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F5405C152A9701F6002FA0C9 /* PersonClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonClient.swift; sourceTree = "<group>"; };
+		F5405C152A9701F6002FA0C9 /* AppClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppClient.swift; sourceTree = "<group>"; };
 		F5405C182A970233002FA0C9 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		F5418A892A9AED2E00511A67 /* PersonForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonForm.swift; sourceTree = "<group>"; };
 		F5418A8F2A9B759B00511A67 /* Binding+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Binding+Extension.swift"; sourceTree = "<group>"; };
@@ -225,7 +225,7 @@
 		F5405C042A96F579002FA0C9 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
-				F5405C152A9701F6002FA0C9 /* PersonClient.swift */,
+				F5405C152A9701F6002FA0C9 /* AppClient.swift */,
 				F5DC3B9A2AA5865E005528F9 /* AuthenticationClient.swift */,
 				F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */,
 			);
@@ -520,7 +520,7 @@
 				F55BE3592ABBE51500289320 /* String+Extension.swift in Sources */,
 				F5405BDA2A96F347002FA0C9 /* RelNetApp.swift in Sources */,
 				F5DC3B9B2AA5865E005528F9 /* AuthenticationClient.swift in Sources */,
-				F5405C162A9701F6002FA0C9 /* PersonClient.swift in Sources */,
+				F5405C162A9701F6002FA0C9 /* AppClient.swift in Sources */,
 				F5AEDB642AD11967001263C1 /* FlowLayout.swift in Sources */,
 				F558DF212B3320EA0091011F /* GroupInputValidator.swift in Sources */,
 				F5DC3B8D2A9D7094005528F9 /* GroupForm.swift in Sources */,

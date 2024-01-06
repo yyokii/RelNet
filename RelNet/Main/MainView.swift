@@ -86,7 +86,7 @@ struct Main: Reducer {
     }
 
     @Dependency(\.authenticationClient) private var authenticationClient
-    @Dependency(\.personClient) private var personClient
+    @Dependency(\.appClient) private var appClient
 
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
@@ -113,7 +113,7 @@ struct Main: Reducer {
                     return .none
                 case .listenGroups:
                     return .run { send in
-                        for try await result in try await self.personClient.listenGroups() {
+                        for try await result in try await self.appClient.listenGroups() {
                             await send(.internal(.listenGroupsResponse(.success(result))))
                         }
                     } catch: { error, send in
@@ -121,7 +121,7 @@ struct Main: Reducer {
                     }
                 case .listenPersons:
                     return .run { send in
-                        for try await result in try await self.personClient.listenPersons() {
+                        for try await result in try await self.appClient.listenPersons() {
                             await send(.internal(.listenPersonsResponse(.success(result))))
                         }
                     } catch: { error, send in
@@ -357,14 +357,14 @@ private extension MainView {
                 store: Store(initialState: Main.State()) {
                     Main()
                 } withDependencies: {
-                    $0.personClient.listenGroups = {
+                    $0.appClient.listenGroups = {
                         AsyncThrowingStream { continuation in
                             let persons: [Group] = []
                             continuation.yield(IdentifiedArray(uniqueElements: persons))
                             continuation.finish()
                         }
                     }
-                    $0.personClient.listenPersons = {
+                    $0.appClient.listenPersons = {
                         AsyncThrowingStream { continuation in
                             let persons: [Person] = []
                             continuation.yield(IdentifiedArray(uniqueElements: persons))

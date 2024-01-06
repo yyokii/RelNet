@@ -74,7 +74,7 @@ struct PersonsList: Reducer {
     }
 
     @Dependency(\.dismiss) var dismiss
-    @Dependency(\.personClient) private var personClient
+    @Dependency(\.appClient) private var appClient
 
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
@@ -106,7 +106,7 @@ struct PersonsList: Reducer {
                         await send(
                             .deleteGroupResult(
                                 await TaskResult {
-                                    try personClient.deleteGroup(id)
+                                    try appClient.deleteGroup(id)
                                 }
                             )
                         )

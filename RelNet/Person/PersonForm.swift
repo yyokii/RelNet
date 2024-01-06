@@ -62,7 +62,7 @@ struct PersonForm: Reducer {
         }
     }
 
-    @Dependency(\.personClient) private var personClient
+    @Dependency(\.appClient) private var appClient
 
     var body: some ReducerOf<Self> {
         BindingReducer()
@@ -81,7 +81,7 @@ struct PersonForm: Reducer {
                         await send(
                             .addPersonResult(
                                 await TaskResult {
-                                    try personClient.addPerson(person)
+                                    try appClient.addPerson(person)
                                 }
                             )
                         )
@@ -91,7 +91,7 @@ struct PersonForm: Reducer {
                         await send(
                             .editPersonResult(
                                 await TaskResult {
-                                    try self.personClient.updatePerson(person)
+                                    try self.appClient.updatePerson(person)
                                 }
                             )
                         )
