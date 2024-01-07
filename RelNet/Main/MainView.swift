@@ -260,7 +260,7 @@ private extension MainView {
     var groupList: some View {
         VStack(alignment: .leading, spacing: 24) {
             listHeader(
-                title: "グループ",
+                title: String(localized: "group-section-title"),
                 addAction: { viewStore.send(.view(.addGroupButtonTapped)) }
             )
             if viewStore.groups.isEmpty {

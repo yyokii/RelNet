@@ -168,10 +168,10 @@ extension AlertState where Action == MyPage.Action.Alert {
         TextState("delete-account-alert-title")
     } actions: {
         ButtonState(role: .cancel) {
-            TextState("cancel")
+            TextState("Cancel")
         }
         ButtonState(role: .destructive, action: .confirmDeleteAccount) {
-            TextState("yes")
+            TextState("Yes")
         }
     } message: {
         TextState("")
@@ -181,10 +181,10 @@ extension AlertState where Action == MyPage.Action.Alert {
         TextState("sign-out-alert-title")
     } actions: {
         ButtonState(role: .cancel) {
-            TextState("cancel")
+            TextState("Cancel")
         }
         ButtonState(role: .destructive, action: .confirmSignOut) {
-            TextState("yes")
+            TextState("Yes")
         }
     } message: {
         TextState("")

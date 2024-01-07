@@ -310,10 +310,10 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
         TextState("delete-alert-title")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
-            TextState("yes")
+            TextState("Yes")
         }
         ButtonState(role: .cancel) {
-            TextState("cancel")
+            TextState("Cancel")
         }
     } message: {
         TextState("")

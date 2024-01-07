@@ -2,16 +2,44 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "%@" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "adaptiveBlack" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "adaptiveWhite" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "add-button-title" : {
       "extractionState" : "manual",
@@ -31,7 +59,14 @@
       }
     },
     "appAccent" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ""
+          }
+        }
+      }
     },
     "basic-info-section-title" : {
       "localizations" : {
@@ -49,16 +84,6 @@
         }
       }
     },
-    "cancel" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "キャンセル"
-          }
-        }
-      }
-    },
     "Cancel" : {
       "localizations" : {
         "ja" : {
@@ -71,6 +96,12 @@
     },
     "delete-account-alert-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete account?"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -81,6 +112,12 @@
     },
     "delete-alert-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete?"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -91,6 +128,12 @@
     },
     "delete-button-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -128,6 +171,12 @@
     "empty-groups-message" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no groups"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -139,6 +188,12 @@
     "empty-persons-message" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no persons"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -222,12 +277,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Group"
+            "value" : "Groups"
           }
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "グループ"
           }
         }
@@ -238,6 +293,12 @@
     },
     "login-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -301,6 +362,12 @@
     "person-list-title" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persons"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -314,6 +381,12 @@
     },
     "sign-in-with-google-button-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in with Google"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -324,6 +397,12 @@
     },
     "sign-out-alert-title" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out?"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -344,16 +423,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "旅行"
-          }
-        }
-      }
-    },
-    "yes" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "はい"
           }
         }
       }
