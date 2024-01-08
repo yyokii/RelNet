@@ -37,7 +37,7 @@ extension Text {
     struct GroupItemModifier_Previews: PreviewProvider {
         static var content: some View {
             NavigationView {
-                Text("group name")
+                Text("preview-group-name")
                     .groupItemText()
             }
         }

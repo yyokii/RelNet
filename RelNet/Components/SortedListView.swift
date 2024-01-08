@@ -10,46 +10,54 @@ import OrderedCollections
 import SwiftUI
 
 struct SortedPersonsView: View {
-    let persons: IdentifiedArrayOf<Person>
+    let sortedPersons: OrderedDictionary<String, [Person]>
     let onTapPerson: (Person) -> Void
 
-    private var sortedPersons: OrderedDictionary<String, [Person]> {
-        var dict: OrderedDictionary<String, [Person]> = [:]
-        let otherCategory = String(localized: "other-category-title")
+    init(
+        persons: IdentifiedArrayOf<Person>,
+        onTapPerson: @escaping (Person) -> Void
+    ) {
+        self.sortedPersons = makeSortedPersons(of: persons)
+        self.onTapPerson = onTapPerson
 
-        // 初期値の設定
-        for person in persons {
-            let initial = person.nameInitial
-            dict[initial, default: []].append(person)
-        }
+        func makeSortedPersons(of persons: IdentifiedArrayOf<Person>) -> OrderedDictionary<String, [Person]> {
+            var dict: OrderedDictionary<String, [Person]> = [:]
+            let otherCategory = String(localized: "other-category-title")
 
-        // 辞書をソートして再構築
-        let sortedDict = dict.sorted { customSortCriteria(key1: $0.key, key2: $1.key) }
-        return OrderedDictionary(uniqueKeysWithValues: sortedDict)
-
-        func customSortCriteria(key1: String, key2: String) -> Bool {
-            if key1 == otherCategory { return false }
-            if key2 == otherCategory { return true }
-
-            let isKey1Hiragana = isHiragana(key1)
-            let isKey2Hiragana = isHiragana(key2)
-
-            if isKey1Hiragana && !isKey2Hiragana {
-                return true
-            } else if !isKey1Hiragana && isKey2Hiragana {
-                return false
+            // 初期値の設定
+            for person in persons {
+                let initial = person.nameInitial
+                dict[initial, default: []].append(person)
             }
 
-            return key1 < key2
-        }
+            // 辞書をソートして再構築
+            let sortedDict = dict.sorted { customSortCriteria(key1: $0.key, key2: $1.key) }
+            return OrderedDictionary(uniqueKeysWithValues: sortedDict)
 
-        func isHiragana(_ s: String) -> Bool {
-            return s.range(of: "^[ぁ-ん]+$", options: .regularExpression) != nil
+            func customSortCriteria(key1: String, key2: String) -> Bool {
+                if key1 == otherCategory { return false }
+                if key2 == otherCategory { return true }
+
+                let isKey1Hiragana = isHiragana(key1)
+                let isKey2Hiragana = isHiragana(key2)
+
+                if isKey1Hiragana && !isKey2Hiragana {
+                    return true
+                } else if !isKey1Hiragana && isKey2Hiragana {
+                    return false
+                }
+
+                return key1 < key2
+            }
+
+            func isHiragana(_ s: String) -> Bool {
+                return s.range(of: "^[ぁ-ん]+$", options: .regularExpression) != nil
+            }
         }
     }
 
     var body: some View {
-        if persons.isEmpty {
+        if sortedPersons.isEmpty {
             Text("empty-persons-message")
                 .font(.callout)
                 .multilineTextAlignment(.center)
@@ -95,6 +103,7 @@ struct SortedPersonsView: View {
                     }
                 }
             }
+            .padding(.bottom, 100)
         }
     }
 

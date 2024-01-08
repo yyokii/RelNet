@@ -119,12 +119,12 @@ struct MyPageView: View {
         WithViewStore(self.store, observe: { $0 }, send: { $0 }) { viewStore in
             VStack {
                 Form {
-                    Section("サポート") {
+                    Section("support-section-title") {
                         inquiryRow
                         versionRow
                     }
 
-                    Section("アカウント") {
+                    Section("account-section-title") {
                         HStack {
                             RoundedIconAndTitle(symbolName: "person", iconColor: .teal, title: "email")
                             Spacer()
@@ -134,7 +134,7 @@ struct MyPageView: View {
                         Button {
                             viewStore.send(.signOutButtonTapped)
                         } label: {
-                            Text("サインアウト")
+                            Text("sign-out-button-title")
                         }
                         .buttonStyle(BorderlessButtonStyle())
                     }
@@ -142,12 +142,12 @@ struct MyPageView: View {
                     Button {
                         viewStore.send(.deleteAccountButtonTapped)
                     } label: {
-                        Text("アカウントを削除")
+                        Text("delete-account-button-title")
                     }
                     .buttonStyle(BorderlessButtonStyle())
 
                 }
-                .navigationTitle("設定")
+                .navigationTitle("settings-title")
                 .navigationBarTitleDisplayMode(.inline)
             }
             .onAppear {
@@ -168,10 +168,10 @@ extension AlertState where Action == MyPage.Action.Alert {
         TextState("delete-account-alert-title")
     } actions: {
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
         ButtonState(role: .destructive, action: .confirmDeleteAccount) {
-            TextState("Yes")
+            TextState("yes")
         }
     } message: {
         TextState("")
@@ -181,10 +181,10 @@ extension AlertState where Action == MyPage.Action.Alert {
         TextState("sign-out-alert-title")
     } actions: {
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
         ButtonState(role: .destructive, action: .confirmSignOut) {
-            TextState("Yes")
+            TextState("yes")
         }
     } message: {
         TextState("")
@@ -197,7 +197,7 @@ private extension MyPageView {
         Button(action: {
             viewStore.send(.inquiryButtonTapped)
         }) {
-            RoundedIconAndTitle(symbolName: "mail", iconColor: .green, title: "お問い合わせ")
+            RoundedIconAndTitle(symbolName: "mail", iconColor: .green, title: String(localized: "contact-us"))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
         }
@@ -214,7 +214,7 @@ private extension MyPageView {
             viewStore.send(.versionButtonTapped)
         }) {
             HStack {
-                RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: "バージョン")
+                RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: String(localized: "version"))
                 Spacer()
                 Text(viewStore.appVersion.versionText)
             }

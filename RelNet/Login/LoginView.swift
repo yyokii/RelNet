@@ -165,30 +165,30 @@ struct LoginView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .center, spacing: 40) {
-                VStack(alignment: .center, spacing: 20) {
+            VStack(alignment: .center, spacing: 48) {
+                VStack(alignment: .leading, spacing: 32) {
                     appIntro(
                         icon: "hand.thumbsup.fill",
-                        title: "シンプルで直感的",
-                        description: "簡単操作で友達のリストを作成・管理。\nシームレスなインターフェースで快適なユーザー体験。"
+                        title: String(localized: "app-introduction-simple"),
+                        description: String(localized: "app-introduction-simple-description")
                     )
 
                     appIntro(
                         icon: "person.3.fill",
-                        title: "あの人との繋がりを大切に",
-                        description: "重要な日付やイベントを記録し、大切な瞬間を逃さない。\n個別の友達にメモやグループを設定。"
+                        title: String(localized: "app-introduction-connection"),
+                        description: String(localized: "app-introduction-connection-description")
                     )
 
                     appIntro(
                         icon: "key.fill",
-                        title: "プライバシーを重視",
-                        description: "あなたのデータは完全にプライベート。第三者に共有されることはありません。"
+                        title: String(localized: "app-introduction-privacy"),
+                        description: String(localized: "app-introduction-privacy-description")
                     )
                 }
                 .padding(.top, 40)
                 .padding(.horizontal, 24)
 
-                Text("さあ、はじめましょう")
+                Text("login-message")
                     .font(.system(.title3))
                     .bold()
                 signInButtons

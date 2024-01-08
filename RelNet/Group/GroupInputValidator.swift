@@ -63,18 +63,16 @@ enum GroupInputValidationError: LocalizedError, Error {
     var errorDescription: String? {
         switch self {
         case .invalidName:
-            return "\(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)文字以上\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized: "validation-range-error-message \(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)~\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)")
         case .invalidOther:
-            return "\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized: "validation-max-count-error-message \(GroupInputValidator.GroupInputType.otherValidRange.upperBound)")
         }
     }
 
     var recoverySuggestion: String? {
         switch self {
         case .invalidName:
-            return "\(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)文字以上\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)文字以下で入力してください"
-        case .invalidOther:
-            return "\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)文字以下で入力してください"
-        }
+            return String(localized: "validation-range-error-message \(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)~\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)")        case .invalidOther:
+            return String(localized: "validation-max-count-error-message \(GroupInputValidator.GroupInputType.otherValidRange.upperBound)")        }
     }
 }

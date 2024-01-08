@@ -10,7 +10,6 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import Foundation
 
-// TODO: AppClient とかにrenameした方がいいかも
 struct AppClient: Sendable {
 
     @Dependency(\.authenticationClient) private static var authenticationClient
@@ -39,7 +38,6 @@ extension AppClient: DependencyKey {
         listenGroups: {
             AsyncThrowingStream { continuation in
                 guard let user = authenticationClient.currentUser() else {
-                    print("📝 not found user")
                     continuation.finish(throwing: AppClientError.notFoundUser)
                     return
                 }

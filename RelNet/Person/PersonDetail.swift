@@ -200,45 +200,45 @@ private extension PersonDetailView {
         switch viewStore.selectedContentType {
         case .list:
             Section {
-                textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: "ニックネーム", text: viewStore.person.nickname ?? "")
-                textRowItem(symbolName: "calendar", iconColor: .red, title: "誕生日", text: makeText(for: viewStore.person.birthdate))
-                textRowItem(symbolName: "house", iconColor: .green, title: "住所", text: viewStore.person.address ?? "")
-                textRowItem(symbolName: "heart", iconColor: .orange, title: "趣味", text: viewStore.person.hobbies ?? "")
-                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likes ?? "")
-                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikes ?? "")
+                textRowItem(symbolName: "face.smiling", iconColor: .yellow, title: String(localized: "nick-name"), text: viewStore.person.nickname ?? "")
+                textRowItem(symbolName: "calendar", iconColor: .red, title: String(localized: "birth-date"), text: makeText(for: viewStore.person.birthdate))
+                textRowItem(symbolName: "house", iconColor: .green, title: String(localized: "address"), text: viewStore.person.address ?? "")
+                textRowItem(symbolName: "heart", iconColor: .orange, title: String(localized: "hobby"), text: viewStore.person.hobbies ?? "")
+                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: String(localized: "like"), text: viewStore.person.likes ?? "")
+                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: String(localized: "dislike"), text: viewStore.person.dislikes ?? "")
             } header: {
                 Text("basic-info-section-title")
             }
 
             Section {
-                textRowItem(symbolName: "heart", iconColor: .purple, title: "両親", text: viewStore.person.parents ?? "")
-                textRowItem(symbolName: "person.2", iconColor: .orange, title: "兄弟姉妹", text: viewStore.person.sibling ?? "")
-                textRowItem(symbolName: "tortoise", iconColor: .teal, title: "ペット", text: viewStore.person.pets ?? "")
+                textRowItem(symbolName: "heart", iconColor: .purple, title: String(localized: "parent"), text: viewStore.person.parents ?? "")
+                textRowItem(symbolName: "person.2", iconColor: .orange, title: String(localized: "siblings"), text: viewStore.person.sibling ?? "")
+                textRowItem(symbolName: "tortoise", iconColor: .teal, title: String(localized: "pet"), text: viewStore.person.pets ?? "")
             } header: {
                 Text("family-section-title")
             }
 
             Section {
-                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: "好き", text: viewStore.person.likeFoods ?? "")
-                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: "苦手", text: viewStore.person.dislikeFoods ?? "")
-                textRowItem(symbolName: "eyes", iconColor: .teal, title: "アレルギー", text: viewStore.person.allergies ?? "")
+                textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: String(localized: "like"), text: viewStore.person.likeFoods ?? "")
+                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: String(localized: "dislike"), text: viewStore.person.dislikeFoods ?? "")
+                textRowItem(symbolName: "eyes", iconColor: .teal, title: String(localized: "allergy"), text: viewStore.person.allergies ?? "")
 
             } header: {
                 Text("food-section-title")
             }
 
             Section {
-                textRowItem(symbolName: "rectangle.3.group", iconColor: .orange, title: "好きなジャンル", text: viewStore.person.likeMusicCategories ?? "")
-                textRowItem(symbolName: "music.mic", iconColor: .indigo, title: "好きなアーティスト", text: viewStore.person.likeArtists ?? "")
-                textRowItem(symbolName: "music.note", iconColor: .pink, title: "好きな曲", text: viewStore.person.likeMusics ?? "")
-                textRowItem(symbolName: "guitars", iconColor: .purple, title: "できる楽器", text: viewStore.person.playableInstruments ?? "")
+                textRowItem(symbolName: "rectangle.3.group", iconColor: .orange, title: String(localized: "favorite-genre"), text: viewStore.person.likeMusicCategories ?? "")
+                textRowItem(symbolName: "music.mic", iconColor: .indigo, title: String(localized: "favorite-artist"), text: viewStore.person.likeArtists ?? "")
+                textRowItem(symbolName: "music.note", iconColor: .pink, title: String(localized: "favorite-music"), text: viewStore.person.likeMusics ?? "")
+                textRowItem(symbolName: "guitars", iconColor: .purple, title: String(localized: "instruments"), text: viewStore.person.playableInstruments ?? "")
             } header: {
                 Text("music-section-title")
             }
 
             Section {
-                textRowItem(symbolName: "airplane", iconColor: .orange, title: "行ったことある国", text: viewStore.person.travelCountries ?? "")
-                textRowItem(symbolName: "mappin", iconColor: .green, title: "思い出の場所", text: viewStore.person.favoriteLocations ?? "")
+                textRowItem(symbolName: "airplane", iconColor: .orange, title: String(localized: "countries-visited"), text: viewStore.person.travelCountries ?? "")
+                textRowItem(symbolName: "mappin", iconColor: .green, title: String(localized: "favorite-place"), text: viewStore.person.favoriteLocations ?? "")
             } header: {
                 Text("travel-section-title")
             }
@@ -310,10 +310,10 @@ private extension AlertState where Action == PersonDetail.Destination.Action.Ale
         TextState("delete-alert-title")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
-            TextState("Yes")
+            TextState("yes")
         }
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
     } message: {
         TextState("")

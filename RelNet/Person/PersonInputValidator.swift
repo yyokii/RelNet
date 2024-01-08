@@ -62,18 +62,18 @@ enum PersonInputValidationError: LocalizedError, Error {
     var errorDescription: String? {
         switch self {
         case .invalidName:
-            return "\(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)文字以上\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)")
         case .invalidOther:
-            return "\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized:"validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
         }
     }
 
     var recoverySuggestion: String? {
         switch self {
         case .invalidName:
-            return "\(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)文字以上\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)")
         case .invalidOther:
-            return "\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)文字以下で入力してください"
+            return String(localized:"validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
         }
     }
 }

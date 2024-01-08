@@ -238,13 +238,13 @@ extension AlertState where Action == PersonsList.Destination.Action.Alert {
         TextState("delete-alert-title")
     } actions: {
         ButtonState(role: .destructive, action: .confirmDeletion) {
-            TextState("Yes")
+            TextState("yes")
         }
         ButtonState(role: .cancel) {
-            TextState("Cancel")
+            TextState("cancel")
         }
     } message: {
-        TextState("グループを削除します。このグループ内の人物の情報は削除されません。")
+        TextState("delete-group-alert-message")
     }
 }
 

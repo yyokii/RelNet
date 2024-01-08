@@ -119,7 +119,7 @@ struct GroupFormView: View {
                 Section {
                     VStack {
                         ValidatableTextField(
-                            placeholder: String(localized: "group-name-title"),
+                            placeholder: String(localized: "group-name"),
                             text: viewStore.$group.name,
                             validationResult: viewStore.validator.validate(
                                 value: viewStore.group.name,

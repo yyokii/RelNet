@@ -193,7 +193,7 @@ private extension PersonFormView {
             Section {
                 VStack {
                     ValidatableTextField(
-                        placeholder: "名前",
+                        placeholder: String(localized: "name"),
                         text: viewStore.$person.name,
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.name,
@@ -207,7 +207,7 @@ private extension PersonFormView {
                         }
                     }
                     ValidatableTextField(
-                        placeholder: "フリガナ",
+                        placeholder: String(localized: "furigana"),
                         text: viewStore.$person.furigana.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.furigana,
@@ -215,16 +215,16 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "ニックネーム",
+                        placeholder: String(localized: "nick-name"),
                         text: viewStore.$person.nickname.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.nickname,
                             type: .other
                         )
                     )
-                    DatePicker("生年月日", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+                    DatePicker(String(localized: "birth-date"), selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
                     ValidatableTextField(
-                        placeholder: "住所",
+                        placeholder: String(localized: "address"),
                         text: viewStore.$person.address.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.address,
@@ -232,7 +232,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "趣味",
+                        placeholder: String(localized: "hobby"),
                         text: viewStore.$person.hobbies.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.hobbies,
@@ -240,7 +240,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "好きなこと",
+                        placeholder: String(localized: "like"),
                         text: viewStore.$person.likes.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likes,
@@ -248,7 +248,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "苦手なこと",
+                        placeholder: String(localized: "dislike"),
                         text: viewStore.$person.dislikes.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.dislikes,
@@ -263,7 +263,7 @@ private extension PersonFormView {
             Section {
                 VStack {
                     ValidatableTextField(
-                        placeholder: "親",
+                        placeholder: String(localized: "parent"),
                         text: viewStore.$person.parents.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.parents,
@@ -271,7 +271,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "兄弟/姉妹",
+                        placeholder: String(localized: "siblings"),
                         text: viewStore.$person.sibling.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.sibling,
@@ -279,7 +279,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "ペット",
+                        placeholder: String(localized: "pet"),
                         text: viewStore.$person.pets.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.pets,
@@ -294,7 +294,7 @@ private extension PersonFormView {
             Section {
                 VStack {
                     ValidatableTextField(
-                        placeholder: "好きな食べ物",
+                        placeholder: String(localized: "favorite-food"),
                         text: viewStore.$person.likeFoods.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likeFoods,
@@ -302,7 +302,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "好きなお菓子",
+                        placeholder: String(localized: "favorite-snacks"),
                         text: viewStore.$person.likeSweets.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likeSweets,
@@ -310,7 +310,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "アレルギー",
+                        placeholder: String(localized: "allergy"),
                         text: viewStore.$person.allergies.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.allergies,
@@ -318,7 +318,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "苦手な食べ物",
+                        placeholder: String(localized: "dislike"),
                         text: viewStore.$person.dislikeFoods.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.dislikeFoods,
@@ -333,7 +333,7 @@ private extension PersonFormView {
             Section {
                 VStack {
                     ValidatableTextField(
-                        placeholder: "好きなジャンル",
+                        placeholder: String(localized: "favorite-genre"),
                         text: viewStore.$person.likeMusicCategories.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likeMusicCategories,
@@ -341,7 +341,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "好きなアーティスト",
+                        placeholder: String(localized: "favorite-artist"),
                         text: viewStore.$person.likeArtists.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likeArtists,
@@ -349,7 +349,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "好きな曲",
+                        placeholder: String(localized: "favorite-music"),
                         text: viewStore.$person.likeMusics.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.likeMusics,
@@ -357,7 +357,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "演奏できる楽器",
+                        placeholder: String(localized: "instruments"),
                         text: viewStore.$person.playableInstruments.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.playableInstruments,
@@ -372,7 +372,7 @@ private extension PersonFormView {
             Section {
                 VStack {
                     ValidatableTextField(
-                        placeholder: "行った国",
+                        placeholder: String(localized: "countries-visited"),
                         text: viewStore.$person.travelCountries.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.travelCountries,
@@ -380,7 +380,7 @@ private extension PersonFormView {
                         )
                     )
                     ValidatableTextField(
-                        placeholder: "お気に入りの場所",
+                        placeholder: String(localized: "favorite-place"),
                         text: viewStore.$person.favoriteLocations.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.favoriteLocations,
@@ -395,7 +395,7 @@ private extension PersonFormView {
             Section {
                 TextEditor(text: viewStore.$person.notes.toUnwrapped(defaultValue: ""))
             } header: {
-                Text("memo")
+                Text("note-section-title")
             }
         }
     }

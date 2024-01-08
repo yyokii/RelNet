@@ -319,7 +319,7 @@ private extension MainView {
                 HStack(alignment: .center, spacing: 8) {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 20))
-                    Text("追加")
+                    Text("add-button-title")
                 }
             }
             .foregroundStyle(Color.appAccent)

@@ -28,9 +28,9 @@ extension ContentTypeSegmentedPicker {
         var name: String {
             switch self {
             case .list:
-                return "リスト"
+                return String(localized: "list-section-title")
             case .note:
-                return "メモ"
+                return String(localized: "note-section-title")
             }
         }
     }
