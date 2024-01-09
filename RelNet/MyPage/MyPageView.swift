@@ -9,7 +9,8 @@ import ComposableArchitecture
 import Dispatch
 import SwiftUI
 
-struct MyPage: Reducer, Sendable {
+@Reducer
+struct MyPage: Sendable {
     struct State: Equatable {
         @PresentationState var alert: AlertState<Action.Alert>?
         @BindingState var isInquiryPresenting: Bool = false
@@ -107,7 +108,7 @@ struct MyPage: Reducer, Sendable {
                 return .none
             }
         }
-        .ifLet(\.$alert, action: /Action.alert)
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 
@@ -153,7 +154,7 @@ struct MyPageView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .alert(store: self.store.scope(state: \.$alert, action: MyPage.Action.alert))
+            .alert(store: self.store.scope(state: \.$alert, action: \.alert))
         }
     }
 

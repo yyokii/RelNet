@@ -9,8 +9,8 @@ import ComposableArchitecture
 import SwiftUI
 import SwiftUINavigation
 
-struct GroupForm: Reducer {
-
+@Reducer
+struct GroupForm {
     struct State: Equatable, Sendable {
         @BindingState var focus: Field? = .name
         @BindingState var group: Group

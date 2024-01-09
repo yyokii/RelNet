@@ -9,7 +9,8 @@ import ComposableArchitecture
 import SwiftUI
 import _AuthenticationServices_SwiftUI
 
-struct AppFeature: Reducer {
+@Reducer
+struct AppFeature {
     struct State: Equatable {
         var appUser: AppUser?
         var isLoading: Bool = true
@@ -28,7 +29,7 @@ struct AppFeature: Reducer {
     @Dependency(\.authenticationClient) private var authenticationClient
 
     var body: some ReducerOf<Self> {
-        Scope(state: \.login, action: /Action.login) {
+        Scope(state: \.login, action: \.login) {
             Login()
         }
         Reduce<State, Action> { state, action in
