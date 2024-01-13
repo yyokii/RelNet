@@ -8,8 +8,8 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct PersonDetail: Reducer {
-
+@Reducer
+struct PersonDetail {
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
         @BindingState var selectedContentType: ContentTypeSegmentedPicker.ContentType = .list
@@ -55,7 +55,8 @@ struct PersonDetail: Reducer {
     @Dependency(\.dismiss) var dismiss
     @Dependency(\.appClient) private var appClient
 
-    struct Destination: Reducer {
+    @Reducer
+    struct Destination {
         enum State: Equatable {
             case alert(AlertState<Action.Alert>)
             case personForm(PersonForm.State)
@@ -69,7 +70,7 @@ struct PersonDetail: Reducer {
             }
         }
         var body: some ReducerOf<Self> {
-            Scope(state: /State.personForm, action: /Action.personForm) {
+            Scope(state: \.personForm, action: \.personForm) {
                 PersonForm()
             }
         }
@@ -134,7 +135,7 @@ struct PersonDetail: Reducer {
                 return .none
             }
         }
-        .ifLet(\.$destination, action: /Action.destination) {
+        .ifLet(\.$destination, action: \.destination) {
             Destination()
         }
     }
@@ -172,14 +173,10 @@ struct PersonDetailView: View {
             headerMenu
         }
         .alert(
-            store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-            state: /PersonDetail.Destination.State.alert,
-            action: PersonDetail.Destination.Action.alert
+            store: self.store.scope(state: \.$destination.alert, action: \.destination.alert)
         )
         .sheet(
-            store: self.store.scope(state: \.$destination, action: { .destination($0) }),
-            state: /PersonDetail.Destination.State.personForm,
-            action: PersonDetail.Destination.Action.personForm
+            store: self.store.scope(state: \.$destination.personForm, action: \.destination.personForm)
         ) { store in
             NavigationView {
                 PersonFormView(store: store)

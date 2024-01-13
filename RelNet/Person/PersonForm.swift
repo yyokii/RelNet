@@ -12,8 +12,8 @@ import SwiftUINavigation
 /**
  Person情報の入力ができる機能
  */
-struct PersonForm: Reducer {
-
+@Reducer
+struct PersonForm {
     struct State: Equatable, Sendable {
         @BindingState var focus: Field? = .name
         @BindingState var person: Person

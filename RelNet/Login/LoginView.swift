@@ -11,7 +11,8 @@ import Dispatch
 import SwiftUI
 import _AuthenticationServices_SwiftUI
 
-struct Login: Reducer, Sendable {
+@Reducer
+struct Login: Sendable {
     struct State: Equatable {
         // TODO:
         @PresentationState var alert: AlertState<AlertAction>?
@@ -120,7 +121,7 @@ struct Login: Reducer, Sendable {
                 return .none
             }
         }
-        .ifLet(\.$alert, action: /Action.alert)
+        .ifLet(\.$alert, action: \.alert)
     }
 }
 
@@ -196,7 +197,7 @@ struct LoginView: View {
                     .disabled(viewStore.isLoading)
             }
         }
-        .alert(store: self.store.scope(state: \.$alert, action: Login.Action.alert))
+        .alert(store: self.store.scope(state: \.$alert, action: \.alert))
         .navigationTitle("login-title")
     }
 

@@ -10,8 +10,8 @@ import Foundation
 import OrderedCollections
 import SwiftUI
 
-struct Main: Reducer {
-
+@Reducer
+struct Main {
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
 
@@ -49,7 +49,8 @@ struct Main: Reducer {
         enum DelegateAction: Equatable {}
     }
 
-    struct Destination: Reducer {
+    @Reducer
+    struct Destination {
         enum State: Equatable {
             case groupForm(GroupForm.State)
             case myPage(MyPage.State)
@@ -67,19 +68,19 @@ struct Main: Reducer {
         }
 
         var body: some ReducerOf<Self> {
-            Scope(state: /State.groupForm, action: /Action.groupForm) {
+            Scope(state: \.groupForm, action: \.groupForm) {
                 GroupForm()
             }
-            Scope(state: /State.myPage, action: /Action.myPage) {
+            Scope(state: \.myPage, action: \.myPage) {
                 MyPage()
             }
-            Scope(state: /State.personForm, action: /Action.personForm) {
+            Scope(state: \.personForm, action: \.personForm) {
                 PersonForm()
             }
-            Scope(state: /State.personDetail, action: /Action.personDetail) {
+            Scope(state: \.personDetail, action: \.personDetail) {
                 PersonDetail()
             }
-            Scope(state: /State.personsList, action: /Action.personsList) {
+            Scope(state: \.personsList, action: \.personsList) {
                 PersonsList()
             }
         }
@@ -167,7 +168,7 @@ struct Main: Reducer {
                 return .none
             }
         }
-        .ifLet(\.$destination, action: /Action.destination) {
+        .ifLet(\.$destination, action: \.destination) {
             Destination()
         }
     }
@@ -199,32 +200,24 @@ struct MainView: View {
             await viewStore.send(.view(.listenPersons)).finish()
         }
         .navigationDestination(
-            store: store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.personDetail,
-            action: Main.Destination.Action.personDetail
+            store: store.scope(state: \.$destination.personDetail, action: \.destination.personDetail)
         ) {
             PersonDetailView(store: $0)
         }
         .navigationDestination(
-            store: store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.personsList,
-            action: Main.Destination.Action.personsList
+            store: store.scope(state: \.$destination.personsList, action: \.destination.personsList)
         ) {
             PersonsListView(store: $0)
         }
         .sheet(
-            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.groupForm,
-            action: Main.Destination.Action.groupForm
+            store: self.store.scope(state: \.$destination.groupForm, action: \.destination.groupForm)
         ) { store in
             NavigationStack {
                 GroupFormView(store: store)
             }
         }
         .sheet(
-            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.personForm,
-            action: Main.Destination.Action.personForm
+            store: self.store.scope(state: \.$destination.personForm, action: \.destination.personForm)
         ) { store in
             NavigationView {
                 PersonFormView(store: store)
@@ -247,9 +240,7 @@ private extension MainView {
                 .foregroundColor(.primary)
         }
         .sheet(
-            store: self.store.scope(state: \.$destination, action: Main.Action.destination),
-            state: /Main.Destination.State.myPage,
-            action: Main.Destination.Action.myPage
+            store: self.store.scope(state: \.$destination.myPage, action: \.destination.myPage)
         ) { store in
             NavigationView {
                 MyPageView(store: store)

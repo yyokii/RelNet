@@ -11,8 +11,8 @@ import SwiftUI
 /**
  特定のGroupに属するPersonのリスト表示機能
  */
-struct PersonsList: Reducer {
-
+@Reducer
+struct PersonsList {
     struct State: Equatable {
         @PresentationState var destination: Destination.State?
         var selectedGroup: Group
@@ -46,7 +46,8 @@ struct PersonsList: Reducer {
         case deleteGroupResult(TaskResult<String>)
     }
 
-    struct Destination: Reducer {
+    @Reducer
+    struct Destination {
         enum State: Equatable {
             case alert(AlertState<Action.Alert>)
             case editGroup(GroupForm.State)
@@ -154,7 +155,7 @@ struct PersonsList: Reducer {
                 return .none
             }
         }
-        .ifLet(\.$destination, action: /Action.destination) {
+        .ifLet(\.$destination, action: \.destination) {
             Destination()
         }
     }
@@ -179,21 +180,15 @@ struct PersonsListView: View {
                 headerMenu
             }
             .alert(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonsList.Destination.State.alert,
-                action: PersonsList.Destination.Action.alert
+                store: store.scope(state: \.$destination.alert, action: \.destination.alert)
             )
             .navigationDestination(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonsList.Destination.State.personDetail,
-                action: PersonsList.Destination.Action.personDetail
+                store: store.scope(state: \.$destination.personDetail, action: \.destination.personDetail)
             ) {
                 PersonDetailView(store: $0)
             }
             .sheet(
-                store: store.scope(state: \.$destination, action: { .destination($0) }),
-                state: /PersonsList.Destination.State.editGroup,
-                action: PersonsList.Destination.Action.editGroup
+                store: store.scope(state: \.$destination.editGroup, action: \.destination.editGroup)
             ) { store in
                 NavigationStack {
                     GroupFormView(store: store)
