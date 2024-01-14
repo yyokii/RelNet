@@ -11,14 +11,19 @@ import SwiftUI
 
 struct SortedPersonsView: View {
     let sortedPersons: OrderedDictionary<String, [Person]>
+    let scrollViewProxy: ScrollViewProxy?
     let onTapPerson: (Person) -> Void
 
     init(
         persons: IdentifiedArrayOf<Person>,
+        scrollViewProxy: ScrollViewProxy? = nil,
         onTapPerson: @escaping (Person) -> Void
     ) {
         self.sortedPersons = makeSortedPersons(of: persons)
+        self.scrollViewProxy = scrollViewProxy
         self.onTapPerson = onTapPerson
+
+        print(scrollViewProxy != nil)
 
         func makeSortedPersons(of persons: IdentifiedArrayOf<Person>) -> OrderedDictionary<String, [Person]> {
             var dict: OrderedDictionary<String, [Person]> = [:]
@@ -65,45 +70,56 @@ struct SortedPersonsView: View {
                 .frame(height: 160)
                 .frame(maxWidth: .infinity)
         } else {
-            LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders]) {
-                ForEach(sortedPersons.keys, id: \.self) { key in
-                    Section {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(sortedPersons[key]!, id: \.self) { person in
-                                Button {
-                                    onTapPerson(person)
-                                } label: {
-                                    Text(person.name)
-                                        .font(.headline)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .contentShape(Rectangle())
+            ZStack(alignment: .topTrailing) {
+                LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders]) {
+                    ForEach(sortedPersons.keys, id: \.self) { key in
+                        Section {
+                            VStack(alignment: .leading, spacing: 8) {
+                                ForEach(sortedPersons[key]!) { person in
+                                    Button {
+                                        onTapPerson(person)
+                                    } label: {
+                                        Text(person.name)
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(.horizontal)
                                 }
-                                .buttonStyle(.plain)
-                                .padding(.horizontal)
                             }
-                        }
-                    } header: {
-                        HStack(alignment: .center, spacing: 0) {
-                            Text(key)
-                                .font(.headline)
-                                .foregroundColor(.adaptiveWhite)
-                                .frame(width: 16, height: 16)
-                                .padding(8)
-                                .background {
-                                    Circle()
-                                        .fill(Color.adaptiveBlack)
-                                }
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 4)
-                        .background {
-                            Color.adaptiveWhite
+                        } header: {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text(key)
+                                    .font(.headline)
+                                    .foregroundColor(.adaptiveWhite)
+                                    .frame(width: 16, height: 16)
+                                    .padding(8)
+                                    .background {
+                                        Circle()
+                                            .fill(Color.adaptiveBlack)
+                                    }
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
+                            .background {
+                                Color.adaptiveWhite
+                            }
                         }
                     }
                 }
+                .padding(.bottom, 100)
+
+                if let proxy = scrollViewProxy {
+                    IndexList(
+                        proxy: proxy,
+                        scrollTargetIndexes: Array(sortedPersons.keys)
+                    )
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(16)
+                }
             }
-            .padding(.bottom, 100)
         }
     }
 
