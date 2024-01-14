@@ -32,6 +32,7 @@ struct Person: Codable, Identifiable, Hashable {
     // MARK: Family
     var parents: String?
     var sibling: String?
+    var children: String?
     var pets: String?
 
     // MARK: Food
@@ -55,31 +56,28 @@ struct Person: Codable, Identifiable, Hashable {
     @ServerTimestamp var createdAt: Timestamp?
     var updatedAt: Timestamp?
 
-    /// The initial character of `furigana` or `name` in uppercase.
-    /// If the initial character is a Katakana, it returns the corresponding Hiragana character in uppercase.
-    /// Returns a localized "other category" string if no suitable initial character is found, or if the initial character is a Kanji.
-    var nameInitial: String {
-        let otherCategory = String(localized: "other-category-title")
-        var nameOrFurigana: String?
+    var nameInitialForIndex: String {
+        guard let firstChar = nameOrFurigana?.prefix(1).uppercased() else {
+            return String(localized: "other-category-title")
+        }
 
-        // Determine the initial character based on priority
+        // If the first character is an alphabet, skip the category classification
+        if firstChar.range(of: "^[A-Za-z]$", options: .regularExpression) != nil {
+            return firstChar
+        }
+
+        // Convert Katakana to Hiragana if necessary and get the category
+        let hiraganaChar = String(firstChar).applyingTransform(.hiraganaToKatakana, reverse: true) ?? firstChar
+        return hiraganaChar.hiraganaCategory
+    }
+
+    private var nameOrFurigana: String? {
         if let furigana, !furigana.isEmpty {
-            nameOrFurigana = furigana
+            return furigana
         } else if !name.isEmpty, name.range(of: "\\p{Script=Han}", options: .regularExpression) == nil {
-            nameOrFurigana = name
+            return name
         }
-
-        // If a name or furigana is available
-        if let firstChar = nameOrFurigana?.prefix(1) {
-            // Convert Katakana to Hiragana if necessary
-            if let hiraganaChar = String(firstChar).applyingTransform(.hiraganaToKatakana, reverse: true) {
-                return hiraganaChar.uppercased()
-            }
-            return String(firstChar).uppercased()
-        }
-
-        // If no suitable name or furigana is found, return the default category
-        return otherCategory
+        return nil
     }
 
     mutating func updateGroupID(_ id: String) {

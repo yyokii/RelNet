@@ -53,4 +53,28 @@ extension String {
             return hiraganaFurigana
         }
     }
+
+    /// Returns the category of 平仮名.
+    /// Returns the character itself if no category is found.
+    public var hiraganaCategory: String {
+        let categories = [
+            "あ": "あいうえお",
+            "か": "かきくけこがぎぐげござじずぜぞ",
+            "さ": "さしすせそざじずぜぞ",
+            "た": "たちつてとだぢづでど",
+            "な": "なにぬねの",
+            "は": "はひふへほばびぶべぼぱぴぷぺぽ",
+            "ま": "まみむめも",
+            "や": "やゆよ",
+            "ら": "らりるれろ",
+            "わ": "わをん",
+        ]
+
+        for (category, chars) in categories {
+            if chars.contains(self) {
+                return category
+            }
+        }
+        return self
+    }
 }

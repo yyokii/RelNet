@@ -62,18 +62,22 @@ enum PersonInputValidationError: LocalizedError, Error {
     var errorDescription: String? {
         switch self {
         case .invalidName:
-            return String(localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)")
+            return String(
+                localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)"
+            )
         case .invalidOther:
-            return String(localized:"validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
+            return String(localized: "validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
         }
     }
 
     var recoverySuggestion: String? {
         switch self {
         case .invalidName:
-            return String(localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)")
+            return String(
+                localized: "validation-range-error-message \(PersonInputValidator.PersonInputType.nameValidRange.lowerBound)~\(PersonInputValidator.PersonInputType.nameValidRange.upperBound)"
+            )
         case .invalidOther:
-            return String(localized:"validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
+            return String(localized: "validation-max-count-error-message \(PersonInputValidator.PersonInputType.otherValidRange.upperBound)")
         }
     }
 }

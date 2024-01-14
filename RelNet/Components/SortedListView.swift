@@ -10,23 +10,27 @@ import OrderedCollections
 import SwiftUI
 
 struct SortedPersonsView: View {
-    let sortedPersons: OrderedDictionary<String, [Person]>
-    let onTapPerson: (Person) -> Void
+    private let sortedPersons: OrderedDictionary<String, [Person]>
+    private let scrollViewProxy: ScrollViewProxy?
+    private let onTapPerson: (Person) -> Void
 
     init(
         persons: IdentifiedArrayOf<Person>,
+        scrollViewProxy: ScrollViewProxy? = nil,
         onTapPerson: @escaping (Person) -> Void
     ) {
         self.sortedPersons = makeSortedPersons(of: persons)
+        self.scrollViewProxy = scrollViewProxy
         self.onTapPerson = onTapPerson
 
+        /// インデックス: [人の情報]  となるような辞書型であり、且つ平仮名→アルファベットの順になるようにソートされたものを作成する
         func makeSortedPersons(of persons: IdentifiedArrayOf<Person>) -> OrderedDictionary<String, [Person]> {
             var dict: OrderedDictionary<String, [Person]> = [:]
             let otherCategory = String(localized: "other-category-title")
 
             // 初期値の設定
             for person in persons {
-                let initial = person.nameInitial
+                let initial = person.nameInitialForIndex
                 dict[initial, default: []].append(person)
             }
 
@@ -65,45 +69,56 @@ struct SortedPersonsView: View {
                 .frame(height: 160)
                 .frame(maxWidth: .infinity)
         } else {
-            LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders]) {
-                ForEach(sortedPersons.keys, id: \.self) { key in
-                    Section {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(sortedPersons[key]!, id: \.self) { person in
-                                Button {
-                                    onTapPerson(person)
-                                } label: {
-                                    Text(person.name)
-                                        .font(.headline)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .contentShape(Rectangle())
+            ZStack(alignment: .topTrailing) {
+                LazyVStack(alignment: .leading, spacing: 24, pinnedViews: [.sectionHeaders]) {
+                    ForEach(sortedPersons.keys, id: \.self) { key in
+                        Section {
+                            VStack(alignment: .leading, spacing: 8) {
+                                ForEach(sortedPersons[key]!) { person in
+                                    Button {
+                                        onTapPerson(person)
+                                    } label: {
+                                        Text(person.name)
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .contentShape(Rectangle())
+                                    }
+                                    .buttonStyle(.plain)
+                                    .padding(.horizontal)
                                 }
-                                .buttonStyle(.plain)
-                                .padding(.horizontal)
                             }
-                        }
-                    } header: {
-                        HStack(alignment: .center, spacing: 0) {
-                            Text(key)
-                                .font(.headline)
-                                .foregroundColor(.adaptiveWhite)
-                                .frame(width: 16, height: 16)
-                                .padding(8)
-                                .background {
-                                    Circle()
-                                        .fill(Color.adaptiveBlack)
-                                }
-                            Spacer()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 4)
-                        .background {
-                            Color.adaptiveWhite
+                        } header: {
+                            HStack(alignment: .center, spacing: 0) {
+                                Text(key)
+                                    .font(.headline)
+                                    .foregroundColor(.adaptiveWhite)
+                                    .frame(width: 16, height: 16)
+                                    .padding(8)
+                                    .background {
+                                        Circle()
+                                            .fill(Color.adaptiveBlack)
+                                    }
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
+                            .background {
+                                Color.adaptiveWhite
+                            }
                         }
                     }
                 }
+                .padding(.bottom, 100)
+
+                if let proxy = scrollViewProxy {
+                    IndexList(
+                        proxy: proxy,
+                        scrollTargetIndexes: Array(sortedPersons.keys)
+                    )
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .padding(8)
+                }
             }
-            .padding(.bottom, 100)
         }
     }
 
@@ -117,24 +132,29 @@ struct SortedPersonsView: View {
 
     var SortedPersonsView_Preview: some View {
         NavigationView {
-            VStack {
-                SortedPersonsView(
-                    persons: [],
-                    onTapPerson: { person in
-                        print("\(person.name) is tapped")
-                    }
-                )
+            ScrollView {
+                VStack {
+                    SortedPersonsView(
+                        persons: [],
+                        onTapPerson: { person in
+                            print("\(person.name) is tapped")
+                        }
+                    )
 
-                Divider()
+                    Divider()
 
-                SortedPersonsView(
-                    persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
-                    onTapPerson: { person in
-                        print("\(person.name) is tapped")
+                    ScrollViewReader { proxy in
+                        SortedPersonsView(
+                            persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
+                            scrollViewProxy: proxy,
+                            onTapPerson: { person in
+                                print("\(person.name) is tapped")
+                            }
+                        )
                     }
-                )
+                }
+                .padding()
             }
-            .padding()
         }
     }
 

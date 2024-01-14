@@ -19,6 +19,11 @@ extension Color {
         $0.userInterfaceStyle == .dark ? .white : .black
     }
 
+    /// lightモードの場合に、青を設定し且つカラーテーマに対応する
+    public static let adaptiveBlue = Self {
+        $0.userInterfaceStyle == .dark ? .white : .blue
+    }
+
     /*
      白、黒 + アクセント色で基本的に表現する
      */

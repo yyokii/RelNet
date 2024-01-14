@@ -179,13 +179,16 @@ struct MainView: View {
     @ObservedObject private var viewStore: ViewStoreOf<Main>
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 32) {
-                groupList
-                    .padding(.top)
-                personsList
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 32) {
+                    groupList
+                        .padding(.top)
+
+                    personsList(scrollViewProxy: proxy)
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
         }
         .navigationTitle("knot")
         .toolbar {
@@ -273,11 +276,12 @@ private extension MainView {
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal, 8)
             }
         }
     }
 
-    var personsList: some View {
+    func personsList(scrollViewProxy: ScrollViewProxy) -> some View {
         VStack(alignment: .leading, spacing: 24) {
             listHeader(
                 title: String(localized: "person-list-title"),
@@ -286,10 +290,12 @@ private extension MainView {
 
             SortedPersonsView(
                 persons: viewStore.persons,
+                scrollViewProxy: scrollViewProxy,
                 onTapPerson: { person in
                     viewStore.send(.view(.personItemTapped(person)))
                 }
             )
+            .padding(.horizontal, 8)
         }
     }
 
