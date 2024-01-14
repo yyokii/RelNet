@@ -10,9 +10,9 @@ import OrderedCollections
 import SwiftUI
 
 struct SortedPersonsView: View {
-    let sortedPersons: OrderedDictionary<String, [Person]>
-    let scrollViewProxy: ScrollViewProxy?
-    let onTapPerson: (Person) -> Void
+    private let sortedPersons: OrderedDictionary<String, [Person]>
+    private let scrollViewProxy: ScrollViewProxy?
+    private let onTapPerson: (Person) -> Void
 
     init(
         persons: IdentifiedArrayOf<Person>,

@@ -10,16 +10,24 @@ import SwiftUI
 struct IndexList: View {
     @GestureState private var dragLocation: CGPoint = .zero
 
-    let proxy: ScrollViewProxy
-    let scrollTargetIndexes: [String]
-    let generator: UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    let indexes: [String] = {
+    private let proxy: ScrollViewProxy
+    private let scrollTargetIndexes: [String]
+    private let generator: UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    private let indexes: [String] = {
         let hiraganas = ["あ","か","さ","た","な","は","ま","や","ら","わ"]
         let alphabets = (65...90).compactMap { UnicodeScalar($0) }.map { String($0) }
         var indexes = hiraganas + alphabets
         indexes.append(String(localized: "other-category-title"))
         return indexes
     }()
+
+    init(
+        proxy: ScrollViewProxy,
+        scrollTargetIndexes: [String]
+    ) {
+        self.proxy = proxy
+        self.scrollTargetIndexes = scrollTargetIndexes
+    }
 
     var body: some View {
         VStack(alignment: .center, spacing: 2) {
