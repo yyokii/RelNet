@@ -276,6 +276,7 @@ private extension MainView {
                         .buttonStyle(.plain)
                     }
                 }
+                .padding(.horizontal, 8)
             }
         }
     }
@@ -294,6 +295,7 @@ private extension MainView {
                     viewStore.send(.view(.personItemTapped(person)))
                 }
             )
+            .padding(.horizontal, 8)
         }
     }
 

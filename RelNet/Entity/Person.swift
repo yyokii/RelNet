@@ -32,6 +32,7 @@ struct Person: Codable, Identifiable, Hashable {
     // MARK: Family
     var parents: String?
     var sibling: String?
+    var children: String?
     var pets: String?
 
     // MARK: Food

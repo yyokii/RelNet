@@ -269,6 +269,23 @@
         }
       }
     },
+    "child" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Child"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "子供"
+          }
+        }
+      }
+    },
     "contact-us" : {
       "localizations" : {
         "en" : {
@@ -814,6 +831,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ニックネーム"
+          }
+        }
+      }
+    },
+    "not-set" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(not set)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "（未設定）"
           }
         }
       }

@@ -46,8 +46,8 @@ struct PersonForm {
     enum Action: BindableAction, Equatable, Sendable {
 
         // User Action
+        case deleteBirthdateButtonTapped
         case doneButtonTapped
-        case contactedTodayButtonTapped
         case groupButtonTapped(Group)
         case nameEndEditing
 
@@ -68,8 +68,8 @@ struct PersonForm {
         BindingReducer()
         Reduce<State, Action> { state, action in
             switch action {
-            case .contactedTodayButtonTapped:
-                state.person.lastContacted = Date()
+            case .deleteBirthdateButtonTapped:
+                state.person.birthdate = nil
                 return .none
 
             case .doneButtonTapped:
@@ -222,7 +222,7 @@ private extension PersonFormView {
                             type: .other
                         )
                     )
-                    DatePicker(String(localized: "birth-date"), selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+                    birthDateRow
                     ValidatableTextField(
                         placeholder: String(localized: "address"),
                         text: viewStore.$person.address.toUnwrapped(defaultValue: ""),
@@ -275,6 +275,14 @@ private extension PersonFormView {
                         text: viewStore.$person.sibling.toUnwrapped(defaultValue: ""),
                         validationResult: viewStore.validator.validate(
                             value: viewStore.person.sibling,
+                            type: .other
+                        )
+                    )
+                    ValidatableTextField(
+                        placeholder: String(localized: "child"),
+                        text: viewStore.$person.children.toUnwrapped(defaultValue: ""),
+                        validationResult: viewStore.validator.validate(
+                            value: viewStore.person.children,
                             type: .other
                         )
                     )
@@ -414,6 +422,35 @@ private extension PersonFormView {
                     let isSelectedGroup = viewStore.person.groupIDs.contains(group.id ?? "")
                     return RoundedRectangle(cornerRadius: GroupItemModifier.cornerRadius)
                         .fill(isSelectedGroup ? .blue.opacity(0.3) : .clear)
+                }
+            }
+        }
+    }
+
+    var birthDateRow: some View {
+        HStack(alignment: .center, spacing: 0) {
+            Text("birth-date")
+
+            Spacer(minLength: 8)
+
+            if viewStore.person.birthdate == nil {
+                HStack(alignment: .center, spacing: 0) {
+                    Text("not-set")
+
+                    DatePicker("", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+                }
+            } else {
+                HStack(alignment: .center, spacing: 4) {
+                    DatePicker("", selection: viewStore.$person.birthdate.toUnwrapped(defaultValue: defaultBirthDate), displayedComponents: [.date])
+
+                    Button {
+                        viewStore.send(.deleteBirthdateButtonTapped)
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.adaptiveBlue)
+                            .imageScale(.medium)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }

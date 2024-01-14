@@ -210,6 +210,7 @@ private extension PersonDetailView {
             Section {
                 textRowItem(symbolName: "heart", iconColor: .purple, title: String(localized: "parent"), text: viewStore.person.parents ?? "")
                 textRowItem(symbolName: "person.2", iconColor: .orange, title: String(localized: "siblings"), text: viewStore.person.sibling ?? "")
+                textRowItem(symbolName: "figure.child", iconColor: .teal, title: String(localized: "child"), text: viewStore.person.children ?? "")
                 textRowItem(symbolName: "tortoise", iconColor: .teal, title: String(localized: "pet"), text: viewStore.person.pets ?? "")
             } header: {
                 Text("family-section-title")
@@ -217,7 +218,7 @@ private extension PersonDetailView {
 
             Section {
                 textRowItem(symbolName: "hand.thumbsup", iconColor: .pink, title: String(localized: "like"), text: viewStore.person.likeFoods ?? "")
-                textRowItem(symbolName: "hand.thumbsdown", iconColor: .gray, title: String(localized: "dislike"), text: viewStore.person.dislikeFoods ?? "")
+                textRowItem(symbolName: "hand.thumbsdown", iconColor: .green, title: String(localized: "dislike"), text: viewStore.person.dislikeFoods ?? "")
                 textRowItem(symbolName: "eyes", iconColor: .teal, title: String(localized: "allergy"), text: viewStore.person.allergies ?? "")
 
             } header: {

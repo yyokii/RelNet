@@ -23,8 +23,6 @@ struct SortedPersonsView: View {
         self.scrollViewProxy = scrollViewProxy
         self.onTapPerson = onTapPerson
 
-        print(scrollViewProxy != nil)
-
         /// インデックス: [人の情報]  となるような辞書型であり、且つ平仮名→アルファベットの順になるようにソートされたものを作成する
         func makeSortedPersons(of persons: IdentifiedArrayOf<Person>) -> OrderedDictionary<String, [Person]> {
             var dict: OrderedDictionary<String, [Person]> = [:]
@@ -118,7 +116,7 @@ struct SortedPersonsView: View {
                         scrollTargetIndexes: Array(sortedPersons.keys)
                     )
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .padding(16)
+                    .padding(8)
                 }
             }
         }
@@ -134,24 +132,29 @@ struct SortedPersonsView: View {
 
     var SortedPersonsView_Preview: some View {
         NavigationView {
-            VStack {
-                SortedPersonsView(
-                    persons: [],
-                    onTapPerson: { person in
-                        print("\(person.name) is tapped")
+            ScrollView {
+                VStack {
+                    SortedPersonsView(
+                        persons: [],
+                        onTapPerson: { person in
+                            print("\(person.name) is tapped")
+                        }
+                    )
+                    
+                    Divider()
+                    
+                    ScrollViewReader { proxy in
+                        SortedPersonsView(
+                            persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
+                            scrollViewProxy: proxy,
+                            onTapPerson: { person in
+                                print("\(person.name) is tapped")
+                            }
+                        )
                     }
-                )
-
-                Divider()
-
-                SortedPersonsView(
-                    persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
-                    onTapPerson: { person in
-                        print("\(person.name) is tapped")
-                    }
-                )
+                }
+                .padding()
             }
-            .padding()
         }
     }
 

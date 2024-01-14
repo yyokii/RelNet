@@ -12,6 +12,7 @@ struct IndexList: View {
 
     let proxy: ScrollViewProxy
     let scrollTargetIndexes: [String]
+    let generator: UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     let indexes: [String] = {
         let hiraganas = ["あ","か","さ","た","な","は","ま","や","ら","わ"]
         let alphabets = (65...90).compactMap { UnicodeScalar($0) }.map { String($0) }
@@ -21,16 +22,11 @@ struct IndexList: View {
     }()
 
     var body: some View {
-        VStack {
+        VStack(alignment: .center, spacing: 2) {
             ForEach(indexes, id: \.self) { title in
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .foregroundColor(Color.gray.opacity(0.1))
-                    .frame(width: 10, height: 10)
-                    .overlay(
-                        Text(title)
-                            .font(.system(size: 12))
-                            .foregroundColor(.blue)
-                    )
+                Text(title)
+                    .font(.system(size: 12))
+                    .foregroundColor(.adaptiveBlue)
                     .background(dragObserver(title: title))
             }
         }
@@ -51,8 +47,9 @@ struct IndexList: View {
     func dragObserver(geometry: GeometryProxy, title: String) -> some View {
         if geometry.frame(in: .global).contains(dragLocation),
            scrollTargetIndexes.contains(title) {
-            DispatchQueue.main.async {
-                print("📝 called with: \(title)")
+            Task { @MainActor in
+                generator.prepare()
+                generator.impactOccurred()
                 proxy.scrollTo(title, anchor: .top)
             }
         }
