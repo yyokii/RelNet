@@ -65,7 +65,7 @@ struct Person: Codable, Identifiable, Hashable {
         if firstChar.range(of: "^[A-Za-z]$", options: .regularExpression) != nil {
             return firstChar
         }
-        
+
         // Convert Katakana to Hiragana if necessary and get the category
         let hiraganaChar = String(firstChar).applyingTransform(.hiraganaToKatakana, reverse: true) ?? firstChar
         return hiraganaChar.hiraganaCategory

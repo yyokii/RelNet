@@ -72,7 +72,9 @@ enum GroupInputValidationError: LocalizedError, Error {
     var recoverySuggestion: String? {
         switch self {
         case .invalidName:
-            return String(localized: "validation-range-error-message \(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)~\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)")        case .invalidOther:
-            return String(localized: "validation-max-count-error-message \(GroupInputValidator.GroupInputType.otherValidRange.upperBound)")        }
+            return String(localized: "validation-range-error-message \(GroupInputValidator.GroupInputType.nameValidRange.lowerBound)~\(GroupInputValidator.GroupInputType.nameValidRange.upperBound)")
+        case .invalidOther:
+            return String(localized: "validation-max-count-error-message \(GroupInputValidator.GroupInputType.otherValidRange.upperBound)")
+        }
     }
 }

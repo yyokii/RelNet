@@ -14,7 +14,7 @@ struct IndexList: View {
     private let scrollTargetIndexes: [String]
     private let generator: UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
     private let indexes: [String] = {
-        let hiraganas = ["あ","か","さ","た","な","は","ま","や","ら","わ"]
+        let hiraganas = ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"]
         let alphabets = (65...90).compactMap { UnicodeScalar($0) }.map { String($0) }
         var indexes = hiraganas + alphabets
         indexes.append(String(localized: "other-category-title"))
@@ -54,7 +54,8 @@ struct IndexList: View {
 
     func dragObserver(geometry: GeometryProxy, title: String) -> some View {
         if geometry.frame(in: .global).contains(dragLocation),
-           scrollTargetIndexes.contains(title) {
+            scrollTargetIndexes.contains(title)
+        {
             Task { @MainActor in
                 generator.prepare()
                 generator.impactOccurred()

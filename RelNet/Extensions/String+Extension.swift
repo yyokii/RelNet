@@ -67,7 +67,7 @@ extension String {
             "ま": "まみむめも",
             "や": "やゆよ",
             "ら": "らりるれろ",
-            "わ": "わをん"
+            "わ": "わをん",
         ]
 
         for (category, chars) in categories {

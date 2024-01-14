@@ -140,9 +140,9 @@ struct SortedPersonsView: View {
                             print("\(person.name) is tapped")
                         }
                     )
-                    
+
                     Divider()
-                    
+
                     ScrollViewReader { proxy in
                         SortedPersonsView(
                             persons: [.mock(id: "id-1"), .mock(id: "id-1-2"), .mock(id: "id-2"), .mock(id: "id-3")],
