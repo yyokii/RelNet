@@ -18,20 +18,6 @@ struct PersonsList {
         var selectedGroup: Group
         let groups: IdentifiedArrayOf<Group>
         var persons: IdentifiedArrayOf<Person>
-
-        var sortedPersons: [String: [Person]] {
-            var dict: [String: [Person]] = [:]
-            for person in persons {
-                let initial = person.nameInitial
-                if dict[initial] != nil {
-                    dict[initial]?.append(person)
-                } else {
-                    dict[initial] = [person]
-                }
-            }
-
-            return dict
-        }
     }
 
     enum Action: Equatable {

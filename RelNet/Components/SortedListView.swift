@@ -25,13 +25,14 @@ struct SortedPersonsView: View {
 
         print(scrollViewProxy != nil)
 
+        /// インデックス: [人の情報]  となるような辞書型であり、且つ平仮名→アルファベットの順になるようにソートされたものを作成する
         func makeSortedPersons(of persons: IdentifiedArrayOf<Person>) -> OrderedDictionary<String, [Person]> {
             var dict: OrderedDictionary<String, [Person]> = [:]
             let otherCategory = String(localized: "other-category-title")
 
             // 初期値の設定
             for person in persons {
-                let initial = person.nameInitial
+                let initial = person.nameInitialForIndex
                 dict[initial, default: []].append(person)
             }
 
