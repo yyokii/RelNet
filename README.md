@@ -1,3 +1,24 @@
+Simple Friend List App for iOS
+
+![app-screen-shot](https://github.com/yyokii/RelNet/assets/20992687/6e6006bc-4495-44d7-a817-db29c78409aa)
+
+## 📖 Features
+
+* Sign up/in
+* Add group
+* Add person
+
+## 🥞 Teck Stacks
+
+* SwiftUI
+* The Composable Architecture
+* Xcode Cloud
+* Firebase
+  * Firebase Auth
+  * Firestore
+  * Firebase Crashlytics
+  * Cloud Functions for Firebase
+
 ## Dev memo
 
 * 軽微な修正だが、SwiftUIでコンパイル時間が長くエラーが把握できないケースがあるので基本的に`@ObservedObject var viewStore: ViewStoreOf<Feature>`を使用する
