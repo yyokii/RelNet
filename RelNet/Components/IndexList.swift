@@ -16,7 +16,13 @@ struct IndexList: View {
     private let indexes: [String] = {
         let hiraganas = ["あ", "か", "さ", "た", "な", "は", "ま", "や", "ら", "わ"]
         let alphabets = (65...90).compactMap { UnicodeScalar($0) }.map { String($0) }
-        var indexes = hiraganas + alphabets
+
+        var indexes: [String] = []
+        if Locale.appLanguageLocale.language.languageCode?.identifier == "ja" {
+            indexes = hiraganas + alphabets
+        } else {
+            indexes = alphabets
+        }
         indexes.append(String(localized: "other-category-title"))
         return indexes
     }()

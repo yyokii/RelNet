@@ -211,18 +211,11 @@ private extension MyPageView {
     }
 
     var versionRow: some View {
-        Button(action: {
-            viewStore.send(.versionButtonTapped)
-        }) {
-            HStack {
-                RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: String(localized: "version"))
-                Spacer()
-                Text(viewStore.appVersion.versionText)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .contentShape(Rectangle())
+        HStack {
+            RoundedIconAndTitle(symbolName: "iphone.homebutton", iconColor: .orange, title: String(localized: "version"))
+            Spacer()
+            Text(viewStore.appVersion.versionText)
         }
-        .buttonStyle(.plain)
     }
 }
 
