@@ -15,16 +15,17 @@ struct PersonDetail {
         @BindingState var selectedContentType: ContentTypeSegmentedPicker.ContentType = .list
 
         var person: Person
+        var groupNames: [String] {
+            person.groupIDs.compactMap { groupID in
+                groups.first(where: { $0.id == groupID })?.name
+            }
+        }
         let groups: IdentifiedArrayOf<Group>
         let personValidator: PersonInputValidator = .init()
-        let groupNames: [String]
 
         init(person: Person, groups: IdentifiedArrayOf<Group>) {
             self.person = person
             self.groups = groups
-            self.groupNames = person.groupIDs.compactMap { groupID in
-                groups.first(where: { $0.id == groupID })?.name
-            }
         }
     }
 
