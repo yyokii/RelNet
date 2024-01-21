@@ -56,6 +56,7 @@
 		F5DC3BAC2AAAB5D4005528F9 /* FirestorePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */; };
 		F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5DC3BAE2AB1BE09005528F9 /* MainView.swift */; };
 		F5E618242B2B2B8E0069D0C9 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5E618232B2B2B8E0069D0C9 /* AppUser.swift */; };
+		F5F8584D2B5CDD940020DBA0 /* Locale+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5F8584C2B5CDD940020DBA0 /* Locale+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		F5DC3BAB2AAAB5D4005528F9 /* FirestorePath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePath.swift; sourceTree = "<group>"; };
 		F5DC3BAE2AB1BE09005528F9 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		F5E618232B2B2B8E0069D0C9 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
+		F5F8584C2B5CDD940020DBA0 /* Locale+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Locale+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -267,6 +269,7 @@
 				F55BE3582ABBE51500289320 /* String+Extension.swift */,
 				F59EF3592AD455CA0064C18D /* Button+Extensions.swift */,
 				F59EF35B2AD45FC20064C18D /* TCAFeatureAction.swift */,
+				F5F8584C2B5CDD940020DBA0 /* Locale+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -500,6 +503,7 @@
 				F5972F132B31FC16008F9605 /* ValidatableTextField.swift in Sources */,
 				F5DC3B8B2A9D6E30005528F9 /* Group.swift in Sources */,
 				F5DC3BAF2AB1BE09005528F9 /* MainView.swift in Sources */,
+				F5F8584D2B5CDD940020DBA0 /* Locale+Extension.swift in Sources */,
 				F59EF35A2AD455CA0064C18D /* Button+Extensions.swift in Sources */,
 				F59EF35C2AD45FC20064C18D /* TCAFeatureAction.swift in Sources */,
 				F5418A922A9B93D500511A67 /* AppFeature.swift in Sources */,
