@@ -38,26 +38,6 @@
         }
       }
     },
-    "adaptiveBlack" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "adaptiveWhite" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
     "add-button-title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -206,16 +186,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "簡単操作で友達のリストを作成・管理。シームレスなインターフェースで快適なユーザー体験。"
-          }
-        }
-      }
-    },
-    "appAccent" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
           }
         }
       }
@@ -930,26 +900,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ペット"
-          }
-        }
-      }
-    },
-    "placeholderGray" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
-          }
-        }
-      }
-    },
-    "preview-group-name" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : ""
           }
         }
       }
